@@ -15,7 +15,7 @@
  * ```
  */
 
-import {
+ import {
 	CommandPlugin,
 	CommandType,
 	PluginType,
@@ -45,13 +45,23 @@ export function publish(
 				if (!Array.isArray(guildIds)) guildIds = [guildIds];
 
 				if (!guildIds.length) {
-					await client.application?.commands.fetch();
-					if (
-						client.application?.commands.cache.find(
-							(c) => c.name === module.name
-						)
-					)
+					const cmd = (
+						await client.application?.commands.fetch()
+					)?.find((c) => c.name === module.name);
+					if (cmd) {
+						if (!matchData(commandData, cmd)) {
+							console.log(
+								`Found differences in global command ${module.name}\nUpdating command...`
+							);
+							await cmd.edit(commandData).catch(c);
+							console.log(
+								`${module.name} updated with new data successfully!`
+							);
+							return controller.next();
+						}
 						return controller.next();
+					}
+
 					await client
 						.application!.commands.create(commandData)
 						.catch(c);
@@ -68,11 +78,11 @@ export function publish(
 					if (cmd) {
 						if (!matchData(commandData, cmd)) {
 							console.log(
-								`Found differences in command ${module.name}\nUpdating...`
+								`Found differences in command ${module.name}\nUpdating command...`
 							);
 							await cmd.edit(commandData).catch(c);
 							console.log(
-								`${module.name} updated with new data successfully`
+								`${module.name} updated with new data successfully!`
 							);
 							continue;
 						}
@@ -101,7 +111,7 @@ export function publish(
  * @param {object} obj2 - The object to compare against.
  * @returns true
  */
-export function matchData(obj1: object, obj2: object) {
+function matchData(obj1: object, obj2: object) {
 	const keys = Object.keys(obj1);
 	for (const key of keys) {
 		// @ts-ignore
@@ -110,7 +120,6 @@ export function matchData(obj1: object, obj2: object) {
 	}
 	return true;
 }
-
 export function optionsTransformer(ops: Array<SernOptionsData>) {
 	return ops.map((el) =>
 		el.autocomplete ? (({ command, ...el }) => el)(el) : el
