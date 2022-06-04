@@ -14,14 +14,13 @@
  * })
  * ```
  */
-
-import {
+ import {
 	CommandPlugin,
 	CommandType,
 	PluginType,
 	SernOptionsData,
 } from "@sern/handler";
-import { ApplicationCommandType } from "discord.js";
+import { ApplicationCommandData, ApplicationCommandType } from "discord.js";
 
 export function publish(
 	guildIds: string | Array<string> = []
@@ -36,9 +35,9 @@ export function publish(
 				console.error(e);
 			}
 			try {
-				const commandData = {
-					name: module.name!,
+				const commandData: ApplicationCommandData = {
 					type: CommandTypeRaw[module.type],
+					name: module.name!,
 					description: module.description,
 					options: optionsTransformer(module.options ?? []),
 				};
@@ -46,9 +45,21 @@ export function publish(
 
 				if (!guildIds.length) {
 					const cmd = (
-						await client.application?.commands.fetch()
-					)?.find((c) => c.name === module.name);
-					if (cmd) return controller.next();
+						await client.application!.commands.fetch()
+					).find((c) => c.name === module.name);
+					if (cmd) {
+						if (!cmd.equals(commandData, true)) {
+							console.log(
+								`Found differences in global command ${module.name}`
+							);
+							await cmd.edit(commandData).then((c) => {
+								console.log(
+									`${module.name} updated with new data successfully!`
+								);
+							});
+						}
+						return controller.next();
+					}
 
 					await client
 						.application!.commands.create(commandData)
@@ -60,10 +71,22 @@ export function publish(
 				for (const id of guildIds) {
 					const guild = await client.guilds.fetch(id).catch(c);
 					if (!guild) continue;
-					const cmd = (await guild.commands.fetch()).find(
+					const guildcmd = (await guild.commands.fetch()).find(
 						(c) => c.name === module.name
 					);
-					if (cmd) continue;
+					if (guildcmd) {
+						if (!guildcmd.equals(commandData, true)) {
+							console.log(
+								`Found differences in command ${module.name}`
+							);
+							await guildcmd.edit(commandData).catch(c);
+							console.log(
+								`${module.name} updated with new data successfully!`
+							);
+							continue;
+						}
+						continue;
+					}
 					await guild.commands.create(commandData).catch(c);
 					console.log(
 						"Guild Command created",
