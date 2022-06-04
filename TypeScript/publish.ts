@@ -3,7 +3,7 @@
 /**
  * @author: EvolutionX-10
  * @version: 1.0.0
- * @description: This is publish plugin, it allows you to publish and update your slash commands with ease.
+ * @description: This is publish plugin, it allows you to publish your slash commands with ease.
  * @license: MIT
  * @example:
  * ```ts
@@ -48,19 +48,7 @@ export function publish(
 					const cmd = (
 						await client.application?.commands.fetch()
 					)?.find((c) => c.name === module.name);
-					if (cmd) {
-						if (!matchData(commandData, cmd)) {
-							console.log(
-								`Found differences in global command ${module.name}\nUpdating command...`
-							);
-							await cmd.edit(commandData).catch(c);
-							console.log(
-								`${module.name} updated with new data successfully!`
-							);
-							return controller.next();
-						}
-						return controller.next();
-					}
+					if (cmd) return controller.next();
 
 					await client
 						.application!.commands.create(commandData)
@@ -75,19 +63,7 @@ export function publish(
 					const cmd = (await guild.commands.fetch()).find(
 						(c) => c.name === module.name
 					);
-					if (cmd) {
-						if (!matchData(commandData, cmd)) {
-							console.log(
-								`Found differences in command ${module.name}\nUpdating command...`
-							);
-							await cmd.edit(commandData).catch(c);
-							console.log(
-								`${module.name} updated with new data successfully!`
-							);
-							continue;
-						}
-						continue;
-					}
+					if (cmd) continue;
 					await guild.commands.create(commandData).catch(c);
 					console.log(
 						"Guild Command created",
@@ -105,21 +81,6 @@ export function publish(
 	};
 }
 
-/**
- * It compares two objects and returns true if they have the same keys and values
- * @param {object} obj1 - The first object to compare. Should ALWAYS be built data from module
- * @param {object} obj2 - The object to compare against.
- * @returns true
- */
-function matchData(obj1: object, obj2: object) {
-	const keys = Object.keys(obj1);
-	for (const key of keys) {
-		// @ts-ignore
-		if (JSON.stringify(obj1[key]) !== JSON.stringify(obj2[key]))
-			return false;
-	}
-	return true;
-}
 export function optionsTransformer(ops: Array<SernOptionsData>) {
 	return ops.map((el) =>
 		el.autocomplete ? (({ command, ...el }) => el)(el) : el
