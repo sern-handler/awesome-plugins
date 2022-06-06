@@ -1,66 +1,41 @@
-// @ts-nocheck
-
 /**
- * @author: EvolutionX-10
+ * @author: Murtatrxx & EvolotionX-10
  * @version: 1.0.0
- * @description: This is publish plugin, it allows you to publish your slash commands with ease.
+ * @description: This is the publish plugin, it allows you to publish your slash commands with ease.
  * @license: MIT
  * @example:
- * ```ts
- * import { publish } from '../path/to/your/plugin/folder';
- * import { sernModule, CommandType } from '@sern/handler';
- *
- * export default sernModule<CommandType.Slash>([publish()], { // Put guild id in array for guild commands
- * // Your code goes here
- * });
+ * ```js
+ *   import { publish } from '../path/to/your/plugin/folder';
+ *   import { sernModule, CommandType } from '@sern/handler';
+ *   export default sernModule([publish()], { // Put guild id in array for guild commands
+ *   // Your code goes here
+ *   });
  * ```
  */
 
  import {
-	CommandPlugin,
 	CommandType,
 	PluginType,
-	SernOptionsData,
 } from '@sern/handler';
 
 import {
-	ApplicationCommandData,
-	ApplicationCommandType
+  ApplicationCommandType
 } from 'discord.js';
 
-export function publish(
-	guildIds: string | Array<string> = []
-): CommandPlugin<CommandType.Slash | CommandType.Both> {
-	return {
+export function publish(guildIds) {
+  return {
 		type: PluginType.Command,
 		description: 'Manage Slash Commands',
-		name: 'slash-auto-publish-ts',
-		async execute(
-			client: {
-				application: any;
-				guilds: {
-					fetch: (arg0: string) => Promise<any>
-				};
-			},
-			module: {
-				name: any;
-				type: string | number;
-				description: any;
-				options: any;
-			},
-			controller: {
-				next: () => any;
-				stop: () => any
-			}
-		) {
-			function c(e: unknown) {
-				console.error('publish command didnt work for', module.name!);
+		name: 'slash-auto-publish-js',
+		async execute(client, module, controller) {
+			function c(e) {
+				console.error('publish command didnt work for', module.name);
 				console.error(e);
 			}
 			try {
-				const commandData: ApplicationCommandData = {
+				const commandData = {
 					type: CommandTypeRaw[module.type],
-					name: module.name!,
+					name: module.name,
 					description: module.description,
 					options: optionsTransformer(module.options ?? []),
 				};
@@ -68,7 +43,7 @@ export function publish(
 
 				if (!guildIds.length) {
 					const cmd = (
-						await client.application!.commands.fetch()
+						await client.application.commands.fetch()
 					).find((c) => c.name === module.name);
 					if (cmd) {
 						if (!cmd.equals(commandData, true)) {
@@ -85,9 +60,9 @@ export function publish(
 					}
 
 					await client
-						.application!.commands.create(commandData)
+						.application.commands.create(commandData)
 						.catch(c);
-					console.log('Command created', module.name!);
+					console.log('Command created', module.name);
 					return controller.next();
 				}
 
@@ -113,13 +88,13 @@ export function publish(
 					await guild.commands.create(commandData).catch(c);
 					console.log(
 						'Guild Command created',
-						module.name!,
+						module.name,
 						guild.name
 					);
 				}
 				return controller.next();
 			} catch (e) {
-				console.log('Command did not register' + module.name!);
+				console.log('Command did not register' + module.name);
 				console.log(e);
 				return controller.stop();
 			}
@@ -127,7 +102,7 @@ export function publish(
 	};
 }
 
-export function optionsTransformer(ops: Array<SernOptionsData>) {
+export function optionsTransformer(ops) {
 	return ops.map((el) =>
 		el.autocomplete ? (({ command, ...el }) => el)(el) : el
 	);
@@ -138,4 +113,5 @@ export const CommandTypeRaw = {
 	[CommandType.MenuMsg]: ApplicationCommandType.Message,
 	[CommandType.MenuUser]: ApplicationCommandType.User,
 	[CommandType.Slash]: ApplicationCommandType.ChatInput,
-} as const;
+};
+
