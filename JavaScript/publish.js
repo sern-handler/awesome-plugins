@@ -1,3 +1,8 @@
+/* 
+ * ⚠️ WARNING: EDITING THESE TYPE OF FILES CAN CAUSE UNWANTED
+ * DAMAGE TO YOUR CODEBASE, BOT AND MORE. EDIT AT YOUR OWN RISK.
+ */
+
 /**
  * @author: EvolotionX-10 (remix by Murtatrxx)
  * @description: The publish plugin, it allows you to publish your slash commands with ease.
