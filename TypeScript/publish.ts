@@ -1,5 +1,10 @@
 // @ts-nocheck
 
+/* 
+ * ⚠️ WARNING: EDITING THESE TYPE OF FILES CAN CAUSE UNWANTED
+ * DAMAGE TO YOUR CODEBASE, BOT AND MORE. EDIT AT YOUR OWN RISK.
+ */
+
 /**
  * @author: EvolutionX-10
  * @version: 1.0.0
