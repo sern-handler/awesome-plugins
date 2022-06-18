@@ -40,24 +40,7 @@ export function publish(
 		type: PluginType.Command,
 		description: 'Manage Slash Commands',
 		name: 'slash-auto-publish-ts',
-		async execute(
-			client: {
-				application: any;
-				guilds: {
-					fetch: (arg0: string) => Promise<any>
-				};
-			},
-			module: {
-				name: any;
-				type: string | number;
-				description: any;
-				options: any;
-			},
-			controller: {
-				next: () => any;
-				stop: () => any
-			}
-		) {
+		async execute(client: any, module: any, controller: any) {
 			function c(e: unknown) {
 				console.error('publish command didnt work for', module.name!);
 				console.error(e);
