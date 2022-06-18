@@ -1,10 +1,10 @@
 # Sern Awesome Plugins
 
-A curated list made by awesome community of Sern.
+**A curated list made by awesome community of Sern.**
 
 ## 💫 Getting Started
 
-🗺️ To explore plugins, you may want to visit our plugins page
+🗺️ To explore plugins, you may want to visit our plugins page <br>
 ☁️ To install plugins, you can use our CLI. Just like that:
 
 ```sh
