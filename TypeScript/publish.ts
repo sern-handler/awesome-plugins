@@ -1,5 +1,10 @@
 // @ts-nocheck
 
+/* 
+ * ⚠️ WARNING: EDITING THESE TYPE OF FILES CAN CAUSE UNWANTED
+ * DAMAGE TO YOUR CODEBASE, BOT AND MORE. EDIT AT YOUR OWN RISK.
+ */
+
 /**
  * @author: EvolutionX-10
  * @version: 1.0.0
@@ -7,31 +12,37 @@
  * @license: MIT
  * @example:
  * ```ts
- * import { publish } from "../path/to/your/plugin/folder";
- * import { sernModule, CommandType } from "@sern/handler";
- * export default sernModule<CommandType.Slash>([publish()], { // put guild id in array for guild commands
- * // your code
- * })
+ * import { publish } from '../path/to/your/plugin/folder';
+ * import { sernModule, CommandType } from '@sern/handler';
+ *
+ * export default sernModule<CommandType.Slash>([publish()], { // Put guild id in array for guild commands
+ * // Your code goes here
+ * });
  * ```
  */
+
  import {
 	CommandPlugin,
 	CommandType,
 	PluginType,
 	SernOptionsData,
-} from "@sern/handler";
-import { ApplicationCommandData, ApplicationCommandType } from "discord.js";
+} from '@sern/handler';
+
+import {
+	ApplicationCommandData,
+	ApplicationCommandType
+} from 'discord.js';
 
 export function publish(
 	guildIds: string | Array<string> = []
 ): CommandPlugin<CommandType.Slash | CommandType.Both> {
 	return {
 		type: PluginType.Command,
-		description: "Manage Slash Commands",
-		name: "slash-auto-publish",
-		async execute(client, module, controller) {
+		description: 'Manage Slash Commands',
+		name: 'slash-auto-publish-ts',
+		async execute(client: any, module: any, controller: any) {
 			function c(e: unknown) {
-				console.error("publish command didnt work for", module.name!);
+				console.error('publish command didnt work for', module.name!);
 				console.error(e);
 			}
 			try {
@@ -64,7 +75,7 @@ export function publish(
 					await client
 						.application!.commands.create(commandData)
 						.catch(c);
-					console.log("Command created", module.name!);
+					console.log('Command created', module.name!);
 					return controller.next();
 				}
 
@@ -89,14 +100,14 @@ export function publish(
 					}
 					await guild.commands.create(commandData).catch(c);
 					console.log(
-						"Guild Command created",
+						'Guild Command created',
 						module.name!,
 						guild.name
 					);
 				}
 				return controller.next();
 			} catch (e) {
-				console.log("Command did not register" + module.name!);
+				console.log('Command did not register' + module.name!);
 				console.log(e);
 				return controller.stop();
 			}
