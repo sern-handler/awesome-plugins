@@ -14,7 +14,7 @@
  * })
  * ```
  */
- import {
+import {
 	CommandPlugin,
 	CommandType,
 	PluginType,
