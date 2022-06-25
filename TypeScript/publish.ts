@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 /**
- * @author: EvolutionX-10
+ * @author: @EvolutionX-10
  * @version: 1.0.0
  * @description: This is publish plugin, it allows you to publish your slash commands with ease.
  * @license: MIT
