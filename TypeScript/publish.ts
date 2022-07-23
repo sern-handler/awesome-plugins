@@ -1,8 +1,7 @@
-// sern-handler 1.1.0-beta
 // @ts-nocheck
 /**
  * @author: @EvolutionX-10
- * @version: 1.0.0
+ * @version: 1.1.0-beta
  * @description: This is publish plugin, it allows you to publish your slash commands with ease.
  * @license: MIT
  * @example:
