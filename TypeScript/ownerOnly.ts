@@ -6,7 +6,7 @@
  * @license: MIT
  * @example:
  * ```ts
- * import { OwnerOnly } from "../path/to/your/plugin/folder";
+ * import { ownerOnly } from "../path/to/your/plugin/folder";
  * import { sernModule, CommandType } from "@sern/handler";
  * export default sernModule<CommandType.Slash>([OwnerOnly()], {
  * // your code
