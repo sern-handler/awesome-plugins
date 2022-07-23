@@ -1,8 +1,7 @@
 // @ts-nocheck
-
 /**
  * @author: @EvolutionX-10
- * @version: 1.0.0
+ * @version: 1.1.0-beta
  * @description: This is publish plugin, it allows you to publish your slash commands with ease.
  * @license: MIT
  * @example:
@@ -29,7 +28,7 @@ export function publish(
 		type: PluginType.Command,
 		description: "Manage Slash Commands",
 		name: "slash-auto-publish",
-		async execute(client, module, controller) {
+		async execute({ client }, { absPath , mod: module }, controller) {
 			function c(e: unknown) {
 				console.error("publish command didnt work for", module.name!);
 				console.error(e);
