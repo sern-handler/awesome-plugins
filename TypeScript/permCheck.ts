@@ -1,15 +1,15 @@
 // @ts-nocheck
 /**
- * @author: @Nͥeͣoͫʸᵒᵘʳ ˢᶦˢᵗᵉʳ
+ * @author: @NeoYaBoi
  * @version: 1.0.0
- * @description: This is perm checker, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).
+ * @description: This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).
  * @license: Null
  * @example:
  * ```ts
- * import { permChecker } from "../path/to/your/plugin/folder";
+ * import { permCheck } from "../plugins/permCheck"; //(change if need be)
  * import { sernModule, CommandType } from "@sern/handler";
  * export default commandModule({
- *    plugins: [ permChecker('permission', 'No permission response') ],
+ *    plugins: [ permCheck('permission', 'Response Here') ],
  *    execute: (ctx) => {
  *       //your code here
  *    }
@@ -19,7 +19,7 @@
 
 import { PermissionResolvable } from "discord.js";
 import { CommandType, EventPlugin, PluginType } from "@sern/handler";
-export function permCheck(perm: PermissionResolvable, response: String): EventPlugin<CommandType.Both> {
+export function permCheck(perm: PermissionResolvable, response: string): EventPlugin<CommandType.Both> {
   return {
     type: PluginType.Event,
     description: "Checks for specified perm",
