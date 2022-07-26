@@ -17,7 +17,7 @@
  * ```
  */
 
-import { PermissionResolvable } from "discord.js";
+import { PermissionResolvable, type GuildMember } from "discord.js";
 import { CommandType, EventPlugin, PluginType } from "@sern/handler";
 export function permCheck(perm: PermissionResolvable, response: string): EventPlugin<CommandType.Both> {
   return {
