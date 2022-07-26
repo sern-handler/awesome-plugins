@@ -30,7 +30,7 @@ export function permCheck(perm: PermissionResolvable, response: string): EventPl
         console.warn('A command stopped because we couldn\'t check there permissions (was used in dms)') //delete this line if you dont was to be notified when a command is used outside of a guild/server
         return controller.stop()
       }
-      if(!ctx.member.permissions.has(perm)) {
+      if(!(ctx.member! as GuildMember).permissions.has(perm) {
         try {
             await ctx.reply(response)
             return controller.stop()
