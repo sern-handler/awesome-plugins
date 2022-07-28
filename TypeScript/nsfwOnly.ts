@@ -40,7 +40,7 @@ export function nsfwOnly(
     async execute(event, controller) {
       const [ctx] = event;
       //checking if command was executed in dms
-      if(ctx.guild == null) {
+      if(ctx.guild === null) {
         await ctx.reply({ content: response, ephemeral })
         return controller.stop()
       }
