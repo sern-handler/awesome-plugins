@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
  * @author: @NeoYaBoi
- * @version: 1.0.0
+ * @version: 1.0.1
  * @description: This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).
  * @license: Null
  * @example:
