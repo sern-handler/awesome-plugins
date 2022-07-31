@@ -11,8 +11,8 @@ on:
       - main
 
 jobs:
-  Automation:
-    name: Run Automations
+  Prettier:
+    name: Run Prettier
     runs-on: ubuntu-latest
 
     steps:
@@ -30,16 +30,3 @@ jobs:
 
       - name: Run Prettier
         run: prettier --check .
-
-      - name: Convert TypeScript to JavaScript
-        run: npx babel TypeScript --out-dir JavaScript --extensions ".ts"
-
-      - name: Run JavaScript Prettier
-        run: prettier --write ./JavaScript
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "chore: update JavaScript plugins"
-          branch: js
-          create_branch: true
