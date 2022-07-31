@@ -31,7 +31,7 @@ function isGuildText(
   );
 }
 export function nsfwOnly(
-  response: string,
+  onFail: string,
   ephemeral: boolean
 ): EventPlugin<CommandType.Both> {
   return {
@@ -40,19 +40,18 @@ export function nsfwOnly(
     async execute(event, controller) {
       const [ctx] = event;
       //checking if command was executed in dms
-      if(ctx.guild === null) {
-        await ctx.reply({ content: response, ephemeral })
-        return controller.stop()
+      if (ctx.guild === null) {
+        await ctx.reply({ content: onFail, ephemeral });
+        return controller.stop();
       }
-      let result = isGuildText(ctx.channel);
       //channel is thread (not supported by nsfw)
-      if (result == true) {
-        await ctx.reply({ content: response, ephemeral });
+      if (isGuildText(ctx.channel) == true) {
+        await ctx.reply({ content: onFail, ephemeral });
         return controller.stop();
       }
       if (!(ctx.channel! as TextChannel).nsfw) {
         //channel is not nsfw
-        await ctx.reply({ content: response, ephemeral });
+        await ctx.reply({ content: onFail, ephemeral });
         return controller.stop();
       }
       //continues to command if nsfw
