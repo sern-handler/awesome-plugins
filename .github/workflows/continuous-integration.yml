@@ -11,8 +11,8 @@ on:
       - main
 
 jobs:
-  Lint:
-    name: Linting
+  Automation:
+    name: Run Automations
     runs-on: ubuntu-latest
 
     steps:
