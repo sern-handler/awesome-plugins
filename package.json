@@ -1,0 +1,30 @@
+{
+	"name": "awesome-plugins",
+	"version": "1.0.0",
+	"description": "A curated list of cool plugins made by community of sern",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sern-handler/awesome-plugins.git"
+	},
+	"keywords": [
+		"sern",
+		"sern-handler",
+		"awesome-plugins",
+		"awesome"
+	],
+	"author": "sern",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/sern-handler/awesome-plugins/issues"
+	},
+	"homepage": "https://github.com/sern-handler/awesome-plugins#readme",
+	"devDependencies": {
+		"@babel/cli": "^7.18.9",
+		"@babel/core": "^7.18.9",
+		"@babel/preset-typescript": "^7.18.6"
+	}
+}

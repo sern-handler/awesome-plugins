@@ -26,7 +26,20 @@ jobs:
 
       # Prettier must be in `package.json`
       - name: Install Node.js dependencies
-        run: npm i -g prettier
+        run: npm i -g prettier && npm i
 
       - name: Run Prettier
         run: prettier --check .
+
+      - name: Convert TypeScript to JavaScript
+        run: npx babel TypeScript --out-dir JavaScript --extensions ".ts"
+
+      - name: Run JavaScript Prettier
+        run: prettier --write ./JavaScript
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit-message: "chore: generated JavaScript plugins"
+          branch: js
+          create_branch: true
