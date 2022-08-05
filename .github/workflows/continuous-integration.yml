@@ -29,4 +29,4 @@ jobs:
         run: npm i -g prettier && npm i
 
       - name: Run Prettier
-        run: prettier --check .
+        run: prettier --write .
