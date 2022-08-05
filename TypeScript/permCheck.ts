@@ -1,10 +1,10 @@
 // @ts-nocheck
 /**
- * @author: @NeoYaBoi
- * @version: 1.0.1
- * @description: This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).
- * @license: Null
- * @example:
+ * This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).
+ *
+ * @author @NeoYaBoi
+ * @version 1.0.1
+ * @example
  * ```ts
  * import { permCheck } from "../plugins/permCheck"; //(change if need be)
  * import { sernModule, CommandType } from "@sern/handler";

@@ -1,10 +1,10 @@
 // @ts-nocheck
 /**
- * @author: @EvolutionX-10
- * @version: 1.1.0-beta
- * @description: This is publish plugin, it allows you to publish your slash commands with ease.
- * @license: MIT
- * @example:
+ * This is publish plugin, it allows you to publish your slash commands with ease.
+ *
+ * @author @EvolutionX-10
+ * @version 1.1.0
+ * @example
  * ```ts
  * import { publish } from "../path/to/your/plugin/folder";
  * import { sernModule, CommandType } from "@sern/handler";

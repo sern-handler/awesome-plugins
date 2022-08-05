@@ -1,10 +1,10 @@
 //@ts-nocheck
 /**
- * @author: @NeoYaBoi
- * @version: 1.0.0
- * @description: This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw
- * @license: Null
- * @example:
+ * This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw
+ *
+ * @author @NeoYaBoi
+ * @version 1.0.0
+ * @example
  * ```ts
  * import { nsfwOnly } from "../plugins/nsfwOnly"; //(change if need be)
  * import { sernModule, CommandType } from "@sern/handler";

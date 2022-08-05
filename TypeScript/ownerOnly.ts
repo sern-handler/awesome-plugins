@@ -1,10 +1,10 @@
 // @ts-nocheck
 /**
- * @author: @EvolutionX-10
- * @version: 1.0.0
- * @description: This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.
- * @license: MIT
- * @example:
+ * This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.
+ *
+ * @author @EvolutionX-10
+ * @version 1.0.0
+ * @example
  * ```ts
  * import { ownerOnly } from "../path/to/your/plugin/folder";
  * import { sernModule, CommandType } from "@sern/handler";

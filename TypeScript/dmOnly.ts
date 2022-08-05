@@ -1,11 +1,11 @@
 // @ts-nocheck
 /**
- * @author: @EvolutionX-10
- * @version: 1.1.0-beta
- * @description: This is dmOnly plugin, it allows commands to be run only in DMs.
+ * This is dmOnly plugin, it allows commands to be run only in DMs.
+ *
+ * @author @EvolutionX-10
+ * @version 1.0.0
  * @requires `partials: [Partials.Channel], intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent]
- * @license: MIT
- * @example:
+ * @example
  * ```ts
  * import { dmOnly } from "../path/to/your/plugin/folder";
  * import { commandModule } from "@sern/handler";

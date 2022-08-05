@@ -1,10 +1,9 @@
 // @ts-nocheck
 /**
- * @author HighArcs
+ * Allows you to set cooldowns (or "ratelimits") for commands
+ *
+ * @author @HighArcs
  * @version 1.0.0
- * @description allows you to set cooldowns (or "ratelimits") for commands
- * @license null
-
  * @example
  * ```ts
  * import { cooldown } from "../plugins/cooldown";
