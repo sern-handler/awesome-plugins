@@ -7,9 +7,9 @@
  * @example
  * ```ts
  * import { nsfwOnly } from "../plugins/nsfwOnly";
- * import { sernModule, CommandType } from "@sern/handler";
+ * import { commandModule } from "@sern/handler";
  * export default commandModule({
- *  plugins: [ nsfwOnly('response', true/false) ],
+ *  plugins: [ nsfwOnly('response', true) ],
  *  execute: (ctx) => {
  * 		//your code here
  *  }

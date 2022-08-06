@@ -7,7 +7,7 @@
  * @example
  * ```ts
  * import { permCheck } from "../plugins/permCheck";
- * import { sernModule, CommandType } from "@sern/handler";
+ * import { commandModule } from "@sern/handler";
  * export default commandModule({
  *  plugins: [ permCheck('permission', 'No permission response') ],
  *  execute: (ctx) => {
