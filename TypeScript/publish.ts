@@ -6,10 +6,13 @@
  * @version 1.1.0
  * @example
  * ```ts
- * import { publish } from "../path/to/your/plugin/folder";
- * import { sernModule, CommandType } from "@sern/handler";
- * export default sernModule<CommandType.Slash>([publish()], { // put guild id in array for guild commands
- * // your code
+ * import { publish } from "../plugins/publish";
+ * import { commandModule } from "@sern/handler";
+ * export default commandModule({
+ *  plugins: [ publish() ], // put an array of guild ids for guild commands
+ *  execute: (ctx) => {
+ * 		//your code here
+ *  }
  * })
  * ```
  */

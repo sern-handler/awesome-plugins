@@ -6,13 +6,13 @@
  * @version 1.0.0
  * @example
  * ```ts
- * import { nsfwOnly } from "../plugins/nsfwOnly"; //(change if need be)
+ * import { nsfwOnly } from "../plugins/nsfwOnly";
  * import { sernModule, CommandType } from "@sern/handler";
  * export default commandModule({
- *    plugins: [ nsfwOnly('response', true/false) ],
- *    execute: (ctx) => {
- *       //your code here
- *    }
+ *  plugins: [ nsfwOnly('response', true/false) ],
+ *  execute: (ctx) => {
+ * 		//your code here
+ *  }
  * })
  * ```
  */

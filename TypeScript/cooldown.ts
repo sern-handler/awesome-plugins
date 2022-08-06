@@ -7,10 +7,12 @@
  * @example
  * ```ts
  * import { cooldown } from "../plugins/cooldown";
- * import { sernModule, CommandType } from "@sern/handler";
+ * import { commandModule } from "@sern/handler";
  * export default commandModule({
- *   plugins: [cooldown.add( [ ['channel', '1/4'] ] )], // limit to 1 action every 4 seconds per channel
- *   execute: (ctx) => {}
+ *  plugins: [cooldown.add( [ ['channel', '1/4'] ] )], // limit to 1 action every 4 seconds per channel
+ *  execute: (ctx) => {
+ * 		//your code here
+ *  }
  * })
  * ```
  */

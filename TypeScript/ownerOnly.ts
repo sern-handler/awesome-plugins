@@ -6,10 +6,13 @@
  * @version 1.0.0
  * @example
  * ```ts
- * import { ownerOnly } from "../path/to/your/plugin/folder";
- * import { sernModule, CommandType } from "@sern/handler";
- * export default sernModule<CommandType.Slash>([OwnerOnly()], {
- * // your code
+ * import { ownerOnly } from "../plugins/ownerOnly";
+ * import { commandModule } from "@sern/handler";
+ * export default commandModule({
+ *  plugins: [ ownerOnly() ],
+ *  execute: (ctx) => {
+ * 		//your code here
+ *  }
  * })
  * ```
  */

@@ -4,14 +4,15 @@
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
  * @version 1.0.0
- * @requires `partials: [Partials.Channel], intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent]
  * @example
  * ```ts
- * import { dmOnly } from "../path/to/your/plugin/folder";
+ * import { dmOnly } from "../plugins/dmOnly";
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
- * 		plugins: [dmOnly()],
- * 		execute: // your code
+ *  plugins: [dmOnly()],
+ *  execute: (ctx) => {
+ * 		//your code here
+ *  }
  * })
  * ```
  */
