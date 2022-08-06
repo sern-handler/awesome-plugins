@@ -2,7 +2,7 @@
 /**
  * This is dmOnly plugin, it allows commands to be run only in DMs.
  *
- * @author @EvolutionX-10
+ * @author @EvolutionX-10 [<@697795666373640213>]
  * @version 1.0.0
  * @requires `partials: [Partials.Channel], intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent]
  * @example

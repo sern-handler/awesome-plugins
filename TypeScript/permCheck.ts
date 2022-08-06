@@ -2,7 +2,7 @@
 /**
  * This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).
  *
- * @author @NeoYaBoi
+ * @author @NeoYaBoi [<@762918086349029386>]
  * @version 1.0.1
  * @example
  * ```ts

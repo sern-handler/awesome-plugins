@@ -2,7 +2,7 @@
 /**
  * This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.
  *
- * @author @EvolutionX-10
+ * @author @EvolutionX-10 [<@697795666373640213>]
  * @version 1.0.0
  * @example
  * ```ts
