@@ -1,15 +1,18 @@
 // @ts-nocheck
 /**
- * @author: @EvolutionX-10
- * @version: 1.0.0
- * @description: This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.
- * @license: MIT
- * @example:
+ * This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.
+ *
+ * @author @EvolutionX-10 [<@697795666373640213>]
+ * @version 1.0.0
+ * @example
  * ```ts
- * import { ownerOnly } from "../path/to/your/plugin/folder";
- * import { sernModule, CommandType } from "@sern/handler";
- * export default sernModule<CommandType.Slash>([OwnerOnly()], {
- * // your code
+ * import { ownerOnly } from "../plugins/ownerOnly";
+ * import { commandModule } from "@sern/handler";
+ * export default commandModule({
+ *  plugins: [ ownerOnly() ],
+ *  execute: (ctx) => {
+ * 		//your code here
+ *  }
  * })
  * ```
  */
