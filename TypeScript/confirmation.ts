@@ -4,7 +4,6 @@
  * 
  * @author @HighArcs [<@504698587221852172>]
  * @version 1.0.0
- * @description 
  * @example
  * ```ts
  * import { confirmation } from "../plugins/confirmation";
