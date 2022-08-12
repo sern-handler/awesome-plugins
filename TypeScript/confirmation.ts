@@ -14,10 +14,10 @@
  *  type : CommandType.Both
  *  plugins: [confirmation()],
  * 	execute: (ctx, args) => {
- * 		ctx.reply('hola')
+ * 		ctx.reply('hola');
  * 	}
  * })
- */
+ **/
 
 import { CommandType, Context, EventPlugin, PluginType } from "@sern/handler";
 import type { Awaitable, Message, MessageReaction, User } from "discord.js";
