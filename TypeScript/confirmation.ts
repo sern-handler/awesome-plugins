@@ -1,9 +1,10 @@
 //@ts-nocheck
-/**
+/** 
+ * Asks the user for a confirmation message before executing the command
+ * 
  * @author @HighArcs [<@504698587221852172>]
  * @version 1.0.0
- * @description asks the user for a confirmation message before executing the command
- * @license null
+ * @description 
  * @example
  * ```ts
  * import { confirmation } from "../plugins/confirmation";
