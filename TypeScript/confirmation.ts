@@ -18,7 +18,7 @@
  * 	}
  * })
  * ```
- **/
+ */
 
 import { CommandType, Context, EventPlugin, PluginType } from "@sern/handler";
 import type { Awaitable, Message, MessageReaction, User } from "discord.js";
