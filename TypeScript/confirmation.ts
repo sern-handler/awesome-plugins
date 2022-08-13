@@ -17,6 +17,7 @@
  * 		ctx.reply('hola');
  * 	}
  * })
+ * ```
  **/
 
 import { CommandType, Context, EventPlugin, PluginType } from "@sern/handler";
