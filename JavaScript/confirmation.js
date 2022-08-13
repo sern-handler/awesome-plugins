@@ -1,4 +1,5 @@
 //@ts-nocheck
+
 /**
  * Asks the user for a confirmation message before executing the command
  *
@@ -19,30 +20,8 @@
  * })
  * ```
  */
-
-import { CommandType, Context, EventPlugin, PluginType } from "@sern/handler";
-import type { Awaitable, Message, MessageReaction, User } from "discord.js";
-
-type Callback<T> = Awaitable<T> | ((context: Context) => Awaitable<T>);
-type PostCallback<T> =
-	| Awaitable<T>
-	| ((context: Context, result: Message) => any);
-
-interface ConfirmationOptions {
-	timeout: number;
-	message: Callback<string>;
-	onTimeout: PostCallback<string>;
-	onCancel: PostCallback<string>;
-	onConfirm: PostCallback<string>;
-	emojis: Emojis;
-}
-
-interface Emojis {
-	yes: Callback<string>;
-	no: Callback<string>;
-}
-
-const defaultOptions: ConfirmationOptions = {
+import { PluginType } from "@sern/handler";
+const defaultOptions = {
 	timeout: 1000,
 	message: "Are you sure you want to proceed?",
 	onTimeout: "confirmation timed out",
@@ -57,14 +36,12 @@ const defaultOptions: ConfirmationOptions = {
 		yes: "✅",
 	},
 };
-
-export function confirmation(
-	raw: Partial<ConfirmationOptions> = {}
-): EventPlugin<CommandType.Both> {
-	const options: ConfirmationOptions = Object.assign({}, defaultOptions, raw);
+export function confirmation(raw = {}) {
+	const options = Object.assign({}, defaultOptions, raw);
 	return {
 		name: "confirmation",
 		type: PluginType.Event,
+
 		async execute([context], controller) {
 			if (typeof options.message === "function") {
 				options.message = await options.message(context);
@@ -72,6 +49,7 @@ export function confirmation(
 
 			const response = await context.reply(await options.message);
 			let { yes, no } = options.emojis;
+
 			if (typeof yes === "function") {
 				yes = await yes(context);
 			}
@@ -83,9 +61,9 @@ export function confirmation(
 			await response.react(await yes);
 			await response.react(await no);
 
-			function filter(reaction: MessageReaction, user: User) {
+			function filter(reaction, user) {
 				return (
-					([yes, no].includes(reaction.emoji.name!) ||
+					([yes, no].includes(reaction.emoji.name) ||
 						[yes, no].includes(reaction.emoji.identifier)) &&
 					user.id === context.user.id
 				);
@@ -96,6 +74,7 @@ export function confirmation(
 				max: 1,
 				time: options.timeout,
 			});
+
 			if (recieved.size === 0) {
 				if (typeof options.onTimeout === "function") {
 					await options.onTimeout(context, response);
@@ -108,6 +87,7 @@ export function confirmation(
 			}
 
 			const reaction = recieved.first();
+
 			if (!reaction) {
 				return controller.stop();
 			}
@@ -122,6 +102,7 @@ export function confirmation(
 					}
 
 					return controller.next();
+
 				case await no:
 					if (typeof options.onCancel === "function") {
 						await options.onCancel(context, response);
