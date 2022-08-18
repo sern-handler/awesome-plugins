@@ -7,7 +7,8 @@
  * @example
  * ```ts
  * import { channelType } from "../plugins/channelType";
- * import { channelType } from "discord.js"
+ * import type { ChannelType } from "discord.js"
+
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
  *  plugins: [ channelType(ChannelType.GuildText, 'This cannot be used here') ],
