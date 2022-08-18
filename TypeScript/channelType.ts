@@ -1,6 +1,6 @@
 //@ts-nocheck
 /**
- * This plugin checks if a channel is the specified type (does not accept)
+ * This plugin checks if a channel is the specified type 
  *
  * @author @NeoYaBoi [<@762918086349029386>]
  * @version 1.0.0
