@@ -74,8 +74,13 @@ export function publish(
 						return controller.next();
 					}
 
-					client.application!.commands.create(commandData).catch(c);
-					console.log("Command created", module.name!);
+					client
+						.application!.commands.create(commandData)
+						.then(() => {
+							console.log("Command created", module.name!);
+						})
+						.catch(c);
+
 					return controller.next();
 				}
 
