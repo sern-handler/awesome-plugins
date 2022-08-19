@@ -27,12 +27,12 @@ export function channelType(
     description: "Checks the channel type.",
     async execute(event, controller) {
       const [ctx] = event;
-      let channel = ctx.channel?.type
+      let channel = ctx.channel?.type;
       //for some reason the dm channel type was returning undefined at some points
-      if(channel == undefined) {
-        channel = ChannelType.DM
+      if (channel == undefined) {
+        channel = ChannelType.DM;
       }
-      if(channelType.includes(channel)) {
+      if (channelType.includes(channel)) {
         return controller.next();
       }
       if (onFail) {
