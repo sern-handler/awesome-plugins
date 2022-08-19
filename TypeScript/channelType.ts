@@ -16,10 +16,10 @@
  * })
  * ```
  */
-import { ChannelType } from "discord.js";
+const { ChannelType } = require("discord.js");
 import { CommandType, EventPlugin, PluginType } from "@sern/handler";
 export function channelType(
-  channelType: ChannelType[],
+  channelType: typeof ChannelType[],
   onFail?: string
 ): EventPlugin<CommandType.Both> {
   return {
