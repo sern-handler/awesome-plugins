@@ -1,14 +1,12 @@
-//@ts-nocheck
 /**
- * This plugin checks if a channel is the specified type 
+ * This plugin checks if a channel is the specified type
  *
  * @author @NeoYaBoi [<@762918086349029386>]
  * @version 1.0.0
  * @example
  * ```ts
  * import { channelType } from "../plugins/channelType";
- * import type { ChannelType } from "discord.js"
-
+ * import { channelType } from "discord.js"
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
  *  plugins: [ channelType(ChannelType.GuildText, 'This cannot be used here') ],
@@ -18,10 +16,10 @@
  * })
  * ```
  */
-import type { ChannelType } from "discord.js";
+import { ChannelType } from "discord.js";
 import { CommandType, EventPlugin, PluginType } from "@sern/handler";
 export function channelType(
-  channelType: ChannelType,
+  channelType: ChannelType[],
   onFail?: string
 ): EventPlugin<CommandType.Both> {
   return {
@@ -29,13 +27,18 @@ export function channelType(
     description: "Checks the channel type.",
     async execute(event, controller) {
       const [ctx] = event;
-      if (channelType !== ctx.channel?.type) {
-        if (onFail) {
-          await ctx.reply(onFail);
-        }
-        return controller.stop();
+      let channel = ctx.channel?.type
+      //for some reason the dm channel type was returning undefined at some points
+      if(channel == undefined) {
+        channel = ChannelType.DM
       }
-      return controller.next();
+      if(channelType.includes(channel)) {
+        return controller.next();
+      }
+      if (onFail) {
+        await ctx.reply(onFail);
+      }
+      return controller.stop();
     },
   };
 }
