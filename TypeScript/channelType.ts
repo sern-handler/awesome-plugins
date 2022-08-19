@@ -6,7 +6,7 @@
  * @example
  * ```ts
  * import { channelType } from "../plugins/channelType";
- * import { channelType } from "discord.js"
+ * import { ChannelType } from "discord.js"
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
  *  plugins: [ channelType([ChannelType.GuildText], 'This cannot be used here') ],
@@ -16,10 +16,10 @@
  * })
  * ```
  */
-const { ChannelType } = require("discord.js");
+import { ChannelType } from "discord.js";
 import { CommandType, EventPlugin, PluginType } from "@sern/handler";
 export function channelType(
-  channelType: typeof ChannelType[],
+  channelType: ChannelType[],
   onFail?: string
 ): EventPlugin<CommandType.Both> {
   return {
