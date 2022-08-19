@@ -9,7 +9,7 @@
  * import { channelType } from "discord.js"
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
- *  plugins: [ channelType(ChannelType.GuildText, 'This cannot be used here') ],
+ *  plugins: [ channelType([ChannelType.GuildText], 'This cannot be used here') ],
  *  execute: (ctx) => {
  * 		//your code here
  *  }
@@ -29,7 +29,7 @@ export function channelType(
       const [ctx] = event;
       let channel = ctx.channel?.type;
       //for some reason the dm channel type was returning undefined at some points
-      if (channel == undefined) {
+      if (channel === undefined) {
         channel = ChannelType.DM;
       }
       if (channelType.includes(channel)) {
