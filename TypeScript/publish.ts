@@ -74,8 +74,8 @@ export function publish(
 						return controller.next();
 					}
 
-					console.log("Command created", module.name!);
 					client.application!.commands.create(commandData).catch(c);
+					console.log("Command created", module.name!);
 					return controller.next();
 				}
 
@@ -90,20 +90,28 @@ export function publish(
 							console.log(
 								`Found differences in command ${module.name}`
 							);
-							console.log(
-								`${module.name} updated with new data successfully!`
-							);
-							guildcmd.edit(commandData).catch(c);
+							guildcmd
+								.edit(commandData)
+								.then(() =>
+									console.log(
+										`${module.name} updated with new data successfully!`
+									)
+								)
+								.catch(c);
 							continue;
 						}
 						continue;
 					}
-					console.log(
-						"Guild Command created",
-						module.name!,
-						guild.name
-					);
-					guild.commands.create(commandData).catch(c);
+					guild.commands
+						.create(commandData)
+						.then(() =>
+							console.log(
+								"Guild Command created",
+								module.name!,
+								guild.name
+							)
+						)
+						.catch(c);
 				}
 				return controller.next();
 			} catch (e) {
