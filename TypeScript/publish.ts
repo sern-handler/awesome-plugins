@@ -3,14 +3,14 @@
  * This is publish plugin, it allows you to publish your slash commands with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
- * @version 1.2.1
+ * @version 1.2.2
  * @example
  * ```ts
  * import { publish } from "../plugins/publish";
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
  *  plugins: [ publish() ], // put an object containing permissions, ids for guild commands, boolean for dmPermission
- *  // plugins: [ publish({ guildIds: [], dmPermission: true})]
+ *  // plugins: [ publish({ guildIds: ['guildId'], defaultMemberPermissions: 'Administrator'})]
  *  execute: (ctx) => {
  * 		//your code here
  *  }
