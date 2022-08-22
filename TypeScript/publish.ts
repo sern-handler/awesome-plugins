@@ -17,7 +17,7 @@
  * })
  * ```
  */
- import {
+import {
 	CommandPlugin,
 	CommandType,
 	PluginType,
@@ -60,12 +60,14 @@ export function publish(
 				if (!Array.isArray(guildIds)) guildIds = [guildIds!];
 
 				if (!guildIds.length) {
-					const cmd = (await client.application!.commands.fetch()).find(
-						(c) => c.name === module.name
-					);
+					const cmd = (
+						await client.application!.commands.fetch()
+					).find((c) => c.name === module.name);
 					if (cmd) {
 						if (!cmd.equals(commandData, true)) {
-							console.log(`Found differences in global command ${module.name}`);
+							console.log(
+								`Found differences in global command ${module.name}`
+							);
 							cmd.edit(commandData).then(() => {
 								console.log(
 									`${module.name} updated with new data successfully!`
@@ -91,7 +93,9 @@ export function publish(
 					);
 					if (guildcmd) {
 						if (!guildcmd.equals(commandData, true)) {
-							console.log(`Found differences in command ${module.name}`);
+							console.log(
+								`Found differences in command ${module.name}`
+							);
 							guildcmd
 								.edit(commandData)
 								.then(() =>
@@ -107,7 +111,11 @@ export function publish(
 					guild.commands
 						.create(commandData)
 						.then(() =>
-							console.log("Guild Command created", module.name!, guild.name)
+							console.log(
+								"Guild Command created",
+								module.name!,
+								guild.name
+							)
 						)
 						.catch(c);
 				}
