@@ -17,7 +17,7 @@
  * })
  * ```
  */
- import {
+import {
 	CommandPlugin,
 	CommandType,
 	PluginType,
@@ -39,10 +39,15 @@ export function publish(
 		async execute({ client }, { mod: module }, controller) {
 			const defaultOptions = {
 				guildIds: [],
-				dmPermission: true,
+				dmPermission: undefined,
+				defaultMemberPermissions: null,
 			};
-			options = { ...defaultOptions, ...options };
-			let { defaultMemberPermissions, dmPermission, guildIds } = options;
+
+			options = { ...defaultOptions, ...options } as PublishOptions &
+				ValidPublishOptions;
+			let { defaultMemberPermissions, dmPermission, guildIds } =
+				options as unknown as ValidPublishOptions;
+
 			function c(e: unknown) {
 				console.error("publish command didnt work for", module.name!);
 				console.error(e);
@@ -57,15 +62,15 @@ export function publish(
 					dmPermission,
 				};
 
-				if (!Array.isArray(guildIds)) guildIds = [guildIds!];
-
 				if (!guildIds.length) {
-					const cmd = (await client.application!.commands.fetch()).find(
-						(c) => c.name === module.name
-					);
+					const cmd = (
+						await client.application!.commands.fetch()
+					).find((c) => c.name === module.name);
 					if (cmd) {
 						if (!cmd.equals(commandData, true)) {
-							console.log(`Found differences in global command ${module.name}`);
+							console.log(
+								`Found differences in global command ${module.name}`
+							);
 							cmd.edit(commandData).then(() => {
 								console.log(
 									`${module.name} updated with new data successfully!`
@@ -91,7 +96,9 @@ export function publish(
 					);
 					if (guildcmd) {
 						if (!guildcmd.equals(commandData, true)) {
-							console.log(`Found differences in command ${module.name}`);
+							console.log(
+								`Found differences in command ${module.name}`
+							);
 							guildcmd
 								.edit(commandData)
 								.then(() =>
@@ -107,7 +114,11 @@ export function publish(
 					guild.commands
 						.create(commandData)
 						.then(() =>
-							console.log("Guild Command created", module.name!, guild.name)
+							console.log(
+								"Guild Command created",
+								module.name!,
+								guild.name
+							)
 						)
 						.catch(c);
 				}
@@ -134,15 +145,31 @@ export const CommandTypeRaw = {
 	[CommandType.Slash]: ApplicationCommandType.ChatInput,
 } as const;
 
-interface DefaultPublishOptions {
-	guildIds?: string | string[];
+type NonEmptyArray<T extends string = string> = [T, ...T[]];
+
+interface ValidPublishOptions {
+	guildIds: string[];
+	dmPermission: boolean;
+	defaultMemberPermissions: PermissionResolvable;
+}
+interface GuildPublishOptions {
+	guildIds?: NonEmptyArray;
+	defaultMemberPermissions?: PermissionResolvable;
+	dmPermission?: never;
+}
+interface GlobalPublishOptions {
 	defaultMemberPermissions?: PermissionResolvable;
 	dmPermission?: boolean;
+	guildIds?: never;
 }
 
-type PublishOptions = DefaultPublishOptions &
+type BasePublishOptions = GuildPublishOptions | GlobalPublishOptions;
+
+type PublishOptions = BasePublishOptions &
 	(
-		| Required<Pick<DefaultPublishOptions, "defaultMemberPermissions">>
-		| Required<Pick<DefaultPublishOptions, "dmPermission">>
-		| Required<Pick<DefaultPublishOptions, "guildIds">>
+		| Required<Pick<BasePublishOptions, "defaultMemberPermissions">>
+		| (
+				| Required<Pick<BasePublishOptions, "dmPermission">>
+				| Required<Pick<BasePublishOptions, "guildIds">>
+		  )
 	);
