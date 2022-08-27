@@ -4,7 +4,7 @@
  * This is publish plugin, it allows you to publish your slash commands with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
- * @version 1.2.2
+ * @version 1.2.3
  * @example
  * ```ts
  * import { publish } from "../plugins/publish";
