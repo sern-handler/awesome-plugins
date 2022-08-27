@@ -3,7 +3,7 @@
  * This is publish plugin, it allows you to publish your slash commands with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
- * @version 1.2.2
+ * @version 1.2.3
  * @example
  * ```ts
  * import { publish } from "../plugins/publish";
@@ -53,14 +53,14 @@ export function publish(
 				console.error(e);
 			}
 			try {
-				const commandData: ApplicationCommandData = {
+				const commandData = {
 					type: CommandTypeRaw[module.type],
 					name: module.name!,
 					description: module.description,
 					options: optionsTransformer(module.options ?? []),
 					defaultMemberPermissions,
 					dmPermission,
-				};
+				} as ApplicationCommandData;
 
 				if (!guildIds.length) {
 					const cmd = (
@@ -145,9 +145,9 @@ export const CommandTypeRaw = {
 	[CommandType.Slash]: ApplicationCommandType.ChatInput,
 } as const;
 
-type NonEmptyArray<T extends string = string> = [T, ...T[]];
+export type NonEmptyArray<T extends `${number}` = `${number}`> = [T, ...T[]];
 
-interface ValidPublishOptions {
+export interface ValidPublishOptions {
 	guildIds: string[];
 	dmPermission: boolean;
 	defaultMemberPermissions: PermissionResolvable;
@@ -159,13 +159,13 @@ interface GuildPublishOptions {
 }
 interface GlobalPublishOptions {
 	defaultMemberPermissions?: PermissionResolvable;
-	dmPermission?: boolean;
+	dmPermission?: false;
 	guildIds?: never;
 }
 
 type BasePublishOptions = GuildPublishOptions | GlobalPublishOptions;
 
-type PublishOptions = BasePublishOptions &
+export type PublishOptions = BasePublishOptions &
 	(
 		| Required<Pick<BasePublishOptions, "defaultMemberPermissions">>
 		| (
