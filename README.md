@@ -1,4 +1,4 @@
-![discord](https://img.shields.io/discord/889026545715400705) ![reposize](https://img.shields.io/github/languages/code-size/sern-handler/awesome-plugins?label=repo%20size) ![forks](https://img.shields.io/github/forks/sern-handler/awesome-plugins?style=social) ![stars](https://img.shields.io/github/stars/sern-handler/awesome-plugins?style=social)
+[![Awesome](https://awesome.re/badge-flat.svg)](https://awesome.re) ![discord](https://img.shields.io/discord/889026545715400705) ![reposize](https://img.shields.io/github/languages/code-size/sern-handler/awesome-plugins?label=repo%20size) ![forks](https://img.shields.io/github/forks/sern-handler/awesome-plugins?style=social) ![stars](https://img.shields.io/github/stars/sern-handler/awesome-plugins?style=social)
 # sern Plugins
 
 A list of plugins made by the awesome community, for the awesome community.
