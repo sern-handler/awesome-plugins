@@ -14,4 +14,4 @@ Then, read the comments of the plugin file to know how to use them or run `/plug
 ## Contributing
 
 Create your plugin by reading the docs, then open a PR.
-Code it in typescript, and a GitHub Action will convert the plugin to JavaScript automatically when merged.
+Code it in TypeScript, and a GitHub Action will convert the plugin to JavaScript automatically when merged.
