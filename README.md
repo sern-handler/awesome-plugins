@@ -5,7 +5,7 @@ An awesome list of plugins made by the awesome community, for the awesome commun
 
 ## How to install
 
-As easy as running `sern plugins` with the [CLI](https://github.com/sern-handler/cli).
+As easy as running `sern plugins` with the [CLI](https://github.com/sern-handler/cli). Make sure you have a `sern.config.json` file at the root of your project.
 
 You can also install them by downloading the file into your project.
 
