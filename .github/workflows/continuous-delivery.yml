@@ -22,14 +22,11 @@ jobs:
       - name: Install Node.js dependencies
         run: npm i -g prettier && npm i
 
-      - name: Run Prettier
-        run: prettier --write .
-
       - name: Convert TypeScript to JavaScript
         run: npx babel TypeScript --out-dir JavaScript --extensions ".ts"
 
       - name: Run JavaScript Prettier
-        run: prettier --write ./JavaScript
+        run: prettier --write .
 
       - name: Create Pull Request
         id: cpr

@@ -16,21 +16,23 @@
  * })
  * ```
  */
- import { CommandType, EventPlugin, PluginType } from "@sern/handler";
- import { InteractionReplyOptions, ReplyMessageOptions } from "discord.js";
+import { CommandType, EventPlugin, PluginType } from "@sern/handler";
+import { InteractionReplyOptions, ReplyMessageOptions } from "discord.js";
 
- export function disable(
-     onFail?: string | Omit<InteractionReplyOptions, "fetchReply"> | ReplyMessageOptions
- ): EventPlugin<CommandType.Both> {
-     return {
-         type: PluginType.Event,
-         description: "Disables command from responding",
-         async execute([ctx], controller) {
-             if(onFail !== undefined) {
-                await ctx.reply(onFail);
-             } 
-             return controller.stop();
-         }
-     };
- }
- 
+export function disable(
+	onFail?:
+		| string
+		| Omit<InteractionReplyOptions, "fetchReply">
+		| ReplyMessageOptions
+): EventPlugin<CommandType.Both> {
+	return {
+		type: PluginType.Event,
+		description: "Disables command from responding",
+		async execute([ctx], controller) {
+			if (onFail !== undefined) {
+				await ctx.reply(onFail);
+			}
+			return controller.stop();
+		},
+	};
+}
