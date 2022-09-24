@@ -7,7 +7,7 @@
  * @example
  * ```ts
  * import { commandModule, CommandType } from "@sern/handler";
- * import { devServerOnly } from "../plugins/devServerOnly";
+ * import { serverOnly } from "../plugins/serverOnly";
  * export default commandModule({
  *   type: CommandType.Both,
  *   plugins: [devServerOnly(["guildId"], failMessage)], // fail message is the message you will see when the command is ran in the wrong server.
@@ -21,7 +21,7 @@
 
 import { CommandType, EventPlugin, PluginType } from "@sern/handler";
 
-export function devServerOnly(
+export function serverOnly(
   guildId: string[],
   failMessage?: string
 ): EventPlugin<CommandType.Both> {
