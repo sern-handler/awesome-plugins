@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 /**
- * This is publish plugin, it allows you to publish your slash commands with ease.
+ * This is publish plugin, it allows you to publish your application commands with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
- * @version 1.2.3
+ * @version 1.3.0
  * @example
  * ```ts
  * import { publish } from "../plugins/publish";
@@ -44,8 +44,16 @@ export function publish(options) {
 				const commandData = {
 					type: CommandTypeRaw[module.type],
 					name: module.name,
-					description: module.description,
-					options: optionsTransformer(module.options ?? []),
+					description: [CommandType.Slash, CommandType.Both].includes(
+						module.type
+					)
+						? module.description
+						: undefined,
+					options: [CommandType.Slash, CommandType.Both].includes(
+						module.type
+					)
+						? optionsTransformer(module.options ?? [])
+						: [],
 					defaultMemberPermissions,
 					dmPermission,
 				};
@@ -53,7 +61,11 @@ export function publish(options) {
 				if (!guildIds.length) {
 					const cmd = (
 						await client.application.commands.fetch()
-					).find((c) => c.name === module.name);
+					).find(
+						(c) =>
+							c.name === module.name &&
+							c.type === CommandTypeRaw[module.type]
+					);
 
 					if (cmd) {
 						if (!cmd.equals(commandData, true)) {
@@ -83,7 +95,9 @@ export function publish(options) {
 					const guild = await client.guilds.fetch(id).catch(c);
 					if (!guild) continue;
 					const guildcmd = (await guild.commands.fetch()).find(
-						(c) => c.name === module.name
+						(c) =>
+							c.name === module.name &&
+							c.type === CommandTypeRaw[module.type]
 					);
 
 					if (guildcmd) {
