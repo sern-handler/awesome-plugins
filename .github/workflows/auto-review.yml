@@ -1,0 +1,11 @@
+name: 'PR Auto Review'
+on:
+  pull_request_target:
+jobs:
+  pr-auto-review:
+    name: PR Auto Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Automatically assign reviewers
+        if: github.event.action == 'opened'
+        uses: kentaro-m/auto-assign-action@v1.2.1
