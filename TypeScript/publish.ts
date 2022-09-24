@@ -81,7 +81,11 @@ export function publish(
 				if (!guildIds.length) {
 					const cmd = (
 						await client.application!.commands.fetch()
-					).find((c) => c.name === module.name);
+					).find(
+						(c) =>
+							c.name === module.name &&
+							c.type === CommandTypeRaw[module.type]
+					);
 					if (cmd) {
 						if (!cmd.equals(commandData, true)) {
 							console.log(
@@ -108,7 +112,9 @@ export function publish(
 					const guild = await client.guilds.fetch(id).catch(c);
 					if (!guild) continue;
 					const guildcmd = (await guild.commands.fetch()).find(
-						(c) => c.name === module.name
+						(c) =>
+							c.name === module.name &&
+							c.type === CommandTypeRaw[module.type]
 					);
 					if (guildcmd) {
 						if (!guildcmd.equals(commandData, true)) {
