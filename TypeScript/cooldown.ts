@@ -2,7 +2,7 @@
 /**
  * Allows you to set cooldowns (or "ratelimits") for commands
  *
- * @author @HighArcs [<@504698587221852172>]
+ * @author @trueharuu [<@504698587221852172>]
  * @version 1.0.0
  * @example
  * ```ts
