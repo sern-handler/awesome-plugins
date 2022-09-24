@@ -10,7 +10,7 @@
  * import { serverOnly } from "../plugins/serverOnly";
  * export default commandModule({
  *   type: CommandType.Both,
- *   plugins: [devServerOnly(["guildId"], failMessage)], // fail message is the message you will see when the command is ran in the wrong server.
+ *   plugins: [serverOnly(["guildId"], failMessage)], // fail message is the message you will see when the command is ran in the wrong server.
  *   description: "command description",
  *   execute: async (ctx, args) => {
  *     // your code here
