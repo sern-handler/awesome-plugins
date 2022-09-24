@@ -23,15 +23,13 @@ import { CommandType, EventPlugin, PluginType } from "@sern/handler";
 
 export function serverOnly(
   guildId: string[],
-  failMessage?: string
+  failMessage = "I am unable to comply with your command."
 ): EventPlugin<CommandType.Both> {
   return {
     type: PluginType.Event,
     description: "Checks if a command is available in a specific server.",
     async execute([ctx, args], controller) {
       if (!guildId.includes(ctx.guildId)) {
-        if (!failMessage)
-          failMessage = "I am unable to comply with your command.";
         await ctx.reply(failMessage).then(async (m) => {
           setTimeout(async () => {
             await m.delete();
