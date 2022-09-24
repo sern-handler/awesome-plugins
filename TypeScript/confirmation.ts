@@ -2,7 +2,7 @@
 /**
  * Asks the user for a confirmation message before executing the command
  *
- * @author @HighArcs [<@504698587221852172>]
+ * @author @trueharuu [<@504698587221852172>]
  * @version 1.0.0
  * @example
  * ```ts
