@@ -34,9 +34,16 @@ export function confirmation(
 		type: PluginType.Event,
 		description: "Confirms",
 		async execute([ctx], controller) {
-			const content = options?.content ?? "Do you want to proceed?";
-			const labels = options?.labels ?? ["No", "Yes"];
-			const buttons = labels.map((l, i) => {
+			options = {
+				content: "Do you want to proceed?",
+				denialMessage: "Cancelled",
+				labels: ["No", "Yes"],
+				time: 60_000,
+				wrongUserResponse: "Not for you!",
+				...options,
+			};
+
+			const buttons = options.labels!.map((l, i) => {
 				return new ButtonBuilder()
 					.setCustomId(l)
 					.setLabel(l)
@@ -45,7 +52,7 @@ export function confirmation(
 					);
 			});
 			const sent = await ctx.reply({
-				content,
+				content: options.content,
 				components: [
 					new ActionRowBuilder<ButtonBuilder>().setComponents(
 						buttons
@@ -56,19 +63,19 @@ export function confirmation(
 			const collector = sent.createMessageComponentCollector({
 				componentType: ComponentType.Button,
 				filter: (i) => i.user.id === ctx.user.id,
-				time: options?.time ?? 60_000,
+				time: options.time,
 			});
 
 			return new Promise((resolve) => {
 				collector.on("collect", async (i) => {
 					await i.update({ components: [] });
 					collector.stop();
-					if (i.customId === labels[1]) {
+					if (i.customId === options!.labels![1]) {
 						resolve(controller.next());
 						return;
 					}
 					await i.editReply({
-						content: options?.denialMessage ?? "Cancelled",
+						content: options?.denialMessage,
 					});
 					resolve(controller.stop());
 				});
@@ -87,7 +94,7 @@ export function confirmation(
 
 				collector.on("ignore", async (i) => {
 					await i.reply({
-						content: options?.wrongUserResponse ?? "Not for you!",
+						content: options?.wrongUserResponse,
 						ephemeral: true,
 					});
 				});
