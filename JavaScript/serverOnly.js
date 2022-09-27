@@ -3,7 +3,7 @@
 /**
  * Checks if a command is available in a specific server.
  *
- * @author @D3ord3NidAm [<@1017182455926624316>]
+ * @author @DPeter-MJ-Parker [<@1017182455926624316>]
  * @version 1.0.0
  * @example
  * ```ts
