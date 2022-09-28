@@ -3,7 +3,7 @@
 /**
  * Checks if a command is available in a specific server.
  *
- * @author @DPeter-MJ-Parker [<@1017182455926624316>]
+ * @author @Peter-MJ-Parker [<@1017182455926624316>]
  * @version 1.0.0
  * @example
  * ```ts
@@ -22,7 +22,7 @@
 import { PluginType } from "@sern/handler";
 export function serverOnly(
 	guildId,
-	failMessage = "I am unable to comply with your command."
+	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
 ) {
 	return {
 		type: PluginType.Event,
