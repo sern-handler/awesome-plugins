@@ -9,7 +9,7 @@ As easy as running `sern plugins` with the [CLI](https://github.com/sern-handler
 
 You can also install them by downloading the file into your project.
 
-Then, read the comments of the plugin file to know how to use them or run `/plugin` on the discord server
+Then, read the JSDoc of the plugin file to know how to use them or run `/plugin` on the discord server
 
 ## Contributing
 
