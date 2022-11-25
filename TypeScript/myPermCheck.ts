@@ -7,7 +7,7 @@
  * @version 1.1.0
  * @example
  * ```ts
- * import { requirePermission } from "../plugins/permCheck";
+ * import { requirePermission } from "../plugins/myPermCheck";
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
  *  plugins: [ requirePermission('target', 'permission', 'No permission response') ],
