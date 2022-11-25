@@ -10,7 +10,7 @@
  * import { requirePermission } from "../plugins/myPermCheck";
  * import { commandModule } from "@sern/handler";
  * export default commandModule({
- *  plugins: [ requirePermission('target', 'permission', 'No permission response') ],
+ *  plugins: [ requirePermission('target', 'permission', <optional response>'No permission response') ],
  *  execute: (ctx) => {
  * 		//your code here
  *  }
@@ -18,28 +18,22 @@
  * ```
  */
 
+import type { GuildMember, PermissionResolvable } from "discord.js";
 import {
-  type GuildMember,
-  PermissionResolvable,
-  GuildMemberResolvable,
-} from "discord.js";
-import { CommandType, EventPlugin, PluginType } from "@sern/handler";
+  CommandPlugin,
+  Controller,
+  PluginType
+} from "@sern/handler";
 export function requirePermission(
-  target: GuildMemberResolvable,
+  target: "user" | "bot",
   perm: PermissionResolvable,
   response?: string
-): EventPlugin<
-  CommandType.Both,
-  CommandType.MenuMsg,
-  CommandType.MenuSelect,
-  CommandType.MenuUser,
-  CommandType.Modal,
-  CommandType.Button
-> {
+): CommandPlugin {
   return {
     type: PluginType.Event,
     description: "Checks bot/user perms",
-    async execute(event, controller) {
+    async execute(event, controller: Controller) {
+      console.log(event);
       const [ctx] = event;
       if (ctx.guild === null) {
         ctx.reply("This command cannot be used here");
