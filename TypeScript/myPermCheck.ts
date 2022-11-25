@@ -33,7 +33,6 @@ export function requirePermission(
     type: PluginType.Event,
     description: "Checks bot/user perms",
     async execute(event, controller: Controller) {
-      console.log(event);
       const [ctx] = event;
       if (ctx.guild === null) {
         ctx.reply("This command cannot be used here");
