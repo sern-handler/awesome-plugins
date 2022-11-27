@@ -2,7 +2,7 @@
 /**
  * This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw
  *
- * @author @NeoYaBoi [<@762918086349029386>]
+ * @author @Benzo-Fury [<@762918086349029386>]
  * @version 1.0.0
  * @example
  * ```ts
