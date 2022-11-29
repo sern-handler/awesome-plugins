@@ -9,7 +9,7 @@
  * import { requirePermission } from "../plugins/myPermCheck";
  * import { commandModule, CommandType } from "@sern/handler";
  * export default commandModule({
- *  plugins: [ requirePermission<CommandType>('target', 'permission', <optional response>'No permission response') ],
+ *  plugins: [ requirePermission<CommandType>('target', 'permission', 'No response (optional)') ],
  *  execute: (ctx) => {
  * 		//your code here
  *  }
