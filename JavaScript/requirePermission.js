@@ -16,43 +16,39 @@
  * })
  * ```
  */
+import { PluginType } from "@sern/handler";
 
-import type { GuildMember, PermissionResolvable } from "discord.js";
-import {
-	CommandType,
-	Controller,
-	EventPlugin,
-	PluginType,
-} from "@sern/handler";
-
-function payload(resp?: string) {
-	return { fetchReply: true, content: resp } as const;
+function payload(resp) {
+	return {
+		fetchReply: true,
+		content: resp,
+	};
 }
 
-export function requirePermission<T extends CommandType>(
-	target: "user" | "bot",
-	perm: PermissionResolvable,
-	response?: string
-): EventPlugin<T> {
+export function requirePermission(target, perm, response) {
 	return {
 		type: PluginType.Event,
 		description: "Checks bot/user perms",
-		async execute(event, controller: Controller) {
+
+		async execute(event, controller) {
 			const [ctx] = event;
+
 			if (ctx.guild === null) {
 				ctx.reply(payload("This command cannot be used here"));
 				console.warn(
 					"PermCheck > A command stopped because we couldn't check a users permissions (was used in dms)"
 				); //delete this line if you dont want to be notified when a command is used outside of a guild/server
+
 				return controller.stop();
 			}
+
 			switch (target) {
 				case "bot":
 					if (
 						!(
-							(await ctx.guild.members.fetchMe({
+							await ctx.guild.members.fetchMe({
 								cache: false,
-							})!) as GuildMember
+							})
 						).permissions.has(perm)
 					) {
 						if (!response)
@@ -60,15 +56,19 @@ export function requirePermission<T extends CommandType>(
 						await ctx.reply(payload(response));
 						return controller.stop();
 					}
+
 					return controller.next();
+
 				case "user":
-					if (!(ctx.member! as GuildMember).permissions.has(perm)) {
+					if (!ctx.member.permissions.has(perm)) {
 						if (!response)
 							response = `You cannot use this command because you are missing \`${perm}\` permission.`;
 						await ctx.reply(payload(response));
 						return controller.stop();
 					}
+
 					return controller.next();
+
 				default:
 					console.warn(
 						"Perm Check >>> You didn't specify user or bot."
