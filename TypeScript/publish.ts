@@ -1,9 +1,9 @@
 // @ts-nocheck
 /**
- * This is publish plugin, it allows you to publish your application commands with ease.
+ * This is publish plugin, it allows you to publish your application commands using the discord.js library with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
- * @version 1.3.0
+ * @version 2.0.0
  * @example
  * ```ts
  * import { publish } from "../plugins/publish";
@@ -17,32 +17,25 @@
  * })
  * ```
  */
-import {
-	CommandPlugin,
-	CommandType,
-	PluginType,
-	SernOptionsData,
-	SlashCommand,
-} from "@sern/handler";
-import {
-	ApplicationCommandData,
-	ApplicationCommandType,
-	PermissionResolvable,
-} from "discord.js";
+import {CommandPlugin, CommandType, PluginType, SernOptionsData, SlashCommand,} from "@sern/handler";
+import {ApplicationCommandData, ApplicationCommandType, PermissionResolvable,} from "discord.js";
+import { useContainer } from "../index.js"; //your dependency getter
 
 export function publish(
 	options?: PublishOptions
 ): CommandPlugin<
 	| CommandType.Slash
 	| CommandType.Both
-	| CommandType.MenuMsg
-	| CommandType.MenuUser
+	| CommandType.CtxUser
+	| CommandType.CtxMsg
 > {
 	return {
 		type: PluginType.Command,
-		description: "Manage Slash Commands",
+		description: "Manage Application Commands",
 		name: "slash-auto-publish",
-		async execute({ client }, { mod: module }, controller) {
+		async execute({ mod: module }, controller) {
+			// Users need to provide their own useContainer function.
+			const [ client ] = useContainer('@sern/client')
 			const defaultOptions = {
 				guildIds: [],
 				dmPermission: undefined,
@@ -55,55 +48,49 @@ export function publish(
 				options as unknown as ValidPublishOptions;
 
 			function c(e: unknown) {
-				console.error("publish command didnt work for", module.name!);
+				console.error("publish command didnt work for", module.name);
 				console.error(e);
 			}
-			try {
-				const commandData = {
-					type: CommandTypeRaw[module.type],
-					name: module.name!,
-					description: [CommandType.Slash, CommandType.Both].includes(
-						module.type
-					)
-						? module.description
-						: undefined,
-					options: [CommandType.Slash, CommandType.Both].includes(
-						module.type
-					)
-						? optionsTransformer(
-								(module as SlashCommand).options ?? []
-						  )
-						: [],
+			const log = (...message : any[]) => () => console.log(...message);
+			const logged = (...message : any[]) => log(message);
+			const appCmd = <V extends CommandType, S, T>(t: V) => {
+				return (is: S, els: T) => (t & CommandType.Both) !== 0
+					? is
+					: els
+			}
+			const curAppType = CommandTypeRaw[module.type];
+			const createCommandData = () => {
+				const cmd = appCmd(module.type)
+				return {
+					name: module.name,
+					type: curAppType,
+					description: cmd(module.description, ''),
+					options: cmd(optionsTransformer((module as SlashCommand).options ?? []), []),
 					defaultMemberPermissions,
-					dmPermission,
-				} as ApplicationCommandData;
+					dmPermission
+				} as ApplicationCommandData
+			}
+
+			try {
+				const commandData = createCommandData();
 
 				if (!guildIds.length) {
-					const cmd = (
-						await client.application!.commands.fetch()
-					).find(
-						(c) =>
+					const cmd = (await client.application!.commands.fetch())
+						.find((c) =>
 							c.name === module.name &&
-							c.type === CommandTypeRaw[module.type]
-					);
+							c.type === curAppType
+						);
 					if (cmd) {
 						if (!cmd.equals(commandData, true)) {
-							console.log(
-								`Found differences in global command ${module.name}`
-							);
-							cmd.edit(commandData).then(() => {
-								console.log(
-									`${module.name} updated with new data successfully!`
-								);
-							});
+							logged(`Found differences in global command ${module.name}`);
+							cmd.edit(commandData)
+								.then(log(`${module.name} updated with new data successfully!`));
 						}
 						return controller.next();
 					}
 					client
 						.application!.commands.create(commandData)
-						.then(() => {
-							console.log("Command created", module.name!);
-						})
+						.then(log("Command created", module.name))
 						.catch(c);
 					return controller.next();
 				}
@@ -111,23 +98,17 @@ export function publish(
 				for (const id of guildIds) {
 					const guild = await client.guilds.fetch(id).catch(c);
 					if (!guild) continue;
-					const guildcmd = (await guild.commands.fetch()).find(
-						(c) =>
+					const guildCmd = (await guild.commands.fetch())
+						.find(c =>
 							c.name === module.name &&
-							c.type === CommandTypeRaw[module.type]
+							c.type === curAppType
 					);
-					if (guildcmd) {
-						if (!guildcmd.equals(commandData, true)) {
-							console.log(
-								`Found differences in command ${module.name}`
-							);
-							guildcmd
+					if (guildCmd) {
+						if (!guildCmd.equals(commandData, true)) {
+							logged(`Found differences in command ${module.name}`);
+							guildCmd
 								.edit(commandData)
-								.then(() =>
-									console.log(
-										`${module.name} updated with new data successfully!`
-									)
-								)
+								.then(log(`${module.name} updated with new data successfully!`))
 								.catch(c);
 							continue;
 						}
@@ -135,19 +116,13 @@ export function publish(
 					}
 					guild.commands
 						.create(commandData)
-						.then(() =>
-							console.log(
-								"Guild Command created",
-								module.name!,
-								guild.name
-							)
-						)
+						.then(log("Guild Command created", module.name, guild.name))
 						.catch(c);
 				}
 				return controller.next();
 			} catch (e) {
-				console.log("Command did not register" + module.name!);
-				console.log(e);
+				logged("Command did not register" + module.name);
+				logged(e);
 				return controller.stop();
 			}
 		},
@@ -162,8 +137,8 @@ export function optionsTransformer(ops: Array<SernOptionsData>) {
 
 export const CommandTypeRaw = {
 	[CommandType.Both]: ApplicationCommandType.ChatInput,
-	[CommandType.MenuMsg]: ApplicationCommandType.Message,
-	[CommandType.MenuUser]: ApplicationCommandType.User,
+	[CommandType.CtxUser]: ApplicationCommandType.Message,
+	[CommandType.CtxMsg]: ApplicationCommandType.User,
 	[CommandType.Slash]: ApplicationCommandType.ChatInput,
 } as const;
 
