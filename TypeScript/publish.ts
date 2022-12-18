@@ -19,7 +19,11 @@
  */
 import {CommandPlugin, CommandType, PluginType, SernOptionsData, SlashCommand,} from "@sern/handler";
 import {ApplicationCommandData, ApplicationCommandType, PermissionResolvable,} from "discord.js";
-import { useContainer } from "../index.js"; //your dependency getter
+/**
+ * This is the dependency getter that is created from Sern.makeDependencies.
+ * import it here so that this plugin has access to your bot's dependencies
+ */
+import { useContainer } from "../index.js"; 
 
 export function publish(
 	options?: PublishOptions
@@ -53,6 +57,14 @@ export function publish(
 			}
 			const log = (...message : any[]) => () => console.log(...message);
 			const logged = (...message : any[]) => log(message);
+			/**
+			 * a local function that returns either one value or the other,
+			 * depending on {t}'s CommandType. If the commandtype of 
+			 * this module is CommandType.Both or CommandType.Text or CommandType.Slash,
+			 * return 'is', else return 'els'
+			 * @param t 
+			 * @returns S | T
+			 */
 			const appCmd = <V extends CommandType, S, T>(t: V) => {
 				return (is: S, els: T) => (t & CommandType.Both) !== 0
 					? is
