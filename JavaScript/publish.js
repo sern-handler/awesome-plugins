@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 /**
- * This is publish plugin, it allows you to publish your application commands with ease.
+ * This is publish plugin, it allows you to publish your application commands using the discord.js library with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
- * @version 1.3.0
+ * @version 2.0.0
  * @example
  * ```ts
  * import { publish } from "../plugins/publish";
@@ -20,13 +20,21 @@
  */
 import { CommandType, PluginType } from "@sern/handler";
 import { ApplicationCommandType } from "discord.js";
+/**
+ * This is the dependency getter that is created from Sern.makeDependencies.
+ * import it here so that this plugin has access to your bot's dependencies
+ */
+
+import { useContainer } from "../index.js";
 export function publish(options) {
 	return {
 		type: PluginType.Command,
-		description: "Manage Slash Commands",
+		description: "Manage Application Commands",
 		name: "slash-auto-publish",
 
-		async execute({ client }, { mod: module }, controller) {
+		async execute({ mod: module }, controller) {
+			// Users need to provide their own useContainer function.
+			const [client] = useContainer("@sern/client");
 			const defaultOptions = {
 				guildIds: [],
 				dmPermission: undefined,
@@ -40,43 +48,59 @@ export function publish(options) {
 				console.error(e);
 			}
 
-			try {
-				const commandData = {
-					type: CommandTypeRaw[module.type],
+			const log =
+				(...message) =>
+				() =>
+					console.log(...message);
+
+			const logged = (...message) => log(message);
+			/**
+			 * a local function that returns either one value or the other,
+			 * depending on {t}'s CommandType. If the commandtype of
+			 * this module is CommandType.Both or CommandType.Text or CommandType.Slash,
+			 * return 'is', else return 'els'
+			 * @param t
+			 * @returns S | T
+			 */
+
+			const appCmd = (t) => {
+				return (is, els) => ((t & CommandType.Both) !== 0 ? is : els);
+			};
+
+			const curAppType = CommandTypeRaw[module.type];
+
+			const createCommandData = () => {
+				const cmd = appCmd(module.type);
+				return {
 					name: module.name,
-					description: [CommandType.Slash, CommandType.Both].includes(
-						module.type
-					)
-						? module.description
-						: undefined,
-					options: [CommandType.Slash, CommandType.Both].includes(
-						module.type
-					)
-						? optionsTransformer(module.options ?? [])
-						: [],
+					type: curAppType,
+					description: cmd(module.description, ""),
+					options: cmd(optionsTransformer(module.options ?? []), []),
 					defaultMemberPermissions,
 					dmPermission,
 				};
+			};
+
+			try {
+				const commandData = createCommandData();
 
 				if (!guildIds.length) {
 					const cmd = (
 						await client.application.commands.fetch()
 					).find(
-						(c) =>
-							c.name === module.name &&
-							c.type === CommandTypeRaw[module.type]
+						(c) => c.name === module.name && c.type === curAppType
 					);
 
 					if (cmd) {
 						if (!cmd.equals(commandData, true)) {
-							console.log(
+							logged(
 								`Found differences in global command ${module.name}`
 							);
-							cmd.edit(commandData).then(() => {
-								console.log(
+							cmd.edit(commandData).then(
+								log(
 									`${module.name} updated with new data successfully!`
-								);
-							});
+								)
+							);
 						}
 
 						return controller.next();
@@ -84,9 +108,7 @@ export function publish(options) {
 
 					client.application.commands
 						.create(commandData)
-						.then(() => {
-							console.log("Command created", module.name);
-						})
+						.then(log("Command created", module.name))
 						.catch(c);
 					return controller.next();
 				}
@@ -94,21 +116,19 @@ export function publish(options) {
 				for (const id of guildIds) {
 					const guild = await client.guilds.fetch(id).catch(c);
 					if (!guild) continue;
-					const guildcmd = (await guild.commands.fetch()).find(
-						(c) =>
-							c.name === module.name &&
-							c.type === CommandTypeRaw[module.type]
+					const guildCmd = (await guild.commands.fetch()).find(
+						(c) => c.name === module.name && c.type === curAppType
 					);
 
-					if (guildcmd) {
-						if (!guildcmd.equals(commandData, true)) {
-							console.log(
+					if (guildCmd) {
+						if (!guildCmd.equals(commandData, true)) {
+							logged(
 								`Found differences in command ${module.name}`
 							);
-							guildcmd
+							guildCmd
 								.edit(commandData)
-								.then(() =>
-									console.log(
+								.then(
+									log(
 										`${module.name} updated with new data successfully!`
 									)
 								)
@@ -121,8 +141,8 @@ export function publish(options) {
 
 					guild.commands
 						.create(commandData)
-						.then(() =>
-							console.log(
+						.then(
+							log(
 								"Guild Command created",
 								module.name,
 								guild.name
@@ -133,8 +153,8 @@ export function publish(options) {
 
 				return controller.next();
 			} catch (e) {
-				console.log("Command did not register" + module.name);
-				console.log(e);
+				logged("Command did not register" + module.name);
+				logged(e);
 				return controller.stop();
 			}
 		},
@@ -147,7 +167,7 @@ export function optionsTransformer(ops) {
 }
 export const CommandTypeRaw = {
 	[CommandType.Both]: ApplicationCommandType.ChatInput,
-	[CommandType.MenuMsg]: ApplicationCommandType.Message,
-	[CommandType.MenuUser]: ApplicationCommandType.User,
+	[CommandType.CtxUser]: ApplicationCommandType.Message,
+	[CommandType.CtxMsg]: ApplicationCommandType.User,
 	[CommandType.Slash]: ApplicationCommandType.ChatInput,
 };
