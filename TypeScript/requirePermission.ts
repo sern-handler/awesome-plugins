@@ -3,7 +3,7 @@
  *
  * @author @Benzo-Fury [<@762918086349029386>]
  * @author @needhamgary [<@342314924804014081>]
- * @version 1.1.0
+ * @version 1.2.0
  * @example
  * ```ts
  * import { requirePermission } from "../plugins/myPermCheck";
@@ -26,12 +26,16 @@ import {
 } from "@sern/handler";
 
 function payload(resp?: string) {
-	return { fetchReply: true, content: resp } as const;
+	return {
+		fetchReply: true,
+		content: resp,
+		allowedMentions: { repliedUser: false },
+	} as const;
 }
 
 export function requirePermission<T extends CommandType>(
-	target: "user" | "bot",
-	perm: PermissionResolvable,
+	target: "user" | "bot" | "both",
+	perm: PermissionResolvable[],
 	response?: string
 ): EventPlugin<T> {
 	return {
@@ -46,29 +50,48 @@ export function requirePermission<T extends CommandType>(
 				); //delete this line if you dont want to be notified when a command is used outside of a guild/server
 				return controller.stop();
 			}
+			const bot = (await ctx.guild.members.fetchMe({
+				cache: false,
+			})!) as GuildMember;
+			const memm = ctx.member! as GuildMember;
 			switch (target) {
+				//*********************************************************************************************************************//
 				case "bot":
+					if (!bot.permissions.has(perm)) {
+						if (!response)
+							response = `I cannot use this command, please give me \`${perm.join(
+								", "
+							)}\` permission(s).`;
+						await ctx.reply(payload(response));
+						return controller.stop();
+					}
+					return controller.next();
+				//*********************************************************************************************************************//
+				case "user":
+					if (!memm.permissions.has(perm)) {
+						if (!response)
+							response = `You cannot use this command because you are missing \`${perm.join(
+								", "
+							)}\` permission(s).`;
+						await ctx.reply(payload(response));
+						return controller.stop();
+					}
+					return controller.next();
+				//*********************************************************************************************************************//
+				case "both":
 					if (
-						!(
-							(await ctx.guild.members.fetchMe({
-								cache: false,
-							})!) as GuildMember
-						).permissions.has(perm)
+						!bot.permissions.has(perm) ||
+						!memm.permissions.has(perm)
 					) {
 						if (!response)
-							response = `I cannot use this command, please give me \`${perm}\` permission.`;
+							response = `Please ensure <@${bot.user.id}> and <@${
+								memm.user.id
+							}> both have \`${perm.join(", ")}\` permission(s).`;
 						await ctx.reply(payload(response));
 						return controller.stop();
 					}
 					return controller.next();
-				case "user":
-					if (!(ctx.member! as GuildMember).permissions.has(perm)) {
-						if (!response)
-							response = `You cannot use this command because you are missing \`${perm}\` permission.`;
-						await ctx.reply(payload(response));
-						return controller.stop();
-					}
-					return controller.next();
+				//*********************************************************************************************************************//
 				default:
 					console.warn(
 						"Perm Check >>> You didn't specify user or bot."
