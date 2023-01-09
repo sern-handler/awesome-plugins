@@ -17,46 +17,40 @@
  * ```
  */
 import {
-	ChannelType,
-	GuildTextBasedChannel,
-	TextBasedChannel,
-	TextChannel,
+    ChannelType,
+    GuildTextBasedChannel,
+    TextBasedChannel,
+    TextChannel,
 } from "discord.js";
-import { CommandType, EventPlugin, Nullish, PluginType } from "@sern/handler";
+import {CommandControlPlugin, CommandType, controller } from "@sern/handler";
 function isGuildText(
-	channel: Nullish<TextBasedChannel>
+    channel: TextBasedChannel | null
 ): channel is GuildTextBasedChannel {
-	return (
-		channel?.type == ChannelType.GuildPublicThread ||
-		channel?.type == ChannelType.GuildPrivateThread
-	);
+    return (
+        channel?.type == ChannelType.GuildPublicThread ||
+        channel?.type == ChannelType.GuildPrivateThread
+    );
 }
 export function nsfwOnly(
-	onFail: string,
-	ephemeral: boolean
-): EventPlugin<CommandType.Both> {
-	return {
-		type: PluginType.Event,
-		description: "Checks if the channel is nsfw or not.",
-		async execute(event, controller) {
-			const [ctx] = event;
-			//checking if command was executed in dms
-			if (ctx.guild === null) {
-				await ctx.reply({ content: onFail, ephemeral });
-				return controller.stop();
-			}
-			//channel is thread (not supported by nsfw)
-			if (isGuildText(ctx.channel) == true) {
-				await ctx.reply({ content: onFail, ephemeral });
-				return controller.stop();
-			}
-			if (!(ctx.channel! as TextChannel).nsfw) {
-				//channel is not nsfw
-				await ctx.reply({ content: onFail, ephemeral });
-				return controller.stop();
-			}
-			//continues to command if nsfw
-			return controller.next();
-		},
-	};
+    onFail: string,
+    ephemeral: boolean
+) {
+    return CommandControlPlugin<CommandType.Both>(async (ctx, _) => {
+        if (ctx.guild === null) {
+            await ctx.reply({ content: onFail, ephemeral });
+            return controller.stop();
+        }
+        //channel is thread (not supported by nsfw)
+        if (isGuildText(ctx.channel) == true) {
+            await ctx.reply({ content: onFail, ephemeral });
+            return controller.stop();
+        }
+        if (!(ctx.channel! as TextChannel).nsfw) {
+            //channel is not nsfw
+            await ctx.reply({ content: onFail, ephemeral });
+            return controller.stop();
+        }
+        //continues to command if nsfw
+        return controller.next();
+    });
 }
