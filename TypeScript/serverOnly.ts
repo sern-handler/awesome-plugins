@@ -19,25 +19,24 @@
  * ```
  */
 
-import { CommandType, EventPlugin, PluginType } from "@sern/handler";
+import { CommandType, controller, CommandControlPlugin } from "@sern/handler";
 
 export function serverOnly(
-	guildId: string[],
-	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
-): EventPlugin<CommandType.Both> {
-	return {
-		type: PluginType.Event,
-		description: "Checks if a command is available in a specific server.",
-		async execute([ctx, args], controller) {
-			if (!guildId.includes(ctx.guildId)) {
-				await ctx.reply(failMessage).then(async (m) => {
-					setTimeout(async () => {
-						await m.delete();
-					}, 3000);
-				});
-				return controller.stop();
-			}
-			return controller.next();
-		},
-	};
+    guildId: string[],
+    failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
+) {
+    return CommandControlPlugin<CommandType.Both>(async ( ctx, _) => {
+        if(ctx.guildId == null) {
+            return controller.stop()
+        }
+        if (!guildId.includes(ctx.guildId)) {
+            ctx.reply(failMessage).then(async (m) => {
+                setTimeout(async () => {
+                    await m.delete();
+                }, 3000);
+            });
+            return controller.stop();
+        }
+        return controller.next();
+    })
 }
