@@ -18,28 +18,23 @@
  * ```
  */
 import { ChannelType } from "discord.js";
-import { CommandType, EventPlugin, PluginType } from "@sern/handler";
+import {CommandControlPlugin, CommandType, controller } from "@sern/handler";
 export function channelType(
-	channelType: ChannelType[],
-	onFail?: string
-): EventPlugin<CommandType.Both> {
-	return {
-		type: PluginType.Event,
-		description: "Checks the channel type.",
-		async execute(event, controller) {
-			const [ctx] = event;
-			let channel = ctx.channel?.type;
-			//for some reason the dm channel type was returning undefined at some points
-			if (channel === undefined) {
-				channel = ChannelType.DM;
-			}
-			if (channelType.includes(channel)) {
-				return controller.next();
-			}
-			if (onFail) {
-				await ctx.reply(onFail);
-			}
-			return controller.stop();
-		},
-	};
+    channelType: ChannelType[],
+    onFail?: string
+){
+    return CommandControlPlugin<CommandType.Both>(async (ctx, args) => {
+        let channel = ctx.channel?.type;
+        //for some reason the dm channel type was returning undefined at some points
+        if (channel === undefined) {
+            channel = ChannelType.DM;
+        }
+        if (channelType.includes(channel)) {
+            return controller.next();
+        }
+        if (onFail) {
+            await ctx.reply(onFail);
+        }
+        return controller.stop();
+    })
 }
