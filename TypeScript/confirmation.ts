@@ -14,13 +14,13 @@
  *  type : CommandType.Both
  *  plugins: [confirmation()],
  * 	execute: (ctx, args) => {
- * 		ctx.reply('hola');
+ * 		ctx.interaction.followUp('Hello welcome to the secret club')
  * 	}
  * })
  * ```
  */
 
-import { CommandType, Context, EventPlugin, PluginType } from "@sern/handler";
+import {CommandControlPlugin, CommandType, Context, controller } from "@sern/handler";
 import type { Awaitable, Message, MessageReaction, User } from "discord.js";
 
 type Callback<T> = Awaitable<T> | ((context: Context) => Awaitable<T>);
@@ -43,7 +43,7 @@ interface Emojis {
 }
 
 const defaultOptions: ConfirmationOptions = {
-	timeout: 1000,
+	timeout: 5000,
 	message: "Are you sure you want to proceed?",
 	onTimeout: "confirmation timed out",
 	onCancel: "confirmation cancelled",
@@ -60,18 +60,15 @@ const defaultOptions: ConfirmationOptions = {
 
 export function confirmation(
 	raw: Partial<ConfirmationOptions> = {}
-): EventPlugin<CommandType.Both> {
+) {
 	const options: ConfirmationOptions = Object.assign({}, defaultOptions, raw);
-	return {
-		name: "confirmation",
-		type: PluginType.Event,
-		async execute([context], controller) {
+	return CommandControlPlugin<CommandType.Both>(async (context, _) => {
 			if (typeof options.message === "function") {
 				options.message = await options.message(context);
 			}
 
 			const response = await context.reply(await options.message);
-			let { yes, no } = options.emojis;
+			let {yes, no} = options.emojis;
 			if (typeof yes === "function") {
 				yes = await yes(context);
 			}
@@ -103,10 +100,8 @@ export function confirmation(
 					await response.edit(await options.onTimeout);
 					await response.reactions.removeAll();
 				}
-
 				return controller.stop();
 			}
-
 			const reaction = recieved.first();
 			if (!reaction) {
 				return controller.stop();
@@ -132,8 +127,7 @@ export function confirmation(
 
 					return controller.stop();
 			}
-
-			return controller.next();
-		},
-	};
+			return controller.next()
+		}
+	)
 }
