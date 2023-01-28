@@ -2,7 +2,7 @@
 
 /**
  * Allows you to set cooldowns (or "ratelimits") for commands
- *
+ * limits user/channel/guild actions,
  * @author @trueharuu [<@504698587221852172>]
  * @version 1.0.0
  * @example
@@ -17,7 +17,7 @@
  * })
  * ```
  */
-import { PluginType } from "@sern/handler";
+import { CommandControlPlugin, controller } from "@sern/handler";
 import { GuildMember } from "discord.js";
 /**
  * actions/seconds
@@ -89,41 +89,35 @@ function add(items, message) {
 		if (!Array.isArray(c)) return c;
 		return parseCooldown(c[0], c[1]);
 	});
-	return {
-		name: "cooldown",
-		description: "limits user/channel/guild actions",
-		type: PluginType.Event,
+	return CommandControlPlugin(async (context, args) => {
+		for (const { location, actions, seconds } of raw) {
+			const id = getPropertyForLocation(context, location);
+			const cooldown = map.get(id);
 
-		async execute([context], controller) {
-			for (const { location, actions, seconds } of raw) {
-				const id = getPropertyForLocation(context, location);
-				const cooldown = map.get(id);
-
-				if (!cooldown) {
-					map.set(id, 1, seconds * 1000);
-					continue;
-				}
-
-				if (cooldown >= actions) {
-					if (message) {
-						await message({
-							location,
-							actions: cooldown,
-							maxActions: actions,
-							seconds,
-							context,
-						});
-					}
-
-					return controller.stop();
-				}
-
-				map.set(id, cooldown + 1, seconds * 1000);
+			if (!cooldown) {
+				map.set(id, 1, seconds * 1000);
+				continue;
 			}
 
-			return controller.next();
-		},
-	};
+			if (cooldown >= actions) {
+				if (message) {
+					await message({
+						location,
+						actions: cooldown,
+						maxActions: actions,
+						seconds,
+						context,
+					});
+				}
+
+				return controller.stop();
+			}
+
+			map.set(id, cooldown + 1, seconds * 1000);
+		}
+
+		return controller.next();
+	});
 }
 
 const locations = {

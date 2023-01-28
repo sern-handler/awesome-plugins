@@ -17,30 +17,23 @@
  * })
  * ```
  */
-import { PluginType } from "@sern/handler";
+import { CommandControlPlugin, controller } from "@sern/handler";
 export function permCheck(perm, response) {
-	return {
-		type: PluginType.Event,
-		description: "Checks for specified perm",
+	return CommandControlPlugin(async (ctx, args) => {
+		if (ctx.guild === null) {
+			await ctx.reply("This command cannot be used here");
+			console.warn(
+				"PermCheck > A command stopped because we couldn't check a users permissions (was used in dms)"
+			); //delete this line if you dont want to be notified when a command is used outside of a guild/server
 
-		async execute(event, controller) {
-			const [ctx] = event;
+			return controller.stop();
+		}
 
-			if (ctx.guild === null) {
-				ctx.reply("This command cannot be used here");
-				console.warn(
-					"PermCheck > A command stopped because we couldn't check a users permissions (was used in dms)"
-				); //delete this line if you dont want to be notified when a command is used outside of a guild/server
+		if (!ctx.member.permissions.has(perm)) {
+			await ctx.reply(response);
+			return controller.stop();
+		}
 
-				return controller.stop();
-			}
-
-			if (!ctx.member.permissions.has(perm)) {
-				await ctx.reply(response);
-				return controller.stop();
-			}
-
-			return controller.next();
-		},
-	};
+		return controller.next();
+	});
 }

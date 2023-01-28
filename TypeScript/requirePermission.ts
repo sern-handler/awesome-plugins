@@ -19,9 +19,7 @@
  */
 
 import type { GuildMember, PermissionResolvable } from "discord.js";
-import {
-	CommandType, CommandControlPlugin, controller,
-} from "@sern/handler";
+import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
 
 function payload(resp?: string) {
 	return {
@@ -73,10 +71,7 @@ export function requirePermission(
 				return controller.next();
 			//*********************************************************************************************************************//
 			case "both":
-				if (
-					!bot.permissions.has(perm) ||
-					!memm.permissions.has(perm)
-				) {
+				if (!bot.permissions.has(perm) || !memm.permissions.has(perm)) {
 					if (!response)
 						response = `Please ensure <@${bot.user.id}> and <@${
 							memm.user.id
@@ -87,12 +82,9 @@ export function requirePermission(
 				return controller.next();
 			//*********************************************************************************************************************//
 			default:
-				console.warn(
-					"Perm Check >>> You didn't specify user or bot."
-				);
+				console.warn("Perm Check >>> You didn't specify user or bot.");
 				ctx.reply(payload("User or Bot was not specified."));
 				return controller.stop();
 		}
 	});
 }
-

@@ -17,7 +17,12 @@
  * ```
  */
 
-import {CommandControlPlugin, CommandType, Context, controller } from "@sern/handler";
+import {
+	CommandControlPlugin,
+	CommandType,
+	Context,
+	controller,
+} from "@sern/handler";
 import { GuildMember } from "discord.js";
 /**
  * actions/seconds

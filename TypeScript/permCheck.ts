@@ -18,11 +18,8 @@
  */
 
 import type { GuildMember, PermissionResolvable } from "discord.js";
-import {CommandControlPlugin, CommandType, controller } from "@sern/handler";
-export function permCheck(
-	perm: PermissionResolvable,
-	response: string
-) {
+import { CommandControlPlugin, CommandType, controller } from "@sern/handler";
+export function permCheck(perm: PermissionResolvable, response: string) {
 	return CommandControlPlugin<CommandType.Both>(async (ctx, args) => {
 		if (ctx.guild === null) {
 			await ctx.reply("This command cannot be used here");
@@ -36,5 +33,5 @@ export function permCheck(
 			return controller.stop();
 		}
 		return controller.next();
-	})
+	});
 }
