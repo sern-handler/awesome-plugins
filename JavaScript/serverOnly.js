@@ -19,26 +19,25 @@
  * });
  * ```
  */
-import { PluginType } from "@sern/handler";
+import { controller, CommandControlPlugin } from "@sern/handler";
 export function serverOnly(
 	guildId,
 	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
 ) {
-	return {
-		type: PluginType.Event,
-		description: "Checks if a command is available in a specific server.",
+	return CommandControlPlugin(async (ctx, _) => {
+		if (ctx.guildId == null) {
+			return controller.stop();
+		}
 
-		async execute([ctx, args], controller) {
-			if (!guildId.includes(ctx.guildId)) {
-				await ctx.reply(failMessage).then(async (m) => {
-					setTimeout(async () => {
-						await m.delete();
-					}, 3000);
-				});
-				return controller.stop();
-			}
+		if (!guildId.includes(ctx.guildId)) {
+			ctx.reply(failMessage).then(async (m) => {
+				setTimeout(async () => {
+					await m.delete();
+				}, 3000);
+			});
+			return controller.stop();
+		}
 
-			return controller.next();
-		},
-	};
+		return controller.next();
+	});
 }

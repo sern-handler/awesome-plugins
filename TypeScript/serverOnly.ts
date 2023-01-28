@@ -22,21 +22,21 @@
 import { CommandType, controller, CommandControlPlugin } from "@sern/handler";
 
 export function serverOnly(
-    guildId: string[],
-    failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
+	guildId: string[],
+	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
 ) {
-    return CommandControlPlugin<CommandType.Both>(async ( ctx, _) => {
-        if(ctx.guildId == null) {
-            return controller.stop()
-        }
-        if (!guildId.includes(ctx.guildId)) {
-            ctx.reply(failMessage).then(async (m) => {
-                setTimeout(async () => {
-                    await m.delete();
-                }, 3000);
-            });
-            return controller.stop();
-        }
-        return controller.next();
-    })
+	return CommandControlPlugin<CommandType.Both>(async (ctx, _) => {
+		if (ctx.guildId == null) {
+			return controller.stop();
+		}
+		if (!guildId.includes(ctx.guildId)) {
+			ctx.reply(failMessage).then(async (m) => {
+				setTimeout(async () => {
+					await m.delete();
+				}, 3000);
+			});
+			return controller.stop();
+		}
+		return controller.next();
+	});
 }

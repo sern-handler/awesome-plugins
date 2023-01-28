@@ -17,22 +17,17 @@
  * })
  * ```
  */
-import { PluginType } from "@sern/handler";
+import { CommandControlPlugin, controller } from "@sern/handler";
 export function dmOnly(content, ephemeral) {
-	return {
-		type: PluginType.Event,
-		description: "Allows commands to be run in DM only",
+	//  For discord.js you should have the Partials.Channel and DirectMessages intent enabled.
+	return CommandControlPlugin(async (ctx, _) => {
+		if (ctx.channel?.isDMBased()) return controller.next();
+		if (content)
+			await ctx.reply({
+				content,
+				ephemeral,
+			}); // Change this if you want or remove it for silent deny
 
-		async execute(event, controller) {
-			const [ctx] = event;
-			if (ctx.channel?.isDMBased()) return controller.next();
-			if (content)
-				await ctx.reply({
-					content,
-					ephemeral,
-				}); // Change this if you want or remove it for silent deny
-
-			return controller.stop();
-		},
-	};
+		return controller.stop();
+	});
 }

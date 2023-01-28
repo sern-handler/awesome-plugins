@@ -17,20 +17,14 @@
  * })
  * ```
  */
-import { PluginType } from "@sern/handler";
+import { CommandControlPlugin, controller } from "@sern/handler";
 const ownerIDs = ["697795666373640213"]; //! Fill your ID
 
 export function ownerOnly() {
-	return {
-		type: PluginType.Event,
-		description: "Allows only bot owner to run command",
+	return CommandControlPlugin((ctx, args) => {
+		if (ownerIDs.includes(ctx.user.id)) return controller.next(); //* If you want to reply when the command fails due to user not being owner, you can use following
+		// await ctx.reply("Only owner can run it!!!");
 
-		async execute(event, controller) {
-			const [ctx] = event;
-			if (ownerIDs.includes(ctx.user.id)) return controller.next(); //* If you want to reply when the command fails due to user not being owner, you can use following
-			// await ctx.reply("Only owner can run it!!!");
-
-			return controller.stop(); //! Important: It stops the execution of command!
-		},
-	};
+		return controller.stop(); //! Important: It stops the execution of command!
+	});
 }

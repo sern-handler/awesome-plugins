@@ -18,7 +18,7 @@
  * ```
  */
 import { ChannelType } from "discord.js";
-import { PluginType } from "@sern/handler";
+import { CommandControlPlugin, controller } from "@sern/handler";
 
 function isGuildText(channel) {
 	return (
@@ -28,39 +28,32 @@ function isGuildText(channel) {
 }
 
 export function nsfwOnly(onFail, ephemeral) {
-	return {
-		type: PluginType.Event,
-		description: "Checks if the channel is nsfw or not.",
+	return CommandControlPlugin(async (ctx, _) => {
+		if (ctx.guild === null) {
+			await ctx.reply({
+				content: onFail,
+				ephemeral,
+			});
+			return controller.stop();
+		} //channel is thread (not supported by nsfw)
 
-		async execute(event, controller) {
-			const [ctx] = event; //checking if command was executed in dms
+		if (isGuildText(ctx.channel) == true) {
+			await ctx.reply({
+				content: onFail,
+				ephemeral,
+			});
+			return controller.stop();
+		}
 
-			if (ctx.guild === null) {
-				await ctx.reply({
-					content: onFail,
-					ephemeral,
-				});
-				return controller.stop();
-			} //channel is thread (not supported by nsfw)
+		if (!ctx.channel.nsfw) {
+			//channel is not nsfw
+			await ctx.reply({
+				content: onFail,
+				ephemeral,
+			});
+			return controller.stop();
+		} //continues to command if nsfw
 
-			if (isGuildText(ctx.channel) == true) {
-				await ctx.reply({
-					content: onFail,
-					ephemeral,
-				});
-				return controller.stop();
-			}
-
-			if (!ctx.channel.nsfw) {
-				//channel is not nsfw
-				await ctx.reply({
-					content: onFail,
-					ephemeral,
-				});
-				return controller.stop();
-			} //continues to command if nsfw
-
-			return controller.next();
-		},
-	};
+		return controller.next();
+	});
 }
