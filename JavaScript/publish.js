@@ -23,8 +23,8 @@ import { ApplicationCommandType } from "discord.js";
 import { useContainer } from "../index.js";
 export const CommandTypeRaw = {
 	[CommandType.Both]: ApplicationCommandType.ChatInput,
-	[CommandType.CtxUser]: ApplicationCommandType.Message,
-	[CommandType.CtxMsg]: ApplicationCommandType.User,
+	[CommandType.CtxUser]: ApplicationCommandType.User,
+	[CommandType.CtxMsg]: ApplicationCommandType.Message,
 	[CommandType.Slash]: ApplicationCommandType.ChatInput,
 };
 export function publish(options) {
