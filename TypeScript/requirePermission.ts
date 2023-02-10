@@ -26,6 +26,7 @@ function payload(resp?: string) {
 		fetchReply: true,
 		content: resp,
 		allowedMentions: { repliedUser: false },
+		ephemeral: true
 	} as const;
 }
 
@@ -80,11 +81,6 @@ export function requirePermission(
 					return controller.stop();
 				}
 				return controller.next();
-			//*********************************************************************************************************************//
-			default:
-				console.warn("Perm Check >>> You didn't specify user or bot.");
-				ctx.reply(payload("User or Bot was not specified."));
-				return controller.stop();
 		}
 	});
 }
