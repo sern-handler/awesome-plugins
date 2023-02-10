@@ -26,6 +26,7 @@ function payload(resp?: string) {
 		fetchReply: true,
 		content: resp,
 		allowedMentions: { repliedUser: false },
+		ephemeral: true
 	} as const;
 }
 
