@@ -1,0 +1,22 @@
+name: "Generate Plugin Listing"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  babashka_job:
+    runs-on: ubuntu-latest
+    name: Execute babashka script
+    steps:
+      # To use a script from the repository,
+      # you must check out the repository first
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Now we can execute a babashka script from our
+      # repository
+      - name: babashka script
+        uses: tzafrirben/babashka-docker-action@v0.3
+        id: bb_script
+        with:
+          bb_src: 'scripts/gen-lock.clj'
+          bb_args: ''
