@@ -4,7 +4,7 @@
   (io/file (str "./" name)))
 
 (defn makeLink [lang name] 
-  (str "https://github.com/sern-handler/awesome-plugins/blob/main/" lang "/" name))
+  (str "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/" lang "/" name))
 
 (defn nameNoExtension [name]
    (subs name 0 (- (.length name) 3)) 
