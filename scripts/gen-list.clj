@@ -2,13 +2,9 @@
 	
 (defn directory [name]
   (io/file (str "./" name)))
-	
- 
-	
+
 (defn make-link [lang]
   (fn [name] (str "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/" lang "/" name)))
-	
- 
 	
 (defn name-without-extension [name]
   (if-let [last-dot-index (str/last-index-of name ".")]
