@@ -1,0 +1,43 @@
+name: "Generate Plugin Listing"
+
+on:
+  push:
+    branches:
+      main
+  workflow_dispatch:
+
+jobs:
+  gen-listing:
+    runs-on: ubuntu-latest
+    name: Execute babashka script
+    steps:
+      # To use a script from the repository,
+      # you must check out the repository first
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Now we can execute a babashka script from our
+      # repository
+      - name: babashka-script
+        uses: tzafrirben/babashka-docker-action@v0.3
+        id: bb_script
+        with:
+          bb_src: 'scripts/gen-list.clj'
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5-beta
+        with:
+          commit-message: "chore: Update plugins listing"
+          branch: js
+          delete-branch: true
+          branch-suffix: short-commit-hash
+          title: "chore: Update Plugin Listing"
+          body: "asfl;asdkcng;lfkv;lajf;bflglfsafs;af"
+          reviewers: jacoobes 
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
+
