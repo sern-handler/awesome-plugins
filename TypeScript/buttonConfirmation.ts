@@ -27,7 +27,7 @@ import {
 	ComponentType,
 } from "discord.js";
 
-export function confirmation(options?: Partial<ConfirmationOptions>) {
+export function buttonConfirmation(options?: Partial<ConfirmationOptions>) {
 	return CommandControlPlugin<CommandType.Both>(async (ctx, args) => {
 		options = {
 			content: "Do you want to proceed?",
