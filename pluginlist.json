@@ -1,0 +1,82 @@
+{
+  "JavaScript" : [ {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/publish.js",
+    "name" : "publish"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/buttonConfirmation.js",
+    "name" : "buttonConfirmation"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/requirePermission.js",
+    "name" : "requirePermission"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/nsfwOnly.js",
+    "name" : "nsfwOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/serverOnly.js",
+    "name" : "serverOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/ownerOnly.js",
+    "name" : "ownerOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/confirmation.js",
+    "name" : "confirmation"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/permCheck.js",
+    "name" : "permCheck"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/dmOnly.js",
+    "name" : "dmOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/disable.js",
+    "name" : "disable"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/channelType.js",
+    "name" : "channelType"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/assertFields.js",
+    "name" : "assertFields"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/JavaScript/cooldown.js",
+    "name" : "cooldown"
+  } ],
+  "TypeScript" : [ {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/permCheck.ts",
+    "name" : "permCheck"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/assertFields.ts",
+    "name" : "assertFields"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/serverOnly.ts",
+    "name" : "serverOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/dmOnly.ts",
+    "name" : "dmOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/disable.ts",
+    "name" : "disable"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/publish.ts",
+    "name" : "publish"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/cooldown.ts",
+    "name" : "cooldown"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/confirmation.ts",
+    "name" : "confirmation"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/ownerOnly.ts",
+    "name" : "ownerOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/channelType.ts",
+    "name" : "channelType"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/nsfwOnly.ts",
+    "name" : "nsfwOnly"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/requirePermission.ts",
+    "name" : "requirePermission"
+  }, {
+    "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/buttonConfirmation.ts",
+    "name" : "buttonConfirmation"
+  } ]
+}
