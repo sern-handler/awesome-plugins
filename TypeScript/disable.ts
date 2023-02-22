@@ -3,7 +3,8 @@
  * Disables a command entirely, for whatever reasons you may need.
  *
  * @author @jacoobes [<@182326315813306368>]
- * @version 1.0.0
+ * @author @Peter-MJ-Parker [<@1017182455926624316>]
+ * @version 2.0.0
  * @example
  * ```ts
  * import { disable } from "../plugins/disable";
@@ -16,23 +17,46 @@
  * })
  * ```
  */
-import { CommandType, EventPlugin, PluginType } from "@sern/handler";
-import { InteractionReplyOptions, ReplyMessageOptions } from "discord.js";
+import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
+import {
+	InteractionReplyOptions,
+	Message,
+	ReplyMessageOptions,
+} from "discord.js";
 
 export function disable(
 	onFail?:
 		| string
 		| Omit<InteractionReplyOptions, "fetchReply">
 		| ReplyMessageOptions
-): EventPlugin<CommandType.Both> {
-	return {
-		type: PluginType.Event,
-		description: "Disables command from responding",
-		async execute([ctx], controller) {
-			if (onFail !== undefined) {
-				await ctx.reply(onFail);
+) {
+	return CommandControlPlugin<CommandType.Both>(async (ctx, [args]) => {
+		if (onFail !== undefined) {
+			switch (args) {
+				case "text":
+					ctx.reply(onFail)
+						.then((m) => {
+							setTimeout(() => {
+								m.delete();
+								ctx.message.delete();
+							}, 5000);
+						})
+						.catch(() => {});
+
+					break;
+
+				case "slash":
+					await ctx.reply({ content: onFail, ephemeral: true });
+					break;
+
+				default:
+					break;
 			}
-			return controller.stop();
-		},
-	};
+		} else if (onFail === undefined && args === "slash") {
+			onFail = "This command is disabled.";
+			await ctx.reply({ content: onFail, ephemeral: true });
+		}
+		return controller.stop();
+	});
 }
+
