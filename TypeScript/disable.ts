@@ -34,29 +34,36 @@ export function disable(
 		if (onFail !== undefined) {
 			switch (args) {
 				case "text":
-					ctx.reply(onFail)
-						.then((m) => {
-							setTimeout(() => {
-								m.delete();
-								ctx.message.delete();
-							}, 5000);
-						})
-						.catch(() => {});
+					//reply to text command
+					const msg = await ctx.reply(onFail);
+					setTimeout(() => {
+						//deletes the bots reply to the user
+						msg.delete();
+						//deletes the original authors message (text command).
+						ctx.message.delete();
+						//waits 5 seconds before deleting messages
+					}, 5000).catch((e) => {
+						//logs error to console (if any).
+						console.log(e);
+					});
 
 					break;
 
 				case "slash":
+					//ephemeral response to say the command is disabled with users response.
 					await ctx.reply({ content: onFail, ephemeral: true });
 					break;
 
 				default:
 					break;
 			}
-		} else if (onFail === undefined && args === "slash") {
+		}
+		//this function tells the bot to reply to an interaction so it doesn't seem like it fails (in case there is no onFail message).
+		if (onFail === undefined && args === "slash") {
 			onFail = "This command is disabled.";
 			await ctx.reply({ content: onFail, ephemeral: true });
 		}
+		//stop the command from running
 		return controller.stop();
 	});
 }
-
