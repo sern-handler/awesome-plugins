@@ -1,9 +1,6 @@
 name: "Generate Plugin Listing"
 
 on:
-  push:
-    branches:
-      main
   workflow_dispatch:
 
 jobs:
