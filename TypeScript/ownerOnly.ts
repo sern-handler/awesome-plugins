@@ -18,12 +18,11 @@
  */
 
 import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
-const ownerIDs = ["697795666373640213"]; //! Fill your ID
-export function ownerOnly() {
-	return CommandControlPlugin<CommandType.Both>((ctx, args) => {
+export function ownerOnly(ownerIDs: string[]) {
+	return CommandControlPlugin<CommandType.Both>(async (ctx, args) => {
 		if (ownerIDs.includes(ctx.user.id)) return controller.next();
 		//* If you want to reply when the command fails due to user not being owner, you can use following
-		// await ctx.reply("Only owner can run it!!!");
+		await ctx.reply("Only owner can run it!!!");
 		return controller.stop(); //! Important: It stops the execution of command!
 	});
 }
