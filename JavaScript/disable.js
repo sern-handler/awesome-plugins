@@ -4,7 +4,7 @@
  * Disables a command entirely, for whatever reasons you may need.
  *
  * @author @jacoobes [<@182326315813306368>]
- * @author @Peter-MJ-Parker [<@1017182455926624316>]
+ * @author @Peter-MJ-Parker [<@371759410009341952>]
  * @version 2.0.0
  * @example
  * ```ts
