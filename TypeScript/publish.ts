@@ -27,6 +27,7 @@ import {
 import {
 	ApplicationCommandData,
 	ApplicationCommandType,
+	ApplicationCommandOptionType,
 	PermissionResolvable,
 } from "discord.js";
 import { useContainer } from "../index.js";
@@ -159,9 +160,18 @@ export function publish<
 }
 
 export function optionsTransformer(ops: Array<SernOptionsData>) {
-	return ops.map((el) =>
-		el.autocomplete ? (({ command, ...el }) => el)(el) : el
-	);
+    return ops.map((el) => {
+        switch(el.type) {
+            case ApplicationCommandOptionType.String:
+            case ApplicationCommandOptionType.Number:
+            case ApplicationCommandOptionType.Integer: {
+                return el.autocomplete && 'command' in el 
+                    ? (({command, ...el}) => el)(el) 
+                    : el;
+            } 
+            default: return el;
+        }
+    });
 }
 
 export type NonEmptyArray<T extends `${number}` = `${number}`> = [T, ...T[]];
