@@ -19,7 +19,10 @@
  * ```
  */
 import { CommandInitPlugin, CommandType, controller } from "@sern/handler";
-import { ApplicationCommandType } from "discord.js";
+import {
+	ApplicationCommandType,
+	ApplicationCommandOptionType,
+} from "discord.js";
 import { useContainer } from "../index.js";
 export const CommandTypeRaw = {
 	[CommandType.Both]: ApplicationCommandType.ChatInput,
@@ -146,7 +149,18 @@ export function publish(options) {
 	});
 }
 export function optionsTransformer(ops) {
-	return ops.map((el) =>
-		el.autocomplete ? (({ command, ...el }) => el)(el) : el
-	);
+	return ops.map((el) => {
+		switch (el.type) {
+			case ApplicationCommandOptionType.String:
+			case ApplicationCommandOptionType.Number:
+			case ApplicationCommandOptionType.Integer: {
+				return el.autocomplete && "command" in el
+					? (({ command, ...el }) => el)(el)
+					: el;
+			}
+
+			default:
+				return el;
+		}
+	});
 }
