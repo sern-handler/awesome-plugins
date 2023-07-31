@@ -23,6 +23,7 @@ import {
 	controller,
 	SernOptionsData,
 	SlashCommand,
+	Service,
 } from "@sern/handler";
 import {
 	ApplicationCommandData,
@@ -30,7 +31,6 @@ import {
 	ApplicationCommandOptionType,
 	PermissionResolvable,
 } from "discord.js";
-import { useContainer } from "../index.js";
 
 export const CommandTypeRaw = {
 	[CommandType.Both]: ApplicationCommandType.ChatInput,
@@ -48,7 +48,7 @@ export function publish<
 >(options?: PublishOptions) {
 	return CommandInitPlugin<T>(async ({ module }) => {
 		// Users need to provide their own useContainer function.
-		const [client] = useContainer("@sern/client");
+		const client = Service("@sern/client");
 		const defaultOptions = {
 			guildIds: [],
 			dmPermission: undefined,
