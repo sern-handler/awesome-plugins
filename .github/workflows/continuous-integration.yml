@@ -27,6 +27,3 @@ jobs:
       # Prettier must be in `package.json`
       - name: Install Node.js dependencies
         run: npm i -g prettier && npm i
-
-      - name: Run Prettier
-        run: prettier --write .
