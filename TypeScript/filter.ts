@@ -12,6 +12,7 @@ import {
   User,
 } from "discord.js";
 
+
 export type Test = (context: Context) => boolean;
 
 export class Criteria {
@@ -20,6 +21,9 @@ export class Criteria {
     public readonly execute: Test,
     public readonly children: Array<Criteria>
   ) {}
+  toString() {
+    return this.name
+  }
 }
 
 export const or = (...filters: Array<FilterImpl>): FilterImpl => {
@@ -28,7 +32,7 @@ export const or = (...filters: Array<FilterImpl>): FilterImpl => {
       tests: for (const filter of filters) {
         if (filter.test(context)) {
           pass = true;
-          break tests
+          break tests;
         }
       }
 
@@ -534,8 +538,9 @@ export const isInGuild = (): FilterImpl => {
   }
 
 export const isInDm = (): FilterImpl => {
-    return withCustomMessage(not(isInGuild()), "is in dm");
-  }
+    const notInGuild = compose(not, isInGuild);
+    return withCustomMessage(notInGuild(), "is in dm");
+}
 
 export const never = (): FilterImpl => {
     function execute(context: Context): boolean {
@@ -543,7 +548,7 @@ export const never = (): FilterImpl => {
       return false;
     }
     return new FilterImpl(new Criteria("never", execute, []), "never");
-  }
+}
 
 export const always = (): FilterImpl => {
     function execute(context: Context): boolean {
@@ -551,7 +556,22 @@ export const always = (): FilterImpl => {
       return true;
     }
     return new FilterImpl(new Criteria("always", execute, []), "always");
-  }
+}
+type CtxMap<T> = (arg: T) => FilterImpl;
+
+/**
+  * Call FilterImpls in right to left order. 
+  * @example 
+  * import { compose, isUserId, not } from '../plugins/filter'
+  * const isNotUserId = compose(not, isUserId)
+  *
+  */
+export const compose = <T = void>(...funcs: CtxMap<any>[]): CtxMap<T> => {
+    return (arg: T): FilterImpl => 
+        //@ts-ignore
+        funcs.reduceRight((result, func) => func(result), arg);
+}
+
 
 export class FilterImpl {
   public readonly test: Test;
@@ -565,15 +585,13 @@ export class FilterImpl {
 }
 
 
-
-export type FilterOptions = [
-  filters: Array<FilterImpl>,
+export type FilterOptions = {
+  condition: Array<FilterImpl> | FilterImpl,
   onFailed?: (context: Context, filters: Array<FilterImpl>) => unknown
-];
-
+};
 /**
- * Generalized `filter` plugin. revised by jacoobes, all credit to original author 
- * 
+ * Generalized `filter` plugin. revised by jacoobes, all credit to original author.
+ * Perform declarative conditionals as plugins.  
  * @author @trueharuu [<@504698587221852172>]
  * @version 2.0.0
  * @example 
@@ -581,29 +599,29 @@ export type FilterOptions = [
  * import { commandModule } from '@sern/handler';
  *
  * export default commandModule({
- *     plugins: filter([not(isGuildOwner()), canMentionEveryone()]),
+ *     plugins: filter({ condition: [not(isGuildOwner()), canMentionEveryone()] }),
  *     async execute(context) {
  *       // your code here
  *     }
  * });
  */
-export const filter = Object.assign(
-  {},
-  FilterImpl,
+
+export const filter = 
   (options: FilterOptions) => {
     return CommandControlPlugin<CommandType.Both>(async (context) => {
-      const value = and(...options[0]).test(context);
+      const arrayifiedCondition = Array.isArray(options.condition) ? options.condition : [options.condition]
+      const value = and(...arrayifiedCondition).test(context);
 
       if (value) {
         return controller.next();
       }
 
-      if (options[1] !== undefined) {
-        await options[1](context, options[0]);
+      if (options.onFailed !== undefined) {
+        await options.onFailed(context, arrayifiedCondition);
       } else {
         await context.reply({
           ephemeral: true,
-          content: `you do not match the criteria for this command:\n${options[0]
+          content: `you do not match the criteria for this command:\n${arrayifiedCondition
             .map((x) => x.message)
             .filter((x) => x !== undefined)
             .join("\n")}`,
@@ -616,5 +634,4 @@ export const filter = Object.assign(
 
       return controller.stop();
     });
-  }
-);
+  };
