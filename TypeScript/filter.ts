@@ -22,7 +22,7 @@ export class Criteria {
     public readonly children: Array<Criteria>
   ) {}
   toString() {
-    return this.name
+    return this.name + ' ' + this.children.map(c => c.name).join(', ')
   }
 }
 
@@ -188,23 +188,23 @@ export const hasChannelPermission = (
 
 export const canAddReactions =(channelId?: string): FilterImpl => {
     return hasChannelPermission("AddReactions", channelId);
-  }
+}
 
 export const canAttachFiles =(channelId?: string): FilterImpl => {
     return hasChannelPermission("AttachFiles", channelId);
-  }
+}
 
 export const canBanMembers = (): FilterImpl => {
     return hasGuildPermission("BanMembers");
-  }
+}
 
 export const canChangeNickname = (): FilterImpl => {
     return hasGuildPermission("ChangeNickname");
-  }
+}
 
 export const canConnect = (channelId?: string): FilterImpl => {
     return hasChannelPermission("Connect", channelId);
-  }
+}
 
 export const canCreateInstantInvite =(channelId?: string): FilterImpl => {
     return hasChannelPermission("CreateInstantInvite", channelId);
