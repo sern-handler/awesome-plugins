@@ -599,7 +599,7 @@ export type FilterOptions = {
  * import { commandModule } from '@sern/handler';
  *
  * export default commandModule({
- *     plugins: filter({ condition: [not(isGuildOwner()), canMentionEveryone()] }),
+ *     plugins: [filter({ condition: [not(isGuildOwner()), canMentionEveryone()] })],
  *     async execute(context) {
  *       // your code here
  *     }
