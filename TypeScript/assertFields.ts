@@ -1,5 +1,6 @@
 //@ts-nocheck
 /**
+ * @plugin
  * This plugin checks the fields of a ModalSubmitInteraction
  * with regex or a custom callback
  *

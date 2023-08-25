@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * @plugin
  * This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check bot or user for that perm).
  *
  * @author @Benzo-Fury [<@762918086349029386>]

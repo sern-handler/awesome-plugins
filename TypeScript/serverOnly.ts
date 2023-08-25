@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * @plugin
  * Checks if a command is available in a specific server.
  *
  * @author @Peter-MJ-Parker [<@371759410009341952>]

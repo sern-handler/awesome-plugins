@@ -22,14 +22,13 @@
 (defn remove-non-jsdoc [lines]
   ( ->> lines 
     (filter #(re-find #"^\s*\*|/\*\*|\*/" %))
-    (take-while (fn [s] (not (str/ends-with? s "*/")))))) 
+    (take-while (fn [s] (not (str/ends-with? s "*/"))) ))) 
 
 (defn into-jsdoc-content [lines]
   "get jsdoc from lines of file"
   ( ->> lines
     remove-non-jsdoc
-    (map #(str/replace % #"^\s*\*(\s*)|\/\*\*(\s*)|\*\/" "$1"))
-    ))
+    (map #(str/replace % #"^\s*\*(\s*)|\/\*\*(\s*)|\*\/" "$1"))))
 
 (defn parse-author [line] 
   ( -> line 
@@ -38,6 +37,7 @@
 
 (defn group-doc [line] 
   (cond 
+    (str/includes? line "@plugin")  {:plugin ""}
     (str/includes? line "@author")  {:author (parse-author line)}
     (str/includes? line "@example") {:example ""}
     (str/includes? line "@version") {:version (-> line 
@@ -60,11 +60,17 @@
 (defn file-data [plugin-name]
   "gets all jsdoc content. Transforms into lazy seq of data"
   (let [file (io/file (str "./TypeScript/" plugin-name))
-        lines (->> (read-lines file) 
-                   into-jsdoc-content
-                   (map group-doc))
+        ; We start a plugin metadata block. 
+        ; this will transform the first JSDOC block that 
+        ; starts with a @plugin tag
+        lines (drop-while (comp not :plugin) (->> (read-lines file) 
+                                                  into-jsdoc-content
+                                                  (map group-doc)))
+        ; description of plugin should come next, up until the first author tag appears
         [description, remaining] (get-description lines :author)
+        ; get authors, and then the version of plugin should appear. 
         [authors, [version, & remaining2]] (get-description remaining :version)]
+        ; transform into map
         {:description (reduce combine-lines "" (map :unknown description))
          :version (:version version)
          :author (reduce accumulate-multiple [] (map :author authors))
@@ -100,17 +106,6 @@
 (def json (generate-content "./TypeScript") )
 
 (println json)
-
-;(defn file-links-and-basenames [dir]
-;  (let [base-link (make-link dir)]
-;    (mapv #(zipmap [:link :name :content] ((juxt base-link name-without-extension) %))
-;          (file-names dir))))
-;	
-;(def file-info-map (juxt keyword file-links-and-basenames))
-;	
-;(def json
-;  (into {} (map file-info-map ["JavaScript" "TypeScript"])))
-
 
 (json/generate-stream json (io/writer "pluginlist.json") { :pretty true })
 

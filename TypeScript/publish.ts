@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * @plugin
  * This is publish plugin, it allows you to publish your application commands using the discord.js library with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]

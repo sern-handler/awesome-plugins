@@ -1,6 +1,6 @@
 [ {
   "description" : "\n\n This plugin checks the fields of a ModalSubmitInteraction\n with regex or a custom callback\n",
-  "hash" : "ab12dd67c26675dc81e57e97d1a08de0",
+  "hash" : "b8aa2274920c0f213c9114d45221c58b",
   "name" : "assertFields",
   "author" : [ "@jacoobes [<@182326315813306368>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/assertFields.ts",
@@ -8,7 +8,7 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n This is buttonConfirmation plugin, it runs confirmation prompt in the form of buttons.\n Note that you need to use edit/editReply in the command itself because we are already replying in the plugin!\n Credits to original plugin of confirmation using reactions and its author!\n",
-  "hash" : "7a071169f57e5f87ade794957cf68ec5",
+  "hash" : "0e2be01ac2619a9c8287c6ffce9e8131",
   "name" : "buttonConfirmation",
   "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/buttonConfirmation.ts",
@@ -16,7 +16,7 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n This plugin checks if a channel is the specified type\n",
-  "hash" : "c020108989582ab77b57911cf2e48337",
+  "hash" : "c6383e66bbf87381825aa39c62d5b51a",
   "name" : "channelType",
   "author" : [ "@Benzo-Fury [<@762918086349029386>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/channelType.ts",
@@ -24,7 +24,7 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n Asks the user for a confirmation message before executing the command\n",
-  "hash" : "f4be14a6a80f987cb8d0ad7e8196ee79",
+  "hash" : "a820bd60a80c3658dc36502523e623b1",
   "name" : "confirmation",
   "author" : [ "@trueharuu [<@504698587221852172>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/confirmation.ts",
@@ -32,7 +32,7 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n Allows you to set cooldowns (or \"ratelimits\") for commands\n limits user/channel/guild actions,",
-  "hash" : "fc50aaad73efb5b6ae0d19469ef4a843",
+  "hash" : "58c0d7e452c7cde713d66fbbda7e1f9e",
   "name" : "cooldown",
   "author" : [ "@trueharuu [<@504698587221852172>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/cooldown.ts",
@@ -40,7 +40,7 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n Disables a command entirely, for whatever reasons you may need.\n",
-  "hash" : "1de6d2e0fbc37f4cd2d41072003b7717",
+  "hash" : "5425ad0dcc0c58b6a9fa40dbbfb3f717",
   "name" : "disable",
   "author" : [ "@jacoobes [<@182326315813306368>]", "@Peter-MJ-Parker [<@371759410009341952>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/disable.ts",
@@ -48,7 +48,7 @@
   "version" : "2.0.0"
 }, {
   "description" : "\n\n This is dmOnly plugin, it allows commands to be run only in DMs.\n",
-  "hash" : "1289cba26f8e836e06be2db4e8296f9a",
+  "hash" : "5158a4cefb8d4650e9a9e45862d0a9b5",
   "name" : "dmOnly",
   "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/dmOnly.ts",
@@ -56,7 +56,7 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw\n",
-  "hash" : "7da8e876336e40d14c1495c432a65283",
+  "hash" : "fb844c123737e30c138e1ab9ce05f2d1",
   "name" : "nsfwOnly",
   "author" : [ "@Benzo-Fury [<@762918086349029386>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/nsfwOnly.ts",
@@ -64,7 +64,7 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.\n",
-  "hash" : "f90227b3d5ed9a2161bc40d36e3b5e81",
+  "hash" : "4822b8938beda2555c361958a180cb43",
   "name" : "ownerOnly",
   "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/ownerOnly.ts",
@@ -72,7 +72,7 @@
   "version" : "1.2.0"
 }, {
   "description" : "\n\n This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).\n",
-  "hash" : "2ae662d81b867b8ab7009dfcf9d2b8d2",
+  "hash" : "5104bf059b8afcab5989f889a9d0358f",
   "name" : "permCheck",
   "author" : [ "@Benzo-Fury [<@762918086349029386>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/permCheck.ts",
@@ -80,7 +80,7 @@
   "version" : "1.0.1"
 }, {
   "description" : "\n\n This is publish plugin, it allows you to publish your application commands using the discord.js library with ease.\n",
-  "hash" : "fe3720d241ede15d11a00f8bf3b21256",
+  "hash" : "67934a8aeb10e7efd3cc6ed826ae5e17",
   "name" : "publish",
   "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/publish.ts",
@@ -88,7 +88,7 @@
   "version" : "2.0.0"
 }, {
   "description" : "\n\n This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check bot or user for that perm).\n",
-  "hash" : "fad8c2e449976f086284ea41bd4894d8",
+  "hash" : "57596321666d53c7dfb22ee1c590ce42",
   "name" : "requirePermission",
   "author" : [ "@Benzo-Fury [<@762918086349029386>]", "@needhamgary [<@342314924804014081>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/requirePermission.ts",
@@ -96,7 +96,7 @@
   "version" : "1.2.0"
 }, {
   "description" : "\n\n Checks if a command is available in a specific server.\n",
-  "hash" : "aa4cc720a04aa6a9466d99d791cb4807",
+  "hash" : "b53b706d987fbbe1a5012d6c3d840093",
   "name" : "serverOnly",
   "author" : [ "@Peter-MJ-Parker [<@371759410009341952>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/serverOnly.ts",

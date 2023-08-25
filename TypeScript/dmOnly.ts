@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * @plugin
  * This is dmOnly plugin, it allows commands to be run only in DMs.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
