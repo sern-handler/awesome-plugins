@@ -590,6 +590,7 @@ export type FilterOptions = {
   onFailed?: (context: Context, filters: Array<FilterImpl>) => unknown
 };
 /**
+ * @plugin
  * Generalized `filter` plugin. revised by jacoobes, all credit to original author.
  * Perform declarative conditionals as plugins.  
  * @author @trueharuu [<@504698587221852172>]
