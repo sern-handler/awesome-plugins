@@ -30,7 +30,7 @@ jobs:
 
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v5-beta
+        uses: peter-evans/create-pull-request@v5
         with:
           commit-message: "chore: update JavaScript plugins"
           branch: js
