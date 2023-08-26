@@ -24,7 +24,7 @@ export function permCheck(perm: PermissionResolvable, response: string) {
 		if (ctx.guild === null) {
 			await ctx.reply("This command cannot be used here");
 			console.warn(
-				"PermCheck > A command stopped because we couldn't check a users permissions (was used in dms)"
+				"PermCheck > A command stopped because we couldn't check a users permissions (was used in dms)",
 			); //delete this line if you dont want to be notified when a command is used outside of a guild/server
 			return controller.stop();
 		}

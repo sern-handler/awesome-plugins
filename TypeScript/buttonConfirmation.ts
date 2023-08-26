@@ -77,7 +77,7 @@ export function buttonConfirmation(options?: Partial<ConfirmationOptions>) {
 				await sent.edit({
 					components: [
 						new ActionRowBuilder<ButtonBuilder>().setComponents(
-							buttons
+							buttons,
 						),
 					],
 				});

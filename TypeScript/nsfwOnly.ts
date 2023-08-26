@@ -24,7 +24,7 @@ import {
 } from "discord.js";
 import { CommandControlPlugin, CommandType, controller } from "@sern/handler";
 function isGuildText(
-	channel: TextBasedChannel | null
+	channel: TextBasedChannel | null,
 ): channel is GuildTextBasedChannel {
 	return (
 		channel?.type == ChannelType.GuildPublicThread ||
