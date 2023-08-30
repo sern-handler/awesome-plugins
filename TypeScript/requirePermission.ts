@@ -16,7 +16,8 @@
  * 		//your code here
  *  }
  * })
- * ```
+ * ``` 
+ * @end
  */
 
 import type { GuildMember, PermissionResolvable } from "discord.js";

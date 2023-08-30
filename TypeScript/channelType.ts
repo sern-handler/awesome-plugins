@@ -17,6 +17,7 @@
  *  }
  * })
  * ```
+ * @end
  */
 import { ChannelType } from "discord.js";
 import { CommandControlPlugin, CommandType, controller } from "@sern/handler";

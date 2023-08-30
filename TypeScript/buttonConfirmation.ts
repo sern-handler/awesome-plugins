@@ -18,6 +18,7 @@
  *  }
  * })
  * ```
+ * @end
  */
 
 import { CommandControlPlugin, CommandType, controller } from "@sern/handler";

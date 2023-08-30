@@ -605,6 +605,7 @@ export type FilterOptions = {
  *       // your code here
  *     }
  * });
+ * @end
  */
 
 export const filter = 

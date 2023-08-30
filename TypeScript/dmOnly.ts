@@ -15,7 +15,8 @@
  * 		//your code here
  *  }
  * })
- * ```
+ * ``` 
+ * @end
  */
 import { CommandControlPlugin, CommandType, controller } from "@sern/handler";
 export function dmOnly(content?: string, ephemeral?: boolean) {

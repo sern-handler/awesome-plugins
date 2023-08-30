@@ -16,7 +16,8 @@
  * 		//your code here
  *  }
  * })
- * ```
+ * ``` 
+ * @end
  */
 import {
 	CommandInitPlugin,

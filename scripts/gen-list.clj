@@ -21,8 +21,7 @@
 ; remove not jsdoc lines
 (defn remove-non-jsdoc [lines]
   ( ->> lines 
-    (filter #(re-find #"^\s*\*|/\*\*|\*/" %))
-    (take-while (fn [s] (not (str/ends-with? s "*/"))) ))) 
+    (filter #(re-find #"^\s*\*|/\*\*|\*/" %)))) 
 
 (defn into-jsdoc-content [lines]
   "get jsdoc from lines of file"
@@ -40,6 +39,7 @@
     (str/includes? line "@plugin")  {:plugin ""}
     (str/includes? line "@author")  {:author (parse-author line)}
     (str/includes? line "@example") {:example ""}
+    (str/includes? line "@end") {:end "" }
     (str/includes? line "@version") {:version (-> line 
                                                      (str/replace #"@version" "")
                                                      (str/trim))}
@@ -74,7 +74,8 @@
         {:description (reduce combine-lines "" (map :unknown description))
          :version (:version version)
          :author (reduce accumulate-multiple [] (map :author authors))
-         :example (reduce combine-lines "" (map :unknown remaining2))}
+         :example (reduce combine-lines "" (map :unknown ( ->> remaining2 
+                                                               (take-while (comp not :end)))))}
     ))
 
 (defn get-filename [file] 
@@ -105,7 +106,6 @@
 
 (def json (generate-content "./TypeScript") )
 
-(println json)
 
 (json/generate-stream json (io/writer "pluginlist.json") { :pretty true })
 

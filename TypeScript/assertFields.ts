@@ -26,6 +26,7 @@
  *     }
  * })
  * ```
+ * @plugin
  */
 import { CommandControlPlugin, CommandType, controller } from "@sern/handler";
 import type { ModalSubmitInteraction } from "discord.js";
