@@ -16,7 +16,7 @@
  * 		//your code here
  *  }
  * })
- * ``` 
+ * ```
  * @end
  */
 import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
@@ -30,7 +30,7 @@ export function disable(
 	onFail?:
 		| string
 		| Omit<InteractionReplyOptions, "fetchReply">
-		| ReplyMessageOptions
+		| ReplyMessageOptions,
 ) {
 	return CommandControlPlugin<CommandType.Both>(async (ctx, [args]) => {
 		if (onFail !== undefined) {

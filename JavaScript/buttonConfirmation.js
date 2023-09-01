@@ -1,6 +1,7 @@
 //@ts-nocheck
 
 /**
+ * @plugin
  * This is buttonConfirmation plugin, it runs confirmation prompt in the form of buttons.
  * Note that you need to use edit/editReply in the command itself because we are already replying in the plugin!
  * Credits to original plugin of confirmation using reactions and its author!
@@ -18,6 +19,7 @@
  *  }
  * })
  * ```
+ * @end
  */
 import { CommandControlPlugin, controller } from "@sern/handler";
 import {

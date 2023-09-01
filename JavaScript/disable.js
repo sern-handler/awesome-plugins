@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 /**
+ * @plugin
  * Disables a command entirely, for whatever reasons you may need.
  *
  * @author @jacoobes [<@182326315813306368>]
@@ -17,6 +18,7 @@
  *  }
  * })
  * ```
+ * @end
  */
 import { CommandControlPlugin, controller } from "@sern/handler";
 export function disable(onFail) {

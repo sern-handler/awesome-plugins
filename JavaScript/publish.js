@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 /**
+ * @plugin
  * This is publish plugin, it allows you to publish your application commands using the discord.js library with ease.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
@@ -17,13 +18,13 @@
  *  }
  * })
  * ```
+ * @end
  */
 import { CommandInitPlugin, CommandType, controller } from "@sern/handler";
 import {
 	ApplicationCommandType,
 	ApplicationCommandOptionType,
 } from "discord.js";
-import { useContainer } from "../index.js";
 export const CommandTypeRaw = {
 	[CommandType.Both]: ApplicationCommandType.ChatInput,
 	[CommandType.CtxUser]: ApplicationCommandType.User,
@@ -33,7 +34,15 @@ export const CommandTypeRaw = {
 export function publish(options) {
 	return CommandInitPlugin(async ({ module }) => {
 		// Users need to provide their own useContainer function.
-		const [client] = useContainer("@sern/client");
+		let client;
+
+		try {
+			client = (await import("@sern/handler")).Service("@sern/client");
+		} catch {
+			const { useContainer } = await import("../index.js");
+			client = useContainer("@sern/client")[0];
+		}
+
 		const defaultOptions = {
 			guildIds: [],
 			dmPermission: undefined,
@@ -85,18 +94,18 @@ export function publish(options) {
 
 			if (!guildIds.length) {
 				const cmd = (await client.application.commands.fetch()).find(
-					(c) => c.name === module.name && c.type === curAppType
+					(c) => c.name === module.name && c.type === curAppType,
 				);
 
 				if (cmd) {
 					if (!cmd.equals(commandData, true)) {
 						logged(
-							`Found differences in global command ${module.name}`
+							`Found differences in global command ${module.name}`,
 						);
 						cmd.edit(commandData).then(
 							log(
-								`${module.name} updated with new data successfully!`
-							)
+								`${module.name} updated with new data successfully!`,
+							),
 						);
 					}
 
@@ -114,7 +123,7 @@ export function publish(options) {
 				const guild = await client.guilds.fetch(id).catch(c);
 				if (!guild) continue;
 				const guildCmd = (await guild.commands.fetch()).find(
-					(c) => c.name === module.name && c.type === curAppType
+					(c) => c.name === module.name && c.type === curAppType,
 				);
 
 				if (guildCmd) {
@@ -124,8 +133,8 @@ export function publish(options) {
 							.edit(commandData)
 							.then(
 								log(
-									`${module.name} updated with new data successfully!`
-								)
+									`${module.name} updated with new data successfully!`,
+								),
 							)
 							.catch(c);
 						continue;

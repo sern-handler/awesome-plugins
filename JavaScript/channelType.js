@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 /**
+ * @plugin
  * This plugin checks if a channel is the specified type
  *
  * @author @Benzo-Fury [<@762918086349029386>]
@@ -17,6 +18,7 @@
  *  }
  * })
  * ```
+ * @end
  */
 import { ChannelType } from "discord.js";
 import { CommandControlPlugin, controller } from "@sern/handler";

@@ -1,6 +1,7 @@
 //@ts-nocheck
 
 /**
+ * @plugin
  * Asks the user for a confirmation message before executing the command
  *
  * @author @trueharuu [<@504698587221852172>]
@@ -19,6 +20,7 @@
  * 	}
  * })
  * ```
+ * @end
  */
 import { CommandControlPlugin, controller } from "@sern/handler";
 const defaultOptions = {

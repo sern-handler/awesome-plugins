@@ -1,6 +1,7 @@
 //@ts-nocheck
 
 /**
+ * @plugin
  * This plugin checks the fields of a ModalSubmitInteraction
  * with regex or a custom callback
  *
@@ -26,6 +27,7 @@
  *     }
  * })
  * ```
+ * @plugin
  */
 import { CommandControlPlugin, controller } from "@sern/handler";
 export function assertFields(config) {
@@ -46,7 +48,7 @@ export function assertFields(config) {
 				errors.push(
 					input +
 						" failed to pass assertion " +
-						resolvedAssertion.toString()
+						resolvedAssertion.toString(),
 				);
 			}
 		}
