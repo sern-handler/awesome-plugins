@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * @plugin
  * This is dmOnly plugin, it allows commands to be run only in DMs.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
@@ -14,7 +15,8 @@
  * 		//your code here
  *  }
  * })
- * ```
+ * ``` 
+ * @end
  */
 import { CommandControlPlugin, CommandType, controller } from "@sern/handler";
 export function dmOnly(content?: string, ephemeral?: boolean) {

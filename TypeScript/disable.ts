@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * @plugin
  * Disables a command entirely, for whatever reasons you may need.
  *
  * @author @jacoobes [<@182326315813306368>]
@@ -15,7 +16,8 @@
  * 		//your code here
  *  }
  * })
- * ```
+ * ``` 
+ * @end
  */
 import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
 import {

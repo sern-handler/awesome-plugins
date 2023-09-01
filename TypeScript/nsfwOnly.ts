@@ -1,5 +1,6 @@
 //@ts-nocheck
 /**
+ * @plugin
  * This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw
  *
  * @author @Benzo-Fury [<@762918086349029386>]
@@ -14,7 +15,8 @@
  * 		//your code here
  *  }
  * })
- * ```
+ * ``` 
+ * @end
  */
 import {
 	ChannelType,

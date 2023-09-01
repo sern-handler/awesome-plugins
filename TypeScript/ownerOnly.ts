@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * @plugin
  * This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
@@ -14,7 +15,8 @@
  * 		//your code here
  *  }
  * })
- * ```
+ * ``` 
+ * @end
  */
 
 import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
