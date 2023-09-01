@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 /**
+ * @plugin
  * This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.
  *
  * @author @EvolutionX-10 [<@697795666373640213>]
@@ -16,6 +17,7 @@
  *  }
  * })
  * ```
+ * @end
  */
 import { CommandControlPlugin, controller } from "@sern/handler";
 const ownerIDs = ["697795666373640213"]; //! Fill your ID

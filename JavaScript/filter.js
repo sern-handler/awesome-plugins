@@ -1,33 +1,25 @@
-import {
-	CommandControlPlugin,
-	type CommandType,
-	type Context,
-	controller,
-} from "@sern/handler";
+import { CommandControlPlugin, controller } from "@sern/handler";
 import {
 	GuildMember,
 	GuildMemberRoleManager,
-	PermissionResolvable,
 	PermissionsBitField,
 	User,
 } from "discord.js";
-
-export type Test = (context: Context) => boolean;
-
 export class Criteria {
-	public constructor(
-		public readonly name: string,
-		public readonly execute: Test,
-		public readonly children: Array<Criteria>,
-	) {}
+	constructor(name, execute, children) {
+		this.name = name;
+		this.execute = execute;
+		this.children = children;
+	}
+
 	toString() {
 		return this.name + " " + this.children.map((c) => c.name).join(", ");
 	}
 }
-
-export const or = (...filters: Array<FilterImpl>): FilterImpl => {
-	function execute(context: Context): boolean {
+export const or = (...filters) => {
+	function execute(context) {
 		let pass = false;
+
 		tests: for (const filter of filters) {
 			if (filter.test(context)) {
 				pass = true;
@@ -38,16 +30,14 @@ export const or = (...filters: Array<FilterImpl>): FilterImpl => {
 		return pass;
 	}
 
-	const children: Array<Criteria> = filters.map((x) => x.criteria);
-
+	const children = filters.map((x) => x.criteria);
 	return new FilterImpl(
 		new Criteria("or", execute, children),
 		`or(${filters.map((x) => x.message).join(", ")})`,
 	);
 };
-
-export const and = (...filters: Array<FilterImpl>): FilterImpl => {
-	function execute(context: Context): boolean {
+export const and = (...filters) => {
+	function execute(context) {
 		for (const filter of filters) {
 			if (!filter.test(context)) {
 				return false;
@@ -57,16 +47,14 @@ export const and = (...filters: Array<FilterImpl>): FilterImpl => {
 		return true;
 	}
 
-	const children: Array<Criteria> = filters.map((x) => x.criteria);
-
+	const children = filters.map((x) => x.criteria);
 	return new FilterImpl(
 		new Criteria("and", execute, children),
 		`and(${filters.map((x) => x.message).join(", ")})`,
 	);
 };
-
-export const not = (filter: FilterImpl): FilterImpl => {
-	function execute(context: Context): boolean {
+export const not = (filter) => {
+	function execute(context) {
 		return !filter.test(context);
 	}
 
@@ -75,20 +63,13 @@ export const not = (filter: FilterImpl): FilterImpl => {
 		`not(${filter.criteria})`,
 	);
 };
-export const custom = (execute: Test, message?: string): FilterImpl => {
+export const custom = (execute, message) => {
 	return new FilterImpl(new Criteria("custom", execute, []), message);
 };
-
-export const withCustomMessage = (
-	filter: FilterImpl,
-	message?: string,
-): FilterImpl => {
+export const withCustomMessage = (filter, message) => {
 	return new FilterImpl(filter.criteria, message);
 };
-
-export const hasGuildPermission = (
-	permission: PermissionResolvable,
-): FilterImpl => {
+export const hasGuildPermission = (permission) => {
 	const b = PermissionsBitField.resolve(permission);
 	const field = Object.entries(PermissionsBitField.Flags).find(
 		([, v]) => v === b,
@@ -102,13 +83,14 @@ export const hasGuildPermission = (
 
 	const [name] = field;
 
-	function execute(context: Context): boolean {
+	function execute(context) {
 		if (context.member !== null) {
 			if (typeof context.member.permissions === "string") {
 				return new PermissionsBitField(
 					BigInt(context.member.permissions),
 				).has(b);
 			}
+
 			return context.member.permissions.has(b);
 		}
 
@@ -120,10 +102,7 @@ export const hasGuildPermission = (
 		`has guild permission: ${name}`,
 	);
 };
-export const hasChannelPermission = (
-	permission: PermissionResolvable,
-	channelId?: string,
-): FilterImpl => {
+export const hasChannelPermission = (permission, channelId) => {
 	const b = PermissionsBitField.resolve(permission);
 	const field = Object.entries(PermissionsBitField.Flags).find(
 		([, v]) => v === b,
@@ -137,14 +116,13 @@ export const hasChannelPermission = (
 
 	const [name] = field;
 
-	function execute(context: Context): boolean {
+	function execute(context) {
 		if (context.member !== null) {
 			const channel =
 				channelId !== undefined
 					? context.guild?.channels.cache.get(channelId)
-					: context.channel;
+					: context.channel; // ?
 
-			// ?
 			if (channel == undefined || channel === null) {
 				return false;
 			}
@@ -153,9 +131,8 @@ export const hasChannelPermission = (
 				return true;
 			}
 
-			const field2 = channel.permissionsFor(context.user);
+			const field2 = channel.permissionsFor(context.user); // assume we have no permission overrides
 
-			// assume we have no permission overrides
 			if (field2 === null) {
 				if (context.member !== null) {
 					if (typeof context.member.permissions === "string") {
@@ -183,133 +160,101 @@ export const hasChannelPermission = (
 			: `has channel permission ${name}`,
 	);
 };
-
-export const canAddReactions = (channelId?: string): FilterImpl => {
+export const canAddReactions = (channelId) => {
 	return hasChannelPermission("AddReactions", channelId);
 };
-
-export const canAttachFiles = (channelId?: string): FilterImpl => {
+export const canAttachFiles = (channelId) => {
 	return hasChannelPermission("AttachFiles", channelId);
 };
-
-export const canBanMembers = (): FilterImpl => {
+export const canBanMembers = () => {
 	return hasGuildPermission("BanMembers");
 };
-
-export const canChangeNickname = (): FilterImpl => {
+export const canChangeNickname = () => {
 	return hasGuildPermission("ChangeNickname");
 };
-
-export const canConnect = (channelId?: string): FilterImpl => {
+export const canConnect = (channelId) => {
 	return hasChannelPermission("Connect", channelId);
 };
-
-export const canCreateInstantInvite = (channelId?: string): FilterImpl => {
+export const canCreateInstantInvite = (channelId) => {
 	return hasChannelPermission("CreateInstantInvite", channelId);
 };
-
-export const canDeafenMembers = (channelId?: string): FilterImpl => {
+export const canDeafenMembers = (channelId) => {
 	return hasChannelPermission("DeafenMembers", channelId);
 };
-
-export const canEmbedLinks = (channelId?: string): FilterImpl => {
+export const canEmbedLinks = (channelId) => {
 	return hasChannelPermission("EmbedLinks", channelId);
 };
-
-export const canKickMembers = (): FilterImpl => {
+export const canKickMembers = () => {
 	return hasGuildPermission("KickMembers");
 };
-
-export const canManageChannelWebhooks = (channelId?: string): FilterImpl => {
+export const canManageChannelWebhooks = (channelId) => {
 	return hasChannelPermission("ManageWebhooks", channelId);
 };
-
-export const canManageChannels = (channelId?: string): FilterImpl => {
+export const canManageChannels = (channelId) => {
 	return hasChannelPermission("ManageChannels", channelId);
 };
-
-export const canManageEmojisAndStickers = (): FilterImpl => {
+export const canManageEmojisAndStickers = () => {
 	return hasGuildPermission("ManageEmojisAndStickers");
 };
-
-export const canManageGuild = (): FilterImpl => {
+export const canManageGuild = () => {
 	return hasGuildPermission("ManageGuild");
 };
-
-export const canManageGuildWebhooks = (): FilterImpl => {
+export const canManageGuildWebhooks = () => {
 	return hasGuildPermission("ManageWebhooks");
 };
-
-export const canManageMessages = (channelId?: string): FilterImpl => {
+export const canManageMessages = (channelId) => {
 	return hasChannelPermission("ManageMessages", channelId);
 };
-
-export const canManageNicknames = (): FilterImpl => {
+export const canManageNicknames = () => {
 	return hasGuildPermission("ManageNicknames");
 };
-
-export const canManageRoles = (): FilterImpl => {
+export const canManageRoles = () => {
 	return hasGuildPermission("ManageRoles");
 };
-
-export const canMentionEveryone = (channelId?: string): FilterImpl => {
+export const canMentionEveryone = (channelId) => {
 	return hasChannelPermission("MentionEveryone", channelId);
 };
-
-export const canMoveMembers = (channelId?: string): FilterImpl => {
+export const canMoveMembers = (channelId) => {
 	return hasChannelPermission("MoveMembers", channelId);
 };
-
-export const canMuteMembers = (channelId?: string): FilterImpl => {
+export const canMuteMembers = (channelId) => {
 	return hasChannelPermission("MuteMembers", channelId);
 };
-
-export const canPrioritySpeaker = (channelId?: string): FilterImpl => {
+export const canPrioritySpeaker = (channelId) => {
 	return hasChannelPermission("PrioritySpeaker", channelId);
 };
-
-export const canReadMessageHistory = (channelId?: string): FilterImpl => {
+export const canReadMessageHistory = (channelId) => {
 	return hasChannelPermission("ReadMessageHistory", channelId);
 };
-
-export const canViewChannel = (channelId: string): FilterImpl => {
+export const canViewChannel = (channelId) => {
 	return hasChannelPermission("ViewChannel", channelId);
 };
-
-export const canSendMessages = (channelId: string): FilterImpl => {
+export const canSendMessages = (channelId) => {
 	return hasChannelPermission("SendMessages", channelId);
 };
-
-export const canSendTtsMessages = (channelId?: string): FilterImpl => {
+export const canSendTtsMessages = (channelId) => {
 	return hasChannelPermission("SendTTSMessages", channelId);
 };
-
-export const canSpeak = (channelId?: string): FilterImpl => {
+export const canSpeak = (channelId) => {
 	return hasChannelPermission("Speak", channelId);
 };
-
-export const canStream = (channelId?: string): FilterImpl => {
+export const canStream = (channelId) => {
 	return hasChannelPermission("Stream", channelId);
 };
-
-export const canUseExternalEmojis = (channelId?: string): FilterImpl => {
+export const canUseExternalEmojis = (channelId) => {
 	return hasChannelPermission("UseExternalEmojis", channelId);
 };
-
-export const canUseVoiceActivity = (channelId?: string): FilterImpl => {
+export const canUseVoiceActivity = (channelId) => {
 	return hasChannelPermission("UseVAD", channelId);
 };
-
-export const canViewAuditLog = (): FilterImpl => {
+export const canViewAuditLog = () => {
 	return hasGuildPermission("ViewAuditLog");
 };
-
-export const canViewGuildInsights = (): FilterImpl => {
+export const canViewGuildInsights = () => {
 	return hasGuildPermission("ViewGuildInsights");
 };
-
-export const channelIdIn = (channelIds: Array<string>): FilterImpl => {
-	function execute(context: Context): boolean {
+export const channelIdIn = (channelIds) => {
+	function execute(context) {
 		return channelIds.includes(
 			context.isMessage()
 				? context.message.channelId
@@ -322,16 +267,14 @@ export const channelIdIn = (channelIds: Array<string>): FilterImpl => {
 		`channel is one of: ${channelIds.map((v) => `<#${v}>`).join(", ")}`,
 	);
 };
-
-export const hasEveryRole = (roles: Array<string>): FilterImpl => {
+export const hasEveryRole = (roles) => {
 	return withCustomMessage(
 		and(...roles.map((v) => hasRole(v))),
 		`has all of: ${roles.map((v) => `<@&${v}>`).join(", ")}`,
 	);
 };
-
-export const hasMentionableRole = (): FilterImpl => {
-	function execute(context: Context): boolean {
+export const hasMentionableRole = () => {
+	function execute(context) {
 		if (context.member !== null) {
 			if (context.member.roles instanceof GuildMemberRoleManager) {
 				return (
@@ -346,21 +289,21 @@ export const hasMentionableRole = (): FilterImpl => {
 			}
 
 			return context.member.roles
-				.map((roleId) => context.guild!.roles.cache.get(roleId))
+				.map((roleId) => context.guild.roles.cache.get(roleId))
 				.filter((x) => x !== undefined)
-				.some((x) => x!.mentionable);
+				.some((x) => x.mentionable);
 		}
 
 		return false;
 	}
+
 	return new FilterImpl(
 		new Criteria("hasMentionableRole", execute, []),
 		"has a mentionable role",
 	);
 };
-
-export const hasNickname = (nickname?: string): FilterImpl => {
-	function execute(context: Context): boolean {
+export const hasNickname = (nickname) => {
+	function execute(context) {
 		if (context.member !== null) {
 			if (context.member instanceof GuildMember) {
 				if (nickname !== null) {
@@ -378,19 +321,18 @@ export const hasNickname = (nickname?: string): FilterImpl => {
 				context.member.nick !== null &&
 				context.member.nick !== undefined
 			);
-		}
+		} // dm members can technically have nicknames but they're per-user, so this should never be true.
 
-		// dm members can technically have nicknames but they're per-user, so this should never be true.
 		return false;
 	}
+
 	return new FilterImpl(
 		new Criteria("hasNickname", execute, []),
 		"has a nickname",
 	);
 };
-
-export const hasParentId = (parentId: string): FilterImpl => {
-	function execute(context: Context): boolean {
+export const hasParentId = (parentId) => {
+	function execute(context) {
 		if (context.channel !== null) {
 			if (context.channel.isDMBased()) {
 				return false;
@@ -407,9 +349,8 @@ export const hasParentId = (parentId: string): FilterImpl => {
 		`has channel parent <#${parentId}>`,
 	);
 };
-
-export const hasRole = (roleId: string): FilterImpl => {
-	function execute(context: Context): boolean {
+export const hasRole = (roleId) => {
+	function execute(context) {
 		if (context.member !== null) {
 			if (context.member.roles instanceof GuildMemberRoleManager) {
 				return context.member.roles.cache.has(roleId);
@@ -420,9 +361,8 @@ export const hasRole = (roleId: string): FilterImpl => {
 			}
 
 			return context.member.roles.includes(roleId);
-		}
+		} // assume dm members have every role ever.
 
-		// assume dm members have every role ever.
 		return true;
 	}
 
@@ -431,20 +371,17 @@ export const hasRole = (roleId: string): FilterImpl => {
 		`has role <@&${roleId}>`,
 	);
 };
-
-export const hasSomeRole = (roles: Array<string>): FilterImpl => {
+export const hasSomeRole = (roles) => {
 	return withCustomMessage(
 		or(...roles.map((role) => hasRole(role))),
 		`has any of: ${roles.map((v) => `<@&${v}>`).join(", ")}`,
 	);
 };
-
-export const isAdministator = (): FilterImpl => {
+export const isAdministator = () => {
 	return hasGuildPermission("Administrator");
 };
-
-export const isChannelId = (channelId: string): FilterImpl => {
-	function execute(context: Context): boolean {
+export const isChannelId = (channelId) => {
+	function execute(context) {
 		if (context.isMessage()) {
 			return context.message.channelId === channelId;
 		}
@@ -457,9 +394,8 @@ export const isChannelId = (channelId: string): FilterImpl => {
 		`is channel <#${channelId}>`,
 	);
 };
-
-export const isChannelNsfw = (): FilterImpl => {
-	function execute(context: Context): boolean {
+export const isChannelNsfw = () => {
+	function execute(context) {
 		if (context.channel !== null) {
 			if (context.channel.isDMBased() || context.channel.isThread()) {
 				return false;
@@ -470,28 +406,28 @@ export const isChannelNsfw = (): FilterImpl => {
 
 		return false;
 	}
+
 	return new FilterImpl(
 		new Criteria("isChannelNsfw", execute, []),
 		"channel marked as nsfw",
 	);
 };
-
-export const isGuildOwner = (): FilterImpl => {
-	function execute(context: Context): boolean {
+export const isGuildOwner = () => {
+	function execute(context) {
 		if (context.guild !== null) {
 			return context.guild.ownerId === context.user.id;
 		}
 
 		return true;
 	}
+
 	return new FilterImpl(
 		new Criteria("isGuildOwner", execute, []),
 		"is guild owner",
 	);
 };
-
-export const isBotOwner = (): FilterImpl => {
-	function execute(context: Context): boolean {
+export const isBotOwner = () => {
+	function execute(context) {
 		if (context.client.application !== null) {
 			if (context.client.application.owner !== null) {
 				if (context.client.application.owner instanceof User) {
@@ -504,28 +440,27 @@ export const isBotOwner = (): FilterImpl => {
 					context.user.id,
 				);
 			}
-		}
+		} // nope
 
-		// nope
 		return false;
 	}
+
 	return new FilterImpl(
 		new Criteria("isBotOwner", execute, []),
 		"is bot owner",
 	);
 };
-
-export const isUserId = (userId: string): FilterImpl => {
-	function execute(context: Context): boolean {
+export const isUserId = (userId) => {
+	function execute(context) {
 		return context.user.id === userId;
 	}
+
 	return new FilterImpl(
 		new Criteria("isUserId", execute, []),
 		`is user: <@${userId}>`,
 	);
 };
-
-export const parentIdIn = (parentIds: Array<string>): FilterImpl => {
+export const parentIdIn = (parentIds) => {
 	return withCustomMessage(
 		or(...parentIds.map((v) => hasParentId(v))),
 		`channel parent is one of: ${parentIds
@@ -533,16 +468,14 @@ export const parentIdIn = (parentIds: Array<string>): FilterImpl => {
 			.join(", ")}`,
 	);
 };
-
-export const userIdIn = (userIds: Array<string>): FilterImpl => {
+export const userIdIn = (userIds) => {
 	return withCustomMessage(
 		or(...userIds.map((v) => isUserId(v))),
 		`user is one of: ${userIds.map((v) => `<@${v}>`).join(", ")}`,
 	);
 };
-
-export const isInGuild = (): FilterImpl => {
-	function execute(context: Context): boolean {
+export const isInGuild = () => {
+	function execute(context) {
 		return context.guildId !== null;
 	}
 
@@ -551,28 +484,26 @@ export const isInGuild = (): FilterImpl => {
 		"is in guild",
 	);
 };
-
-export const isInDm = (): FilterImpl => {
+export const isInDm = () => {
 	const notInGuild = compose(not, isInGuild);
 	return withCustomMessage(notInGuild(), "is in dm");
 };
-
-export const never = (): FilterImpl => {
-	function execute(context: Context): boolean {
+export const never = () => {
+	function execute(context) {
 		void context;
 		return false;
 	}
+
 	return new FilterImpl(new Criteria("never", execute, []), "never");
 };
-
-export const always = (): FilterImpl => {
-	function execute(context: Context): boolean {
+export const always = () => {
+	function execute(context) {
 		void context;
 		return true;
 	}
+
 	return new FilterImpl(new Criteria("always", execute, []), "always");
 };
-type CtxMap<T> = (arg: T) => FilterImpl;
 
 /**
  * Call FilterImpls in right to left order.
@@ -581,27 +512,19 @@ type CtxMap<T> = (arg: T) => FilterImpl;
  * const isNotUserId = compose(not, isUserId)
  *
  */
-export const compose = <T = void>(...funcs: CtxMap<any>[]): CtxMap<T> => {
-	return (arg: T): FilterImpl =>
-		//@ts-ignore
-		funcs.reduceRight((result, func) => func(result), arg);
+export const compose = (...funcs) => {
+	return (
+		arg, //@ts-ignore
+	) => funcs.reduceRight((result, func) => func(result), arg);
 };
-
 export class FilterImpl {
-	public readonly test: Test;
-
-	public constructor(
-		public readonly criteria: Criteria,
-		public message?: string,
-	) {
+	constructor(criteria, message) {
+		this.criteria = criteria;
+		this.message = message;
 		this.test = this.criteria.execute;
 	}
 }
 
-export type FilterOptions = {
-	condition: Array<FilterImpl> | FilterImpl;
-	onFailed?: (context: Context, filters: Array<FilterImpl>) => unknown;
-};
 /**
  * @plugin
  * Generalized `filter` plugin. revised by jacoobes, all credit to original author.
@@ -620,9 +543,8 @@ export type FilterOptions = {
  * });
  * @end
  */
-
-export const filter = (options: FilterOptions) => {
-	return CommandControlPlugin<CommandType.Both>(async (context) => {
+export const filter = (options) => {
+	return CommandControlPlugin(async (context) => {
 		const arrayifiedCondition = Array.isArray(options.condition)
 			? options.condition
 			: [options.condition];

@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 /**
+ * @plugin
  * Checks if a command is available in a specific server.
  *
  * @author @Peter-MJ-Parker [<@371759410009341952>]
@@ -18,11 +19,12 @@
  *   },
  * });
  * ```
+ * @end
  */
 import { controller, CommandControlPlugin } from "@sern/handler";
 export function serverOnly(
 	guildId,
-	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
+	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer.",
 ) {
 	return CommandControlPlugin(async (ctx, _) => {
 		if (ctx.guildId == null) {

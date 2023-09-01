@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 /**
+ * @plugin
  * Allows you to set cooldowns (or "ratelimits") for commands
  * limits user/channel/guild actions,
  * @author @trueharuu [<@504698587221852172>]
@@ -16,6 +17,7 @@
  *  }
  * })
  * ```
+ * @end
  */
 import { CommandControlPlugin, controller } from "@sern/handler";
 import { GuildMember } from "discord.js";
