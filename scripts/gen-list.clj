@@ -8,8 +8,8 @@
   (io/file (str "./" name)))
 
 (defn make-link [name] 
-  (str "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/TypeScript/" name))
-	
+  (str "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/" name))
+
 (defn name-without-extension [name]
   (if-let [last-dot-index (str/last-index-of name ".")]
     (subs name 0 last-dot-index)
@@ -59,7 +59,7 @@
   
 (defn file-data [plugin-name]
   "gets all jsdoc content. Transforms into lazy seq of data"
-  (let [file (io/file (str "./TypeScript/" plugin-name))
+  (let [file (io/file (str "./plugins/" plugin-name))
         ; We start a plugin metadata block. 
         ; this will transform the first JSDOC block that 
         ; starts with a @plugin tag
@@ -97,16 +97,16 @@
    (map (fn [file]
           (let [ 
                 fname (get-filename file)
-                file-data (file-data fname)] 
-            (conj (hash-map 
+                file-data (file-data fname)]
+            (conj (hash-map
                     :name (name-without-extension fname) 
                     :link (make-link fname)
                     :hash (copy+md5 file (java.io.OutputStream/nullOutputStream)))
               file-data ))))))
 
-(def json (generate-content "./TypeScript") )
+(def json (generate-content "./plugins") )
 
 
 (json/generate-stream json (io/writer "pluginlist.json") { :pretty true })
 
-(println "\nGenerated Plugins!")
+(println "Generated Plugins!")

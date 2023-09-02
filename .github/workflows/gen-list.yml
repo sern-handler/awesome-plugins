@@ -1,6 +1,11 @@
 name: "Generate Plugin Listing"
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'plugins/**'
   workflow_dispatch:
 
 jobs:
@@ -20,21 +25,13 @@ jobs:
           babashka-version: 1.1.173
       - name: gen-list
         run: bb scripts/gen-list.clj
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v5-beta
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit-message: "chore: Update plugins listing"
-          branch: js
-          delete-branch: true
-          branch-suffix: short-commit-hash
-          title: "chore: Update Plugin Listing"
-          body: "asfl;asdkcng;lfkv;lajf;bflglfsafs;af"
-          reviewers: jacoobes 
-      - name: Enable Pull Request Automerge
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
+          commit_message: "chore: update plugin listing"
+          commit_options: '--no-verify --signoff'
+          repository: .
+          commit_user_name: "GitHub Actions"
+          file_pattern: "plugins.json"
+          status_options: '--untracked-files=no'
+          push_options: '--force'
