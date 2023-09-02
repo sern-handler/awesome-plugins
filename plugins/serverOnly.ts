@@ -25,7 +25,7 @@ import { CommandType, controller, CommandControlPlugin } from "@sern/handler";
 
 export function serverOnly(
 	guildId: string[],
-	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer."
+	failMessage = "This command is not available in this guild. \nFor permission to use in your server, please contact my developer.",
 ) {
 	return CommandControlPlugin<CommandType.Both>(async (ctx, _) => {
 		if (ctx.guildId == null) {

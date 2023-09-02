@@ -19,7 +19,7 @@ export class Criteria {
 	public constructor(
 		public readonly name: string,
 		public readonly execute: Test,
-		public readonly children: Array<Criteria>
+		public readonly children: Array<Criteria>,
 	) {}
 	toString() {
 		return this.name + " " + this.children.map((c) => c.name).join(", ");
@@ -43,7 +43,7 @@ export const or = (...filters: Array<FilterImpl>): FilterImpl => {
 
 	return new FilterImpl(
 		new Criteria("or", execute, children),
-		`or(${filters.map((x) => x.message).join(", ")})`
+		`or(${filters.map((x) => x.message).join(", ")})`,
 	);
 };
 
@@ -62,7 +62,7 @@ export const and = (...filters: Array<FilterImpl>): FilterImpl => {
 
 	return new FilterImpl(
 		new Criteria("and", execute, children),
-		`and(${filters.map((x) => x.message).join(", ")})`
+		`and(${filters.map((x) => x.message).join(", ")})`,
 	);
 };
 
@@ -73,7 +73,7 @@ export const not = (filter: FilterImpl): FilterImpl => {
 
 	return new FilterImpl(
 		new Criteria("not", execute, [filter.criteria]),
-		`not(${filter.criteria})`
+		`not(${filter.criteria})`,
 	);
 };
 export const custom = (execute: Test, message?: string): FilterImpl => {
@@ -82,22 +82,22 @@ export const custom = (execute: Test, message?: string): FilterImpl => {
 
 export const withCustomMessage = (
 	filter: FilterImpl,
-	message?: string
+	message?: string,
 ): FilterImpl => {
 	return new FilterImpl(filter.criteria, message);
 };
 
 export const hasGuildPermission = (
-	permission: PermissionResolvable
+	permission: PermissionResolvable,
 ): FilterImpl => {
 	const b = PermissionsBitField.resolve(permission);
 	const field = Object.entries(PermissionsBitField.Flags).find(
-		([, v]) => v === b
+		([, v]) => v === b,
 	);
 
 	if (field === undefined) {
 		throw new Error(
-			`unknown permission \`${permission}\` in filter \`hasGuildPermission\``
+			`unknown permission \`${permission}\` in filter \`hasGuildPermission\``,
 		);
 	}
 
@@ -107,7 +107,7 @@ export const hasGuildPermission = (
 		if (context.member !== null) {
 			if (typeof context.member.permissions === "string") {
 				return new PermissionsBitField(
-					BigInt(context.member.permissions)
+					BigInt(context.member.permissions),
 				).has(b);
 			}
 			return context.member.permissions.has(b);
@@ -118,21 +118,21 @@ export const hasGuildPermission = (
 
 	return new FilterImpl(
 		new Criteria("hasGuildPermission", execute, []),
-		`has guild permission: ${name}`
+		`has guild permission: ${name}`,
 	);
 };
 export const hasChannelPermission = (
 	permission: PermissionResolvable,
-	channelId?: string
+	channelId?: string,
 ): FilterImpl => {
 	const b = PermissionsBitField.resolve(permission);
 	const field = Object.entries(PermissionsBitField.Flags).find(
-		([, v]) => v === b
+		([, v]) => v === b,
 	);
 
 	if (field === undefined) {
 		throw new Error(
-			`unknown permission \`${permission}\` in filter \`hasChannelPermission\``
+			`unknown permission \`${permission}\` in filter \`hasChannelPermission\``,
 		);
 	}
 
@@ -161,7 +161,7 @@ export const hasChannelPermission = (
 				if (context.member !== null) {
 					if (typeof context.member.permissions === "string") {
 						return new PermissionsBitField(
-							BigInt(context.member.permissions)
+							BigInt(context.member.permissions),
 						).has(b);
 					}
 
@@ -181,7 +181,7 @@ export const hasChannelPermission = (
 		new Criteria("hasChannelPermission", execute, []),
 		channelId !== undefined
 			? `has channel permission ${name} in <#${channelId}>`
-			: `has channel permission ${name}`
+			: `has channel permission ${name}`,
 	);
 };
 
@@ -314,20 +314,20 @@ export const channelIdIn = (channelIds: Array<string>): FilterImpl => {
 		return channelIds.includes(
 			context.isMessage()
 				? context.message.channelId
-				: context.interaction.channelId
+				: context.interaction.channelId,
 		);
 	}
 
 	return new FilterImpl(
 		new Criteria("channelIdIn", execute, []),
-		`channel is one of: ${channelIds.map((v) => `<#${v}>`).join(", ")}`
+		`channel is one of: ${channelIds.map((v) => `<#${v}>`).join(", ")}`,
 	);
 };
 
 export const hasEveryRole = (roles: Array<string>): FilterImpl => {
 	return withCustomMessage(
 		and(...roles.map((v) => hasRole(v))),
-		`has all of: ${roles.map((v) => `<@&${v}>`).join(", ")}`
+		`has all of: ${roles.map((v) => `<@&${v}>`).join(", ")}`,
 	);
 };
 
@@ -337,7 +337,7 @@ export const hasMentionableRole = (): FilterImpl => {
 			if (context.member.roles instanceof GuildMemberRoleManager) {
 				return (
 					context.member.roles.cache.filter(
-						(x) => x.mentionable === true
+						(x) => x.mentionable === true,
 					).size > 0
 				);
 			}
@@ -356,7 +356,7 @@ export const hasMentionableRole = (): FilterImpl => {
 	}
 	return new FilterImpl(
 		new Criteria("hasMentionableRole", execute, []),
-		"has a mentionable role"
+		"has a mentionable role",
 	);
 };
 
@@ -386,7 +386,7 @@ export const hasNickname = (nickname?: string): FilterImpl => {
 	}
 	return new FilterImpl(
 		new Criteria("hasNickname", execute, []),
-		"has a nickname"
+		"has a nickname",
 	);
 };
 
@@ -405,7 +405,7 @@ export const hasParentId = (parentId: string): FilterImpl => {
 
 	return new FilterImpl(
 		new Criteria("hasParentId", execute, []),
-		`has channel parent <#${parentId}>`
+		`has channel parent <#${parentId}>`,
 	);
 };
 
@@ -429,14 +429,14 @@ export const hasRole = (roleId: string): FilterImpl => {
 
 	return new FilterImpl(
 		new Criteria("hasRole", execute, []),
-		`has role <@&${roleId}>`
+		`has role <@&${roleId}>`,
 	);
 };
 
 export const hasSomeRole = (roles: Array<string>): FilterImpl => {
 	return withCustomMessage(
 		or(...roles.map((role) => hasRole(role))),
-		`has any of: ${roles.map((v) => `<@&${v}>`).join(", ")}`
+		`has any of: ${roles.map((v) => `<@&${v}>`).join(", ")}`,
 	);
 };
 
@@ -455,7 +455,7 @@ export const isChannelId = (channelId: string): FilterImpl => {
 
 	return new FilterImpl(
 		new Criteria("isChannelId", execute, []),
-		`is channel <#${channelId}>`
+		`is channel <#${channelId}>`,
 	);
 };
 
@@ -473,7 +473,7 @@ export const isChannelNsfw = (): FilterImpl => {
 	}
 	return new FilterImpl(
 		new Criteria("isChannelNsfw", execute, []),
-		"channel marked as nsfw"
+		"channel marked as nsfw",
 	);
 };
 
@@ -487,7 +487,7 @@ export const isGuildOwner = (): FilterImpl => {
 	}
 	return new FilterImpl(
 		new Criteria("isGuildOwner", execute, []),
-		"is guild owner"
+		"is guild owner",
 	);
 };
 
@@ -502,7 +502,7 @@ export const isBotOwner = (): FilterImpl => {
 				}
 
 				return context.client.application.owner.members.has(
-					context.user.id
+					context.user.id,
 				);
 			}
 		}
@@ -512,7 +512,7 @@ export const isBotOwner = (): FilterImpl => {
 	}
 	return new FilterImpl(
 		new Criteria("isBotOwner", execute, []),
-		"is bot owner"
+		"is bot owner",
 	);
 };
 
@@ -522,7 +522,7 @@ export const isUserId = (userId: string): FilterImpl => {
 	}
 	return new FilterImpl(
 		new Criteria("isUserId", execute, []),
-		`is user: <@${userId}>`
+		`is user: <@${userId}>`,
 	);
 };
 
@@ -531,14 +531,14 @@ export const parentIdIn = (parentIds: Array<string>): FilterImpl => {
 		or(...parentIds.map((v) => hasParentId(v))),
 		`channel parent is one of: ${parentIds
 			.map((v) => `<#${v}>`)
-			.join(", ")}`
+			.join(", ")}`,
 	);
 };
 
 export const userIdIn = (userIds: Array<string>): FilterImpl => {
 	return withCustomMessage(
 		or(...userIds.map((v) => isUserId(v))),
-		`user is one of: ${userIds.map((v) => `<@${v}>`).join(", ")}`
+		`user is one of: ${userIds.map((v) => `<@${v}>`).join(", ")}`,
 	);
 };
 
@@ -549,7 +549,7 @@ export const isInGuild = (): FilterImpl => {
 
 	return new FilterImpl(
 		new Criteria("isInGuild", execute, []),
-		"is in guild"
+		"is in guild",
 	);
 };
 
@@ -593,7 +593,7 @@ export class FilterImpl {
 
 	public constructor(
 		public readonly criteria: Criteria,
-		public message?: string
+		public message?: string,
 	) {
 		this.test = this.criteria.execute;
 	}

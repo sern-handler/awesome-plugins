@@ -52,7 +52,7 @@ export function assertFields(config: {
 				errors.push(
 					input +
 						" failed to pass assertion " +
-						resolvedAssertion.toString()
+						resolvedAssertion.toString(),
 				);
 			}
 		}

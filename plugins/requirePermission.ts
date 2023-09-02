@@ -16,7 +16,7 @@
  * 		//your code here
  *  }
  * })
- * ``` 
+ * ```
  * @end
  */
 
@@ -35,13 +35,13 @@ function payload(resp?: string) {
 export function requirePermission(
 	target: "user" | "bot" | "both",
 	perm: PermissionResolvable[],
-	response?: string
+	response?: string,
 ) {
 	return CommandControlPlugin<CommandType.Both>(async (ctx, args) => {
 		if (ctx.guild === null) {
 			ctx.reply(payload("This command cannot be used here"));
 			console.warn(
-				"PermCheck > A command stopped because we couldn't check a users permissions (was used in dms)"
+				"PermCheck > A command stopped because we couldn't check a users permissions (was used in dms)",
 			); //delete this line if you dont want to be notified when a command is used outside of a guild/server
 			return controller.stop();
 		}
@@ -55,7 +55,7 @@ export function requirePermission(
 				if (!bot.permissions.has(perm)) {
 					if (!response)
 						response = `I cannot use this command, please give me \`${perm.join(
-							", "
+							", ",
 						)}\` permission(s).`;
 					await ctx.reply(payload(response));
 					return controller.stop();
@@ -66,7 +66,7 @@ export function requirePermission(
 				if (!memm.permissions.has(perm)) {
 					if (!response)
 						response = `You cannot use this command because you are missing \`${perm.join(
-							", "
+							", ",
 						)}\` permission(s).`;
 					await ctx.reply(payload(response));
 					return controller.stop();
