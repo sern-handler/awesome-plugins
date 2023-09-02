@@ -1,4 +1,4 @@
-name: "Generate Plugin Listing"
+name: Continuous Delivery
 
 on:
   push:
