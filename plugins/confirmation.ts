@@ -1,7 +1,7 @@
 //@ts-nocheck
 /**
  * @plugin
- * Asks the user for a confirmation message before executing the command
+ * Asks the user for a confirmation msg before executing the command
  *
  * @author @trueharuu [<@504698587221852172>]
  * @version 1.0.0
