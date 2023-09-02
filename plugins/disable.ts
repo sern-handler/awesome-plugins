@@ -16,15 +16,11 @@
  * 		//your code here
  *  }
  * })
- * ``` 
+ * ```
  * @end
  */
 import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
-import {
-	InteractionReplyOptions,
-	Message,
-	ReplyMessageOptions,
-} from "discord.js";
+import { InteractionReplyOptions, ReplyMessageOptions } from "discord.js";
 
 export function disable(
 	onFail?:

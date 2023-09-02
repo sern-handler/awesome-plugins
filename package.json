@@ -4,6 +4,7 @@
 	"description": "A curated list of cool plugins made by community of sern",
 	"main": "index.js",
 	"scripts": {
+		"generate": "bb scripts/gen-list.clj",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -21,10 +22,5 @@
 	"bugs": {
 		"url": "https://github.com/sern-handler/awesome-plugins/issues"
 	},
-	"homepage": "https://github.com/sern-handler/awesome-plugins#readme",
-	"devDependencies": {
-		"@babel/cli": "^7.18.9",
-		"@babel/core": "^7.18.9",
-		"@babel/preset-typescript": "^7.18.6"
-	}
+	"homepage": "https://github.com/sern-handler/awesome-plugins#readme"
 }
