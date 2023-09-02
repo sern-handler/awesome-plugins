@@ -1,8 +1,7 @@
 // @ts-nocheck
 /**
  * @plugin
- * Allows you to set cooldowns (or "ratelimits") for commands
- * limits user/channel/guild actions,
+ * Allows you to set cooldowns (or "ratelimits") for commands, limits user/channel/guild actions.
  * @author @trueharuu [<@504698587221852172>]
  * @version 1.0.0
  * @example
@@ -45,7 +44,7 @@ export class ExpiryMap<K, V> extends Map<K, V> {
 	public readonly expiry: number;
 	constructor(
 		expiry: number = Infinity,
-		iterable: [K, V][] | ReadonlyMap<K, V> = [],
+		iterable: [K, V][] | ReadonlyMap<K, V> = []
 	) {
 		super(iterable);
 		this.expiry = expiry;
@@ -65,7 +64,7 @@ export const map = new ExpiryMap<string, number>();
 
 function parseCooldown(
 	location: CooldownLocation,
-	cooldown: CooldownString,
+	cooldown: CooldownString
 ): Cooldown {
 	const [actions, seconds] = cooldown.split("/").map((s) => Number(s));
 
@@ -113,7 +112,7 @@ function add(
 		| [CooldownLocation | keyof typeof CooldownLocation, CooldownString]
 		| Cooldown
 	>,
-	message?: CooldownResponse,
+	message?: CooldownResponse
 ) {
 	const raw = items.map((c) => {
 		if (!Array.isArray(c)) return c;
