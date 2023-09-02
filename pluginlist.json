@@ -64,11 +64,11 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n Generalized `filter` plugin. revised by jacoobes, all credit to original author.\n Perform declarative conditionals as plugins.",
-  "hash" : "16e5e1cfdaa958e35760b86c2cffb23d",
+  "hash" : "80ea917bbef50ae93f1f6a5ca50114a9",
   "name" : "filter",
   "author" : [ "@trueharuu [<@504698587221852172>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/filter.ts",
-  "example" : "\n\n import { filter, not, isGuildOwner, canMentionEveryone } from '../plugins/filter';\n import { commandModule } from '@sern/handler';\n\n export default commandModule({\n     plugins: [filter({ condition: [not(isGuildOwner()), canMentionEveryone()] })],\n     async execute(context) {\n       // your code here\n     }\n });",
+  "example" : "\n\n ```ts\n import { filter, not, isGuildOwner, canMentionEveryone } from '../plugins/filter';\n import { commandModule } from '@sern/handler';\n\n export default commandModule({\n     plugins: [filter({ condition: [not(isGuildOwner()), canMentionEveryone()] })],\n     async execute(context) {\n       // your code here\n     }\n });\n ```",
   "version" : "2.0.0"
 }, {
   "description" : "\n\n This plugin checks if a channel is the specified type\n",
