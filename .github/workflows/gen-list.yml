@@ -35,5 +35,4 @@ jobs:
           repository: .
           commit_user_name: "GitHub Actions"
           file_pattern: "pluginlist.json"
-          status_options: '--untracked-files=no'
           push_options: '--force'
