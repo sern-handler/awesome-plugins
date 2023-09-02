@@ -17,6 +17,8 @@ jobs:
       # you must check out the repository first
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.FORCE_PUSH }}
       # Now we can execute a babashka script from our
       # repository
       - name: setup babashka
