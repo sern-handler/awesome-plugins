@@ -2,10 +2,10 @@ import { PluginType, makePlugin, controller, ControlPlugin } from "@sern/handler
 import type { AutocompleteInteraction } from 'discord.js'
 
 /**
- * @plugin
- * @author jacoobes
+ * @plugin 
+ * filters autocomplete interaction that pass the criteria
+ * @author jacoobes [<@182326315813306368>]
  * @version 1.0.0
- * @description filters autocomplete interaction that pass the criteria
  * @example
  * ```ts
  * import { CommandType, commandModule } from "@sern/handler";
