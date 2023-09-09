@@ -13,22 +13,6 @@ Before submitting your plugin, please ensure that you have followed the specific
 
 ## Plugin Submission Details
 
-**Description:**
-
-_[Please provide a brief description of your plugin here.]_
-
-**Authors:**
-
-_[List the authors of the plugin along with their Discord IDs in the format `@username [<@discord_id>]`. You can add multiple authors in this manner.]_
-
-**Version:**
-
-_[Specify the version number of your plugin.]_
-
-**Example:**
-
-_[Provide an example of how your plugin can be used here.]_
-
 ## Additional Notes
 
 _[Include any additional information or notes you'd like to provide regarding your plugin submission.]_
