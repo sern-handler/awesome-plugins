@@ -2,10 +2,10 @@ import { PluginType, makePlugin, controller, ControlPlugin } from "@sern/handler
 import type { AutocompleteInteraction } from 'discord.js'
 
 /**
+ * @plugin
  * @author jacoobes
  * @version 1.0.0
  * @description filters autocomplete interaction that pass the criteria
- * @license null
  * @example
  * ```ts
  * import { CommandType, commandModule } from "@sern/handler";
@@ -27,6 +27,7 @@ import type { AutocompleteInteraction } from 'discord.js'
  *    ],
  *    execute: (ctx, args) => {}
  * })
+ * @end
  */
 export const filterA = (pred: (value: string) => boolean) => {
     return makePlugin(PluginType.Control, (a: AutocompleteInteraction) => {
