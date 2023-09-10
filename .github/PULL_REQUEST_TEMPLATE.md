@@ -11,24 +11,42 @@ Before submitting your plugin, please ensure that you have followed the specific
   5. `@example` (a nice example of how to use your plugin)
   6. `@end`
 
+this is an example:
+```js
+/** 
+ * @plugin
+ * filters autocomplete interaction that pass the criteria
+ * @author @jacoobes [<@182326315813306368>]
+ * @version 1.0.0
+ * @example
+ * ```ts
+ * import { CommandType, commandModule } from "@sern/handler";
+ * import { filterA } from '../plugins/filterA.js'
+ * export default commandModule({
+ *    type : CommandType.Slash,
+ *    options: [
+ *       {  
+ *          autocomplete: true,
+ *          command : {
+ *             //only accept autocomplete interactions that include 'poo' in the text
+ *             onEvent: [filterA(s => s.includes('poo'))],
+ *             execute: (autocomplete) => {
+ *                let data = [{ name: 'pooba', value: 'first' }, { name: 'pooga', value: 'second' }]
+ *                autocomplete.respond(data) 
+ *             }
+ *          }
+ *       }
+ *    ],
+ *    execute: (ctx, args) => {}
+ * })
+ * @end
+ */
+
+
+```
+
 ## Plugin Submission Details
-
-**Description:**
-
-_[Please provide a brief description of your plugin here.]_
-
-**Authors:**
-
-_[List the authors of the plugin along with their Discord IDs in the format `@username [<@discord_id>]`. You can add multiple authors in this manner.]_
-
-**Version:**
-
-_[Specify the version number of your plugin.]_
-
-**Example:**
-
-_[Provide an example of how your plugin can be used here.]_
-
+[Enter data here] this is optional
 ## Additional Notes
 
 _[Include any additional information or notes you'd like to provide regarding your plugin submission.]_
