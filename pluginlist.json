@@ -1,28 +1,4 @@
 [ {
-  "description" : "\n\n This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.\n",
-  "hash" : "31adb9ef134cddda53e47e505620c905",
-  "name" : "ownerOnly",
-  "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/ownerOnly.ts",
-  "example" : "\n\n ```ts\n import { ownerOnly } from \"../plugins/ownerOnly\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ ownerOnly() ], // can also pass array of IDs to override default owner IDs\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "1.2.0"
-}, {
-  "description" : "\n\n [DEPRECATED] It allows you to publish your application commands using the discord.js library with ease.\n",
-  "hash" : "66ef98cb1b934c774c7a1d987db1486d",
-  "name" : "publish",
-  "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/publish.ts",
-  "example" : "\n\n ```ts\n import { publish } from \"../plugins/publish\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ publish() ], // put an object containing permissions, ids for guild commands, boolean for dmPermission\n  // plugins: [ publish({ guildIds: ['guildId'], defaultMemberPermissions: 'Administrator'})]\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "2.0.0"
-}, {
-  "description" : "\n\n This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw\n",
-  "hash" : "a8ab190bbd0860f430b62cb996b93802",
-  "name" : "nsfwOnly",
-  "author" : [ "@Benzo-Fury [<@762918086349029386>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/nsfwOnly.ts",
-  "example" : "\n\n ```ts\n import { nsfwOnly } from \"../plugins/nsfwOnly\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ nsfwOnly('response', true) ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "1.0.0"
-}, {
   "description" : "\n\n Asks the user for a confirmation msg before executing the command\n",
   "hash" : "f2bd8f2845694357a20346a99b388e2e",
   "name" : "confirmation",
@@ -39,12 +15,20 @@
   "example" : "\n\n ```ts\n import { buttonConfirmation } from \"../plugins/buttonConfirmation\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ buttonConfirmation() ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
   "version" : "1.0.0"
 }, {
-  "description" : "\n\n Checks if a command is available in a specific server.\n",
-  "hash" : "cdacf2da513618f7676784c852b34cce",
-  "name" : "serverOnly",
-  "author" : [ "@Peter-MJ-Parker [<@371759410009341952>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/serverOnly.ts",
-  "example" : "\n\n ```ts\n import { commandModule, CommandType } from \"@sern/handler\";\n import { serverOnly } from \"../plugins/serverOnly\";\n export default commandModule({\n   type: CommandType.Both,\n   plugins: [serverOnly([\"guildId\"], failMessage)], // fail message is the message you will see when the command is ran in the wrong server.\n   description: \"command description\",\n   execute: async (ctx, args) => {\n     // your code here\n   },\n });\n ```",
+  "description" : "\n\n Generalized `filter` plugin. revised by jacoobes, all credit to original author.\n Perform declarative conditionals as plugins.",
+  "hash" : "80ea917bbef50ae93f1f6a5ca50114a9",
+  "name" : "filter",
+  "author" : [ "@trueharuu [<@504698587221852172>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/filter.ts",
+  "example" : "\n\n ```ts\n import { filter, not, isGuildOwner, canMentionEveryone } from '../plugins/filter';\n import { commandModule } from '@sern/handler';\n\n export default commandModule({\n     plugins: [filter({ condition: [not(isGuildOwner()), canMentionEveryone()] })],\n     async execute(context) {\n       // your code here\n     }\n });\n ```",
+  "version" : "2.0.0"
+}, {
+  "description" : "\n\n This plugin checks if a channel is the specified type\n",
+  "hash" : "a3f95ec62e1480b8c3318443cc8184c0",
+  "name" : "channelType",
+  "author" : [ "@Benzo-Fury [<@762918086349029386>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/channelType.ts",
+  "example" : "\n\n ```ts\n import { channelType } from \"../plugins/channelType\";\n import { ChannelType } from \"discord.js\"\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ channelType([ChannelType.GuildText], 'This cannot be used here') ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
   "version" : "1.0.0"
 }, {
   "description" : "\n\n This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check bot or user for that perm).\n",
@@ -55,22 +39,6 @@
   "example" : "\n\n ```ts\n import { requirePermission } from \"../plugins/myPermCheck\";\n import { commandModule, CommandType } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ requirePermission<CommandType>('target', 'permission', 'No response (optional)') ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
   "version" : "1.2.0"
 }, {
-  "description" : "\n\n This plugin checks the fields of a ModalSubmitInteraction\n with regex or a custom callback\n",
-  "hash" : "637eaca240ccb5fc8a1bf3d4ba0bc368",
-  "name" : "assertFields",
-  "author" : [ "@jacoobes [<@182326315813306368>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/assertFields.ts",
-  "example" : "\n\n ```ts\n export default commandModule({\n     type: CommandType.Modal,\n     plugins: [\n         assertFields({\n             fields: {\n             // check the modal field \"mcUsernameInput\" with the regex /a+b+c/\n                 mcUsernameInput: /a+b+c+/\n             },\n             failure: (errors, interaction) => {\n                 interaction.reply(errors.join(\"\\n\"))\n             }\n         }),\n     ],\n     execute: ctx => {\n         ctx.reply(\"nice!\")\n     }\n })\n ```",
-  "version" : "1.0.0"
-}, {
-  "description" : "\n\n Allows you to set cooldowns (or \"ratelimits\") for commands, limits user/channel/guild actions.",
-  "hash" : "9549ecb8901e2e9f814cd6234d1e8a32",
-  "name" : "cooldown",
-  "author" : [ "@trueharuu [<@504698587221852172>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/cooldown.ts",
-  "example" : "\n\n ```ts\n import { cooldown } from \"../plugins/cooldown\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [cooldown.add( [ ['channel', '1/4'] ] )], // limit to 1 action every 4 seconds per channel\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "1.0.0"
-}, {
   "description" : "\n\n This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).\n",
   "hash" : "a758460fbe9ee036dc8a98854d73a4ba",
   "name" : "permCheck",
@@ -78,14 +46,6 @@
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/permCheck.ts",
   "example" : "\n\n ```ts\n import { permCheck } from \"../plugins/permCheck\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ permCheck('permission', 'No permission response') ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
   "version" : "1.0.1"
-}, {
-  "description" : "\n\n Generalized `filter` plugin. revised by jacoobes, all credit to original author.\n Perform declarative conditionals as plugins.",
-  "hash" : "80ea917bbef50ae93f1f6a5ca50114a9",
-  "name" : "filter",
-  "author" : [ "@trueharuu [<@504698587221852172>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/filter.ts",
-  "example" : "\n\n ```ts\n import { filter, not, isGuildOwner, canMentionEveryone } from '../plugins/filter';\n import { commandModule } from '@sern/handler';\n\n export default commandModule({\n     plugins: [filter({ condition: [not(isGuildOwner()), canMentionEveryone()] })],\n     async execute(context) {\n       // your code here\n     }\n });\n ```",
-  "version" : "2.0.0"
 }, {
   "description" : "\n\n This is dmOnly plugin, it allows commands to be run only in DMs.\n",
   "hash" : "63eabcaafdbd6b6fbd6e52372e656a21",
@@ -95,14 +55,6 @@
   "example" : "\n\n ```ts\n import { dmOnly } from \"../plugins/dmOnly\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [dmOnly()],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
   "version" : "1.0.0"
 }, {
-  "description" : "\n\n This plugin checks if a channel is the specified type\n",
-  "hash" : "a3f95ec62e1480b8c3318443cc8184c0",
-  "name" : "channelType",
-  "author" : [ "@Benzo-Fury [<@762918086349029386>]" ],
-  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/channelType.ts",
-  "example" : "\n\n ```ts\n import { channelType } from \"../plugins/channelType\";\n import { ChannelType } from \"discord.js\"\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ channelType([ChannelType.GuildText], 'This cannot be used here') ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "1.0.0"
-}, {
   "description" : "\n\n Disables a command entirely, for whatever reasons you may need.\n",
   "hash" : "4b6aad954075820aa69315c13c665f28",
   "name" : "disable",
@@ -110,4 +62,52 @@
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/disable.ts",
   "example" : "\n\n ```ts\n import { disable } from \"../plugins/disable\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ disable() ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
   "version" : "2.0.0"
+}, {
+  "description" : "\n\n This plugin checks the fields of a ModalSubmitInteraction\n with regex or a custom callback\n",
+  "hash" : "637eaca240ccb5fc8a1bf3d4ba0bc368",
+  "name" : "assertFields",
+  "author" : [ "@jacoobes [<@182326315813306368>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/assertFields.ts",
+  "example" : "\n\n ```ts\n export default commandModule({\n     type: CommandType.Modal,\n     plugins: [\n         assertFields({\n             fields: {\n             // check the modal field \"mcUsernameInput\" with the regex /a+b+c/\n                 mcUsernameInput: /a+b+c+/\n             },\n             failure: (errors, interaction) => {\n                 interaction.reply(errors.join(\"\\n\"))\n             }\n         }),\n     ],\n     execute: ctx => {\n         ctx.reply(\"nice!\")\n     }\n })\n ```",
+  "version" : "1.0.0"
+}, {
+  "description" : "\n\n This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw\n",
+  "hash" : "d8c81cd449f09b2122330907352cdf76",
+  "name" : "nsfwOnly",
+  "author" : [ "@Benzo-Fury [<@762918086349029386>]", "@SrIzan10 [<@703974042700611634>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/nsfwOnly.ts",
+  "example" : "\n\n ```ts\n import { nsfwOnly } from \"../plugins/nsfwOnly\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ nsfwOnly('response', true) ],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
+  "version" : "1.0.1"
+}, {
+  "description" : "\n\n Checks if a command is available in a specific server.\n",
+  "hash" : "cdacf2da513618f7676784c852b34cce",
+  "name" : "serverOnly",
+  "author" : [ "@Peter-MJ-Parker [<@371759410009341952>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/serverOnly.ts",
+  "example" : "\n\n ```ts\n import { commandModule, CommandType } from \"@sern/handler\";\n import { serverOnly } from \"../plugins/serverOnly\";\n export default commandModule({\n   type: CommandType.Both,\n   plugins: [serverOnly([\"guildId\"], failMessage)], // fail message is the message you will see when the command is ran in the wrong server.\n   description: \"command description\",\n   execute: async (ctx, args) => {\n     // your code here\n   },\n });\n ```",
+  "version" : "1.0.0"
+}, {
+  "description" : "\n\n This is OwnerOnly plugin, it allows only bot owners to run the command, like eval.\n",
+  "hash" : "31adb9ef134cddda53e47e505620c905",
+  "name" : "ownerOnly",
+  "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/ownerOnly.ts",
+  "example" : "\n\n ```ts\n import { ownerOnly } from \"../plugins/ownerOnly\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ ownerOnly() ], // can also pass array of IDs to override default owner IDs\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
+  "version" : "1.2.0"
+}, {
+  "description" : "\n\n [DEPRECATED] It allows you to publish your application commands using the discord.js library with ease.\n",
+  "hash" : "66ef98cb1b934c774c7a1d987db1486d",
+  "name" : "publish",
+  "author" : [ "@EvolutionX-10 [<@697795666373640213>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/publish.ts",
+  "example" : "\n\n ```ts\n import { publish } from \"../plugins/publish\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ publish() ], // put an object containing permissions, ids for guild commands, boolean for dmPermission\n  // plugins: [ publish({ guildIds: ['guildId'], defaultMemberPermissions: 'Administrator'})]\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
+  "version" : "2.0.0"
+}, {
+  "description" : "\n\n Allows you to set cooldowns (or \"ratelimits\") for commands, limits user/channel/guild actions.",
+  "hash" : "9549ecb8901e2e9f814cd6234d1e8a32",
+  "name" : "cooldown",
+  "author" : [ "@trueharuu [<@504698587221852172>]" ],
+  "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/cooldown.ts",
+  "example" : "\n\n ```ts\n import { cooldown } from \"../plugins/cooldown\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [cooldown.add( [ ['channel', '1/4'] ] )], // limit to 1 action every 4 seconds per channel\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
+  "version" : "1.0.0"
 } ]
