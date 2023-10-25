@@ -4,7 +4,8 @@
  * This plugin checks if the channel is nsfw and responds to user with a specified response if not nsfw
  *
  * @author @Benzo-Fury [<@762918086349029386>]
- * @version 1.0.0
+ * @author @SrIzan10 [<@703974042700611634>]
+ * @version 1.0.1
  * @example
  * ```ts
  * import { nsfwOnly } from "../plugins/nsfwOnly";
@@ -29,8 +30,8 @@ function isGuildText(
 	channel: TextBasedChannel | null,
 ): channel is GuildTextBasedChannel {
 	return (
-		channel?.type == ChannelType.GuildPublicThread ||
-		channel?.type == ChannelType.GuildPrivateThread
+		channel?.type == ChannelType.PublicThread ||
+		channel?.type == ChannelType.PrivateThread
 	);
 }
 export function nsfwOnly(onFail: string, ephemeral: boolean) {
