@@ -5,7 +5,7 @@
  *
  * @author @Benzo-Fury [<@762918086349029386>]
  * @author @SrIzan10 [<@703974042700611634>]
- * @version 1.0.0
+ * @version 1.0.1
  * @example
  * ```ts
  * import { nsfwOnly } from "../plugins/nsfwOnly";
