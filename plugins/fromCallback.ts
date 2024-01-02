@@ -29,7 +29,7 @@ import { PluginType, makePlugin, controller } from "@sern/handler";
 
 export const fromCallback = (cb: (...args: any[]) => boolean) => 
     makePlugin(PluginType.Control, (...args) => {
-        console.log(args)
+        //console.log(args)
         if(cb.apply(null, args)) {
             return controller.next();
         }
