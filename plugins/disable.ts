@@ -1,11 +1,11 @@
-// @ts-nocheck
+//@ts-nocheck
 /**
  * @plugin
  * Disables a command entirely, for whatever reasons you may need.
  *
  * @author @jacoobes [<@182326315813306368>]
  * @author @Peter-MJ-Parker [<@371759410009341952>]
- * @version 2.0.0
+ * @version 2.1.0
  * @example
  * ```ts
  * import { disable } from "../plugins/disable";
@@ -20,36 +20,49 @@
  * @end
  */
 import { CommandType, CommandControlPlugin, controller } from "@sern/handler";
-import { InteractionReplyOptions, ReplyMessageOptions } from "discord.js";
+import { InteractionReplyOptions, MessageReplyOptions } from "discord.js";
 
 export function disable(
 	onFail?:
 		| string
 		| Omit<InteractionReplyOptions, "fetchReply">
-		| ReplyMessageOptions,
+		| MessageReplyOptions
 ) {
 	return CommandControlPlugin<CommandType.Both>(async (ctx, [args]) => {
 		if (onFail !== undefined) {
 			switch (args) {
 				case "text":
-					//reply to text command
-					const msg = await ctx.reply(onFail);
-					setTimeout(() => {
-						//deletes the bots reply to the user
-						msg.delete();
-						//deletes the original authors message (text command).
-						ctx.message.delete();
-						//waits 5 seconds before deleting messages
-					}, 5000).catch((e) => {
-						//logs error to console (if any).
-						console.log(e);
-					});
+					try {
+						//reply to text command
+						const msg = await ctx.reply(onFail);
+						setTimeout(() => {
+							//deletes the bots reply to the user
+							msg.delete();
+							//deletes the original authors message (text command).
+							ctx.message.delete();
+							//waits 5 seconds before deleting messages
+						}, 5000);
+					} catch (error) {
+						console.log(
+							"Could not delete disabled response due to: " +
+								error
+						);
+					}
 
 					break;
 
 				case "slash":
-					//ephemeral response to say the command is disabled with users response.
-					await ctx.reply({ content: onFail, ephemeral: true });
+					//response to say the command is disabled with users response.
+					let reply = await ctx.reply(onFail);
+					try {
+						setTimeout(async () => {
+							await reply.delete();
+						}, 5000);
+					} catch (error) {
+						console.log(
+							"Could not delete disabled response due to it being ephemeral."
+						);
+					}
 					break;
 
 				default:
