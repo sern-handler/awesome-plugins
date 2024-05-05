@@ -605,7 +605,7 @@ export type FilterOptions = {
 };
 /**
  * @plugin
- * Generalized `filter` plugin. revised by jacoobes, all credit to original author.
+ * Generalized `filter` plugin. all credit to trueharuu.
  * Perform declarative conditionals as plugins.
  * @author @trueharuu [<@504698587221852172>]
  * @version 2.0.0
