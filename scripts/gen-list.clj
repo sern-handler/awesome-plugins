@@ -16,7 +16,6 @@
                  (= \* fst) (if (= (first rest) \/) res (recur rest (not sol) res))
                  :else (let [line (>>line rest)] (recur (drop (count line) rest) true (conj res (str fst line)))))))))
 
-
 (def jsdoc-regex 
   #"[ \t]*\/\*\*\s*\n([^*]*(\*[^/])?)*\*\/")
 
@@ -29,16 +28,19 @@
       (io/copy digest-stream output-stream))
     (format "%032x" (BigInteger. 1 (.digest digest)))))
 
+(defn plugin-jsdocs [pth] 
+  (let [ [_ & rst] (->> (re-seq jsdoc-regex (slurp pth))
+                      (map (comp str->jsdoc str/trim first)) 
+                      (filter (comp (partial = "plugin") :tag first))
+                      first)] 
+
+    (let [desc (take-while string? rst)
+          more-tags (take-while :tag (drop (inc (count desc)) rst))]
+      {
+        :desc desc
+        :tags more-tags
+       } 
+      )))
+
 (def base "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/")
-(println  (->> (file-seq (io/file "./plugins"))
-               (filter  #(.isFile %))
-               (map (fn [file] 
-                      (let [fname (fs/file-name file)
-                            jsdocs (first  (keep str->jsdoc (re-find jsdoc-regex (slurp (str "./plugins/" fname)))))]
-                        jsdocs
-                        #_{ :name (first (str/split (fs/file-name file) #"\.")) 
-                          :link (str base (fs/file-name file))
-                          :hash (copy+md5 file (java.io.OutputStream/nullOutputStream)) 
-                          
-                          })))))
 
