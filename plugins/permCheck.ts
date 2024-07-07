@@ -66,19 +66,10 @@ function command(perm: PermissionResolvable, response?: string) {
 			});
 			return controller.stop();
 		}
-		if (
-			!(ctx.member! as GuildMember)
-				.permissionsIn(ctx.channel as TextChannel)
-				.any(perm)
-		) {
+		if (!(ctx.member! as GuildMember).permissionsIn(ctx.channel as TextChannel).any(perm)) {
 			await ctx.reply({
 				embeds: [
-					sendEmbed(
-						response ??
-							`You need at least one of the following permissions to run this command:\n${permsToString(
-								perm
-							)}`
-					),
+					sendEmbed(response ?? `You need at least one of the following permissions to run this command:\n${permsToString(perm)}`),
 				],
 				ephemeral: ctx.isMessage() ? false : true,
 			});
@@ -96,9 +87,7 @@ function subGroups(opts: BaseOptions[]) {
 			if (group !== opt.name) {
 				await interaction.reply({
 					embeds: [
-						sendEmbed(
-							`[PLUGIN_permCheck.subGroups]: Failed to find specified subcommandGroup \`${opt.name}\`!`
-						),
+						sendEmbed(`[PLUGIN_permCheck.subGroups]: Failed to find specified subcommandGroup \`${opt.name}\`!`),
 					],
 					ephemeral: true,
 				});
@@ -145,44 +134,30 @@ function subcommands(opts: BaseOptions[]) {
 		await no_guild(interaction);
 		const member = interaction.member as GuildMember;
 		const sub = interaction.options.getSubcommand();
-		for (const opt of opts) {
-			if (sub !== opt.name) {
+		for (const { name, needAllPerms, perms, response } of opts) {
+			if (sub !== name) {
 				await interaction.reply({
 					embeds: [
-						sendEmbed(
-							`[PLUGIN_permCheck.subcommands]: Failed to find specified subcommand \`${opt.name}\`!`
-						),
+						sendEmbed(`[PLUGIN_permCheck.subcommands]: Failed to find specified subcommand \`${name}\`!`),
 					],
 					ephemeral: true,
 				});
 				return controller.stop();
 			}
-			const _perms = member.permissionsIn(
-				interaction.channel as TextChannel
-			);
-			if (opt.needAllPerms && !_perms.has(opt.perms)) {
+			const _perms = member.permissionsIn(interaction.channel as TextChannel);
+			if (needAllPerms && !_perms.has(perms)) {
 				await interaction.reply({
 					embeds: [
-						sendEmbed(
-							opt.response ??
-								`You cannot use this subcommand due to missing permissions: ${permsToString(
-									opt.perms
-								)}`
-						),
+						sendEmbed(response ?? `You cannot use this subcommand due to missing permissions: ${permsToString(perms)}`),
 					],
 					ephemeral: true,
 				});
 				return controller.stop();
 			}
-			if (!opt.needAllPerms && !_perms.any(opt.perms)) {
+			if (!needAllPerms && !_perms.any(perms)) {
 				await interaction.reply({
 					embeds: [
-						sendEmbed(
-							opt.response ??
-								`You cannot use this subcommand because you need at least one of the following permissions: ${permsToString(
-									opt.perms
-								)}`
-						),
+						sendEmbed(response ?? `You cannot use this subcommand because you need at least the following permissions: ${permsToString(perms)}`),
 					],
 					ephemeral: true,
 				});
@@ -198,14 +173,14 @@ function options(opts: BaseOptions[]) {
 		const member = interaction.member as GuildMember;
 		const channel = interaction.channel as TextChannel;
 
-		for (const opt of opts) {
-			const option = interaction.options.get(opt.name);
+		for (const { name, needAllPerms, perms, response } of opts) {
+			const option = interaction.options.get(name);
 
-			if (option && option.name !== opt.name) {
+			if (option && option.name !== name) {
 				await interaction.reply({
 					embeds: [
 						sendEmbed(
-							`[PLUGIN_permCheck.options]: Could not find supplied option: \`${opt.name}\``
+							`[PLUGIN_permCheck.options]: Could not find supplied option: \`${name}\``
 						),
 					],
 					ephemeral: true,
@@ -215,15 +190,13 @@ function options(opts: BaseOptions[]) {
 
 			const permissions = member.permissionsIn(channel);
 
-			if (opt.needAllPerms) {
-				if (!permissions.has(opt.perms)) {
+			if (needAllPerms) {
+				if (!permissions.has(perms)) {
 					await interaction.reply({
 						embeds: [
 							sendEmbed(
-								opt.response ??
-									`You need all the following permissions for option \`${
-										opt.name
-									}\`:\n ${permsToString(...opt.perms)}`
+								response ??
+								`You need all the following permissions for option \`${name}\`:\n ${permsToString(...perms)}`
 							),
 						],
 						ephemeral: true,
@@ -231,14 +204,12 @@ function options(opts: BaseOptions[]) {
 					return controller.stop();
 				}
 			} else {
-				if (!permissions.any(opt.perms)) {
+				if (!permissions.any(perms)) {
 					await interaction.reply({
 						embeds: [
 							sendEmbed(
-								opt.response ??
-									`You need at least one of the following permissions for option \`${
-										opt.name
-									}\`: \n${permsToString(...opt.perms)}`
+								response ??
+								`You need at least one of the following permissions for option \`${name}\`: \n${permsToString(...perms)}`
 							),
 						],
 						ephemeral: true,
