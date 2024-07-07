@@ -200,7 +200,6 @@ function options(opts: BaseOptions[]) {
 
 		for (const opt of opts) {
 			const option = interaction.options.get(opt.name);
-			console.log(option);
 
 			if (option && option.name !== opt.name) {
 				await interaction.reply({
@@ -216,7 +215,6 @@ function options(opts: BaseOptions[]) {
 
 			const permissions = member.permissionsIn(channel);
 
-			console.log(permsToString(permissions));
 			if (opt.needAllPerms) {
 				if (!permissions.has(opt.perms)) {
 					await interaction.reply({
