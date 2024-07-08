@@ -37,7 +37,7 @@ import {
 } from "discord.js";
 import {
 	CommandControlPlugin,
-	CommandType,
+	type CommandType,
 	controller,
 	Service,
 } from "@sern/handler";
@@ -45,33 +45,28 @@ import {
 function command(perm: PermissionResolvable, response?: string) {
 	return CommandControlPlugin<CommandType.Both>(async (ctx) => {
 		if (ctx.guild === null) {
-			await ctx.reply("This command cannot be used in DM's!");
-			return controller.stop();
-		}
-		if (
-			!(ctx.member! as GuildMember)
-				.permissionsIn(ctx.channel as TextChannel)
-				.has(perm)
-		) {
 			await ctx.reply({
-				embeds: [
-					sendEmbed(
-						response ??
-							`You are missing required permissions to run this command:\n${permsToString(
-								perm
-							)}`
-					),
-				],
-				ephemeral: !ctx.isMessage() ? true : false,
+				content: "This command cannot be used in DM's!", 
+				ephemeral: !ctx.isMessage()
 			});
 			return controller.stop();
 		}
-		if (!(ctx.member! as GuildMember).permissionsIn(ctx.channel as TextChannel).any(perm)) {
+		const _perms = (ctx.member as GuildMember).permissionsIn(ctx.channel as TextChannel);
+		if (!_perms.has(perm)) {
+			await ctx.reply({
+				embeds: [
+					sendEmbed(response ?? `You are missing required permissions to run this command:\n${permsToString(perm)}`),
+				],
+				ephemeral: !ctx.isMessage(),
+			});
+			return controller.stop();
+		}
+		if (!_perms.any(perm)) {
 			await ctx.reply({
 				embeds: [
 					sendEmbed(response ?? `You need at least one of the following permissions to run this command:\n${permsToString(perm)}`),
 				],
-				ephemeral: ctx.isMessage() ? false : true,
+				ephemeral: !ctx.isMessage(),
 			});
 			return controller.stop();
 		}
@@ -79,48 +74,42 @@ function command(perm: PermissionResolvable, response?: string) {
 	});
 }
 function subGroups(opts: BaseOptions[]) {
-	return CommandControlPlugin<CommandType.Slash>(async ({ interaction }) => {
-		await no_guild(interaction);
-		const member = interaction.member as GuildMember;
-		const group = interaction.options.getSubcommandGroup();
+	return CommandControlPlugin<CommandType.Slash>(async (ctx) => {
+		if (ctx.guild === null) {
+			await ctx.reply({
+				content: "This command cannot be used in DM's!",
+				ephemeral: !ctx.isMessage(),
+			});
+			return controller.stop();
+		}
+		const member = ctx.member as GuildMember;
+		const group = ctx.options.getSubcommandGroup();
 		for (const opt of opts) {
 			if (group !== opt.name) {
-				await interaction.reply({
+				await ctx.reply({
 					embeds: [
 						sendEmbed(`[PLUGIN_permCheck.subGroups]: Failed to find specified subcommandGroup \`${opt.name}\`!`),
 					],
-					ephemeral: true,
+					ephemeral: !ctx.isMessage(),
 				});
 				return controller.stop();
 			}
-			const _perms = member.permissionsIn(
-				interaction.channel as TextChannel
-			);
+			const _perms = member.permissionsIn(ctx.channel as TextChannel);
 			if (opt.needAllPerms && !_perms.has(opt.perms)) {
-				await interaction.reply({
+				await ctx.reply({
 					embeds: [
-						sendEmbed(
-							opt.response ??
-								`You cannot use this group due to missing permissions: ${permsToString(
-									opt.perms
-								)}`
-						),
+						sendEmbed(opt.response ??	`You cannot use this group due to missing permissions: ${permsToString(opt.perms)}`),
 					],
-					ephemeral: true,
+					ephemeral: !ctx.isMessage(),
 				});
 				return controller.stop();
 			}
 			if (!opt.needAllPerms && !_perms.any(opt.perms)) {
-				await interaction.reply({
+				await ctx.reply({
 					embeds: [
-						sendEmbed(
-							opt.response ??
-								`You cannot use this group because you need at least one of the following permissions: ${permsToString(
-									opt.perms
-								)}`
-						),
+						sendEmbed(opt.response ?? `You cannot use this group because you need at least one of the following permissions: ${permsToString(opt.perms)}`),
 					],
-					ephemeral: true,
+					ephemeral: !ctx.isMessage(),
 				});
 				return controller.stop();
 			}
@@ -130,36 +119,42 @@ function subGroups(opts: BaseOptions[]) {
 }
 
 function subcommands(opts: BaseOptions[]) {
-	return CommandControlPlugin<CommandType.Slash>(async ({ interaction }) => {
-		await no_guild(interaction);
-		const member = interaction.member as GuildMember;
-		const sub = interaction.options.getSubcommand();
+	return CommandControlPlugin<CommandType.Slash>(async ({ ctx }) => {
+		if (ctx.guild === null) {
+			await ctx.reply({
+				content: "This command cannot be used in DM's!",
+				ephemeral: !ctx.isMessage(),
+			});
+			return controller.stop();
+		}
+		const member = ctx.member as GuildMember;
+		const sub = ctx.options.getSubcommand();
 		for (const { name, needAllPerms, perms, response } of opts) {
 			if (sub !== name) {
-				await interaction.reply({
+				await ctx.reply({
 					embeds: [
 						sendEmbed(`[PLUGIN_permCheck.subcommands]: Failed to find specified subcommand \`${name}\`!`),
 					],
-					ephemeral: true,
+					ephemeral: !ctx.isMessage(),
 				});
 				return controller.stop();
 			}
-			const _perms = member.permissionsIn(interaction.channel as TextChannel);
+			const _perms = member.permissionsIn(ctx.channel as TextChannel);
 			if (needAllPerms && !_perms.has(perms)) {
-				await interaction.reply({
+				await ctx.reply({
 					embeds: [
 						sendEmbed(response ?? `You cannot use this subcommand due to missing permissions: ${permsToString(perms)}`),
 					],
-					ephemeral: true,
+					ephemeral: !ctx.isMessage(),
 				});
 				return controller.stop();
 			}
 			if (!needAllPerms && !_perms.any(perms)) {
-				await interaction.reply({
+				await ctx.reply({
 					embeds: [
 						sendEmbed(response ?? `You cannot use this subcommand because you need at least the following permissions: ${permsToString(perms)}`),
 					],
-					ephemeral: true,
+					ephemeral: !ctx.isMessage(),
 				});
 				return controller.stop();
 			}
@@ -168,22 +163,26 @@ function subcommands(opts: BaseOptions[]) {
 	});
 }
 function options(opts: BaseOptions[]) {
-	return CommandControlPlugin<CommandType.Slash>(async ({ interaction }) => {
-		await no_guild(interaction);
-		const member = interaction.member as GuildMember;
-		const channel = interaction.channel as TextChannel;
+	return CommandControlPlugin<CommandType.Slash>(async ({ ctx }) => {
+		if (ctx.guild === null) {
+			await ctx.reply({
+				content: "This command cannot be used in DM's!",
+				ephemeral: !ctx.isMessage(),
+			});
+			return controller.stop();
+		}
+		const member = ctx.member as GuildMember;
+		const channel = ctx.channel as TextChannel;
 
 		for (const { name, needAllPerms, perms, response } of opts) {
-			const option = interaction.options.get(name);
+			const option = ctx.options.get(name);
 
 			if (option && option.name !== name) {
-				await interaction.reply({
-					embeds: [
-						sendEmbed(
-							`[PLUGIN_permCheck.options]: Could not find supplied option: \`${name}\``
-						),
+				await ctx.reply({
+					embeds: [						
+						sendEmbed(`[PLUGIN_permCheck.options]: Could not find supplied option: \`${name}\``),
 					],
-					ephemeral: true,
+					ephemeral: !ctx.isMessage(),
 				});
 				return controller.stop();
 			}
@@ -192,27 +191,21 @@ function options(opts: BaseOptions[]) {
 
 			if (needAllPerms) {
 				if (!permissions.has(perms)) {
-					await interaction.reply({
+					await ctx.reply({
 						embeds: [
-							sendEmbed(
-								response ??
-								`You need all the following permissions for option \`${name}\`:\n ${permsToString(...perms)}`
-							),
+							sendEmbed(response ??	`You need all the following permissions for option \`${name}\`:\n ${permsToString(...perms)}`),
 						],
-						ephemeral: true,
+						ephemeral: !ctx.isMessage(),
 					});
 					return controller.stop();
 				}
 			} else {
 				if (!permissions.any(perms)) {
-					await interaction.reply({
+					await ctx.reply({
 						embeds: [
-							sendEmbed(
-								response ??
-								`You need at least one of the following permissions for option \`${name}\`: \n${permsToString(...perms)}`
-							),
+							sendEmbed(response ??	`You need at least one of the following permissions for option \`${name}\`: \n${permsToString(...perms)}`),
 						],
-						ephemeral: true,
+						ephemeral: !ctx.isMessage(),
 					});
 					return controller.stop();
 				}
@@ -228,16 +221,6 @@ interface BaseOptions {
 	needAllPerms: boolean;
 	response?: string;
 }
-
-const no_guild = async (interaction: ChatInputCommandInteraction) => {
-	if (interaction.guild === null) {
-		await interaction.reply({
-			content: "This command cannot be used in DM's!",
-			ephemeral: true,
-		});
-		return controller.stop();
-	}
-};
 
 const sendEmbed = (description: string) => {
 	const client = Service("@sern/client");
@@ -264,13 +247,13 @@ export function permCheck(
 	perm: PermissionResolvable,
 	response?: string
 ): ReturnType<typeof command>;
+
 export function permCheck(
 	type: "subGroups" | "subcommands" | "options",
 	opts: BaseOptions[]
-):
-	| ReturnType<typeof subGroups>
-	| ReturnType<typeof subcommands>
-	| ReturnType<typeof options>;
+): | ReturnType<typeof subGroups>
+	 | ReturnType<typeof subcommands>
+	 | ReturnType<typeof options>;
 
 export function permCheck(
 	type: "command" | "subGroups" | "subcommands" | "options",
