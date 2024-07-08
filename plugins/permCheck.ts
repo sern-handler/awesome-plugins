@@ -119,7 +119,7 @@ function subGroups(opts: BaseOptions[]) {
 }
 
 function subcommands(opts: BaseOptions[]) {
-	return CommandControlPlugin<CommandType.Slash>(async ({ ctx }) => {
+	return CommandControlPlugin<CommandType.Slash>(async (ctx) => {
 		if (ctx.guild === null) {
 			await ctx.reply({
 				content: "This command cannot be used in DM's!",
@@ -163,7 +163,7 @@ function subcommands(opts: BaseOptions[]) {
 	});
 }
 function options(opts: BaseOptions[]) {
-	return CommandControlPlugin<CommandType.Slash>(async ({ ctx }) => {
+	return CommandControlPlugin<CommandType.Slash>(async (ctx) => {
 		if (ctx.guild === null) {
 			await ctx.reply({
 				content: "This command cannot be used in DM's!",
