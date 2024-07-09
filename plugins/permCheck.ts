@@ -253,12 +253,7 @@ export const permsToString = (...perms: PermissionResolvable[]) => {
     .join(', ');
 };
 
-export function _permCheck(permissionsOrOpts: PermissionResolvable, response?: string) {
-  // permCheck function call is now a alias for command
-  return command(permissionsOrOpts as PermissionResolvable, response);
-}
-
-export const permCheck = Object.assign(_permCheck, {
+export const permCheck = Object.assign(command, {
   command,
   subGroups,
   subcommands,
