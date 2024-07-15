@@ -6,7 +6,8 @@
  *
  * @author @Benzo-Fury [<@762918086349029386>]
  * @author @Peter-MJ-Parker [<@371759410009341952>]
- * @version 2.0.0
+ * @author @MaxiIsSlayy [<@237210568791031809>]
+ * @version 2.0.1
  * @example
  * ```ts
  * import { permCheck } from "../plugins/permCheck";
@@ -79,16 +80,18 @@ function subGroups(opts: BaseOptions[]) {
     }
     const member = ctx.member as GuildMember;
     const group = ctx.options.getSubcommandGroup();
+    if (!opts.some(opt => opt.name === group)) {
+      await interaction.reply({
+        embeds: [
+          sendEmbed(
+            `[PLUGIN_permCheck.subGroups]: Failed to find specified subcommandGroup \`${group}\`!`
+          ),
+        ],
+        ephemeral: true,
+      });
+      return controller.stop();
+    }
     for (const opt of opts) {
-      if (group !== opt.name) {
-        await ctx.reply({
-          embeds: [
-            sendEmbed(`[PLUGIN_permCheck.subGroups]: Failed to find specified subcommandGroup \`${opt.name}\`!`)
-          ],
-          ephemeral: !ctx.isMessage()
-        });
-        return controller.stop();
-      }
       const _perms = member.permissionsIn(ctx.channel as TextChannel);
       if (opt.needAllPerms && !_perms.has(opt.perms)) {
         await ctx.reply({
@@ -131,14 +134,18 @@ function subcommands(opts: BaseOptions[]) {
     }
     const member = ctx.member as GuildMember;
     const sub = ctx.options.getSubcommand();
+    if (!opts.some(opt => opt.name === sub)) {
+      await interaction.reply({
+        embeds: [
+          sendEmbed(
+            `[PLUGIN_permCheck.subcommands]: Failed to find specified subcommand \`${sub}\`!`
+          ),
+        ],
+        ephemeral: true,
+      });
+      return controller.stop();
+    }
     for (const { name, needAllPerms, perms, response } of opts) {
-      if (sub !== name) {
-        await ctx.reply({
-          embeds: [sendEmbed(`[PLUGIN_permCheck.subcommands]: Failed to find specified subcommand \`${name}\`!`)],
-          ephemeral: !ctx.isMessage()
-        });
-        return controller.stop();
-      }
       const _perms = member.permissionsIn(ctx.channel as TextChannel);
       if (needAllPerms && !_perms.has(perms)) {
         await ctx.reply({
