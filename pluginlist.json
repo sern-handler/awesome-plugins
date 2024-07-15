@@ -96,12 +96,12 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).\n Each function (other than \"command\") allows multiple options! [ { ... }, { ... }, { ... } ] See examples!\n",
-  "hash" : "41ad17660561af02aff5a75558563eaf",
+  "hash" : "2728032537d9ec6a0d845fbcae8d7c89",
   "name" : "permCheck",
   "author" : [ "@Benzo-Fury [<@762918086349029386>]", "@Peter-MJ-Parker [<@371759410009341952>]", "@MaxiIsSlayy [<@237210568791031809>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/permCheck.ts",
   "example" : "\n\n ```ts\n import { permCheck } from \"../plugins/permCheck\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ permCheck([\"Administrator\", \"AddReactions\"], \"I am a custom response!\"),\n \t\tpermCheck.options([{ name: \"user\", needAllPerms: true, perms: [\"AttachFiles\", \"CreateEvents\"]}]),\n \t\tpermCheck.subcommands([{ name: \"list\", needAllPerms: false, perms: [\"Connect\"]}]),\n \t\tpermCheck.subGroups([{ name: \"list\", needAllPerms: false, perms: [\"Connect\"], response: \"I am also a custom response!\"}])],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "2.0.1"
+  "version" : "2.1.0"
 }, {
   "description" : "\n\n fromCallback turns a callback into a plugin result.\n if the callback returns truthy value, plugin continues.\n This control plugin works for every command type. The arguments of the callback\n mirror the execute method on the current module.",
   "hash" : "6a085373d3d240922aa1d2c5b50fadd7",
