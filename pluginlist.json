@@ -40,12 +40,12 @@
   "version" : "1.2.0"
 }, {
   "description" : "\n\n Inspired by the plugin \"requirePermission\" created by Benzo-Fury & needhamgary, this plugin will set permissions for specific subcommands without manually writing it into the code.\n",
-  "hash" : "adf6b421a4940a982d997c54ee7864f7",
+  "hash" : "0f2adb85f99056db6f172358bf917b2f",
   "name" : "subcommandPermCheck",
-  "author" : [ "@Peter-MJ-Parker [<@371759410009341952>]" ],
+  "author" : [ "@Peter-MJ-Parker [<@371759410009341952>]", "@MaxiIsSlayy [<@237210568791031809>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/subcommandPermCheck.ts",
   "example" : "\n\n ```ts\n import { subcommandPermCheck } from \"../plugins/subcommandPerms.js\";\n import { commandModule, CommandType } from \"@sern/handler\";\n import { PermissionFlagBits } from \"discord.js\";\n export default commandModule({\n  type: CommandType.Slash,\n  plugins: [\n   subcommandPermCheck({\n    list: [\n      { name: \"string\", perms: [PermissionFlagBits.Administrator] },\n      { name: \"number\", perms: [PermissionFlagBits.SendMessages, PermissionFlagBits.UseVAD] }\n    ],\n   needAllPerms: true, //all = Require the member to have all perms stated or at least one?\n   //response: \"OPTIONAL - respond to user with this message or default.\"\n   })\n  ],\n  execute: ({ interaction }) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "1.0"
+  "version" : "1.0.1"
 }, {
   "description" : "\n\n This is dmOnly plugin, it allows commands to be run only in DMs.\n",
   "hash" : "63eabcaafdbd6b6fbd6e52372e656a21",
@@ -96,12 +96,12 @@
   "version" : "1.0.0"
 }, {
   "description" : "\n\n This is perm check, it allows users to parse the permission you want and let the plugin do the rest. (check user for that perm).\n Each function (other than \"command\") allows multiple options! [ { ... }, { ... }, { ... } ] See examples!\n",
-  "hash" : "28213222ad554b8445b00ba396619fe6",
+  "hash" : "41ad17660561af02aff5a75558563eaf",
   "name" : "permCheck",
-  "author" : [ "@Benzo-Fury [<@762918086349029386>]", "@Peter-MJ-Parker [<@371759410009341952>]" ],
+  "author" : [ "@Benzo-Fury [<@762918086349029386>]", "@Peter-MJ-Parker [<@371759410009341952>]", "@MaxiIsSlayy [<@237210568791031809>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/permCheck.ts",
   "example" : "\n\n ```ts\n import { permCheck } from \"../plugins/permCheck\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [ permCheck([\"Administrator\", \"AddReactions\"], \"I am a custom response!\"),\n \t\tpermCheck.options([{ name: \"user\", needAllPerms: true, perms: [\"AttachFiles\", \"CreateEvents\"]}]),\n \t\tpermCheck.subcommands([{ name: \"list\", needAllPerms: false, perms: [\"Connect\"]}]),\n \t\tpermCheck.subGroups([{ name: \"list\", needAllPerms: false, perms: [\"Connect\"], response: \"I am also a custom response!\"}])],\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
-  "version" : "2.0.0"
+  "version" : "2.0.1"
 }, {
   "description" : "\n\n fromCallback turns a callback into a plugin result.\n if the callback returns truthy value, plugin continues.\n This control plugin works for every command type. The arguments of the callback\n mirror the execute method on the current module.",
   "hash" : "6a085373d3d240922aa1d2c5b50fadd7",
