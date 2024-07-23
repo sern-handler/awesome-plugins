@@ -164,6 +164,7 @@ export const cooldown2 = () => {
                             | Cooldown>,
              message?: CooldownResponse) =>  __add(cooldownMap, items, message),
         locations: locationsFn(cooldownMap),
+        map: cooldownMap
     }
 };
 
