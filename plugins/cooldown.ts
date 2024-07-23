@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * @plugin
  * Allows you to set cooldowns (or "ratelimits") for commands, limits user/channel/guild actions.
@@ -147,19 +146,18 @@ function __add(map : ExpiryMap<string, number>,
 	});
 }
 
-type Location = (value: CooldownString) => ReturnType<typeof add>;
+type Location = (value: CooldownString) => ReturnType<typeof __add>;
 
 const locationsFn  = (map: ExpiryMap<string, number>)=>  ({
-	[CooldownLocation.channel]: (value) =>
-		__add([[CooldownLocation.channel, value]]),
-	[CooldownLocation.user]: (value) => __add([[CooldownLocation.user, value]]),
-	[CooldownLocation.guild]: (value) => __add([[CooldownLocation.guild, value]]),
+	[CooldownLocation.channel]: (value) => __add(map, [[CooldownLocation.channel, value]]),
+	[CooldownLocation.user]: (value) => __add(map, [[CooldownLocation.user, value]]),
+	[CooldownLocation.guild]: (value) => __add(map, [[CooldownLocation.guild, value]]),
 } as Record<CooldownLocation, Location>);
 
 
 
 export const cooldown2 = () => {
-    const cooldownMap = new Map<string, number>();
+    const cooldownMap = new ExpiryMap<string, number>();
     return {
         add:(items: Array<| [CooldownLocation 
                             | keyof typeof CooldownLocation, CooldownString]
