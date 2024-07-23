@@ -12,8 +12,8 @@
  * //IF you want this cooldown to be local to this command: 
  * const localCooldown = cooldown2()
  * export default commandModule({
- *  plugins: [cooldown.add( [ ['channel', '1/4'] ] ), // limit to 1 action every 4 seconds per channel
- *            localCooldown.add([["user", "1/10"]]) ], // limit to 1 action every 10 seconds, local to command
+ *  plugins: [cooldown.add([['channel', '1/4']]), // limit to 1 action every 4 seconds per channel
+ *            localCooldown.add([["user", "1/10"]])], // limit to 1 action every 10 seconds, local to command
  *  execute: (ctx) => { //your code here }
  * })
  * ```
