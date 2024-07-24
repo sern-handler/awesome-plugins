@@ -119,11 +119,11 @@
   "example" : "\n\n ```ts\n import { commandModule, CommandType } from \"@sern/handler\";\n import { serverOnly } from \"../plugins/serverOnly\";\n export default commandModule({\n   type: CommandType.Both,\n   plugins: [serverOnly([\"guildId\"], failMessage)], // fail message is the message you will see when the command is ran in the wrong server.\n   description: \"command description\",\n   execute: async (ctx, args) => {\n     // your code here\n   },\n });\n ```",
   "version" : "1.0.0"
 }, {
-  "description" : "\n\n Allows you to set cooldowns (or \"ratelimits\") for commands, limits user/channel/guild actions.",
-  "hash" : "9549ecb8901e2e9f814cd6234d1e8a32",
+  "description" : "\n\n Allows you to set cooldowns (or \"ratelimits\") for commands, limits user/channel/guild actions.\n An extra function cooldown2 is exported if you want your cooldown to be local to the command.",
+  "hash" : "747944c710f7970b8c6ef9e11f322808",
   "name" : "cooldown",
   "author" : [ "@trueharuu [<@504698587221852172>]" ],
   "link" : "https://raw.githubusercontent.com/sern-handler/awesome-plugins/main/plugins/cooldown.ts",
-  "example" : "\n\n ```ts\n import { cooldown } from \"../plugins/cooldown\";\n import { commandModule } from \"@sern/handler\";\n export default commandModule({\n  plugins: [cooldown.add( [ ['channel', '1/4'] ] )], // limit to 1 action every 4 seconds per channel\n  execute: (ctx) => {\n \t\t//your code here\n  }\n })\n ```",
+  "example" : "\n\n ```ts\n import { cooldown, cooldown2 } from \"../plugins/cooldown\";\n import { commandModule } from \"@sern/handler\";\n //IF you want this cooldown to be local to this command: \n const localCooldown = cooldown2()\n export default commandModule({\n  plugins: [cooldown.add([['channel', '1/4']]), // limit to 1 action every 4 seconds per channel\n            localCooldown.add([[\"user\", \"1/10\"]])], // limit to 1 action every 10 seconds, local to command\n  execute: (ctx) => { //your code here }\n })\n ```",
   "version" : "1.0.0"
 } ]
