@@ -30,7 +30,7 @@
  * ```
  * @end
  */
-import type { GuildMember, PermissionResolvable, TextChannel } from 'discord.js';
+import type { GuildMember, PermissionResolvable, TextChannel, PermissionsBitField } from 'discord.js';
 import { type CommandType, CommandControlPlugin, controller } from '@sern/handler';
 
 export const permsToString = (...perms: PermissionResolvable[]) => {
