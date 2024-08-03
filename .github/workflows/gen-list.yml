@@ -33,6 +33,7 @@ jobs:
           commit_message: "chore: update plugin listing"
           commit_options: '--no-verify --signoff'
           repository: .
-          commit_user_name: "GitHub Actions"
+          commit_user_name: "sernbot"
+          commit_user_email: ${{ secrets.AUTOMATA_EMAIL }}
           file_pattern: "pluginlist.json"
           push_options: '--force'
