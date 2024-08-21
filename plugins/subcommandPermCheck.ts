@@ -5,7 +5,7 @@
  *
  * @author @Peter-MJ-Parker [<@371759410009341952>]
  * @author @MaxiIsSlayy [<@237210568791031809>]
- * @version 1.0.1
+ * @version 1.0.2
  * @example
  * ```ts
  * import { subcommandPermCheck } from "../plugins/subcommandPerms.js";
@@ -19,7 +19,7 @@
  *      { name: "string", perms: [PermissionFlagBits.Administrator] },
  *      { name: "number", perms: [PermissionFlagBits.SendMessages, PermissionFlagBits.UseVAD] }
  *    ],
- *   needAllPerms: true, //all = Require the member to have all perms stated or at least one?
+ *   needAllPerms: true, //Require the member to have all perms stated (true) or at least one (false)?
  *   //response: "OPTIONAL - respond to user with this message or default."
  *   })
  *  ],
@@ -30,21 +30,22 @@
  * ```
  * @end
  */
-import type { GuildMember, PermissionResolvable, TextChannel, PermissionsBitField } from 'discord.js';
+import { type GuildMember, type PermissionResolvable, type TextChannel, PermissionsBitField } from 'discord.js';
 import { type CommandType, CommandControlPlugin, controller } from '@sern/handler';
 
 export const permsToString = (...perms: PermissionResolvable[]) => {
   return new PermissionsBitField(perms)
     .toArray()
-    .map((perm) => `\`${perm}\``)
-    .join(", ");
+    .map(perm => `\`${perm}\``)
+    .join(', ');
 };
 
 export function subcommandPermCheck(opts: Options) {
-  return CommandControlPlugin<CommandType.Slash>(async (ctx) => {
+  return CommandControlPlugin<CommandType.Slash>(async ctx => {
     if (!ctx.isSlash()) {
-      throw new Error('You did not provide a slash command.', { cause: "The plugin 'subcommandPermCheck' is meant for Slash commands only!" });
-      return controller.stop();
+      throw new Error('You did not provide a slash command.', {
+        cause: "The plugin 'subcommandPermCheck' is meant for Slash commands only!"
+      });
     }
 
     if (ctx.guild === null) {
@@ -53,39 +54,29 @@ export function subcommandPermCheck(opts: Options) {
     }
     const member = ctx.member as GuildMember;
     const subcommands = opts.list;
-    let subs = ctx.options.getSubcommand();
+    const sub = ctx.options.getSubcommand();
 
-    if (!subcommands.some((opt) => opt.subcommand === subs)) {
+    if (!subcommands.some(opt => opt.name === sub)) {
       throw new Error("You provided a subcommand name which doesn't exist in given command.", {
-        cause: `${subs} not found on command: ${ctx.interaction.commandName}.`
+        cause: `${sub} not found on command: ${ctx.interaction.commandName}.`
       });
-      return controller.stop();
     }
-    for (const { name, perms } of subcommands) {
-        const each = permsToString(perms);
-        const { needAllPerms } = opts;
-        const memberPermissions = member.permissionsIn(ctx.channel as TextChannel);
-        if (needAllPerms === true) {
-          if (!memberPermissions.has(perms)) {
-            await ctx.reply({
-              content:
-                opts.response ??
-                `You are required to have all of the following permissions to run this subcommand in this channel:\n${each}`,
-              ephemeral: true
-            });
-            return controller.stop();
-          }
-        } else {
-          if (!memberPermissions.any(perms)) {
-            await ctx.reply({
-              content:
-                opts.response ??
-                `You are required to have at least one of the following permissions to run this subcommand in this channel:\n${each}`,
-              ephemeral: true
-            });
-            return controller.stop();
-          }
-        }
+    for (const { perms } of subcommands) {
+      const each = permsToString(perms);
+      const memberPermissions = member.permissionsIn(ctx.channel as TextChannel);
+      const hasPermission = opts.needAllPerms ? memberPermissions.has(perms) : memberPermissions.any(perms);
+
+      if (!hasPermission) {
+        const split = each.split(', ');
+        const quantifier = split.length > 1 ? (opts.needAllPerms ? 'all of' : 'at least one of') : '';
+        const str = `${quantifier} the following permission${split.length > 1 ? 's' : ''}`;
+
+        await ctx.reply({
+          content: opts.response ?? `You are required to have ${str} to run this subcommand in this channel:\n${each}`,
+          ephemeral: true
+        });
+        return controller.stop();
+      }
     }
     return controller.next();
   });
